@@ -96,8 +96,6 @@ namespace nattbakka_server
                 do
                 {
                     result = await _clientWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-                    // Add the received data to the result buffer
                     resultBuffer.AddRange(buffer.Take(result.Count));
 
                 } while (!result.EndOfMessage);  // Continue receiving until the entire message is received
@@ -115,7 +113,7 @@ namespace nattbakka_server
             catch (Exception ex)
             {
                 Console.WriteLine($"Error while receiving message: {ex.Message}");
-                throw;  // Re-throw for external handling
+                throw; 
             }
         }
 

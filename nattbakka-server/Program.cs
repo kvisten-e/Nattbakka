@@ -47,22 +47,22 @@ app.MapGet("/balance", () =>
 });
 
 // Pausad, fungerar ej
-app.MapGet("/active-websockets", (DexService dexService) =>
+/*app.MapGet("/active-websockets", (DexService dexService) =>
 {
     // Get the active DEX names
     var activeDexNames = dexService.GetActiveDexNames();
 
     // Return the list as a JSON response
     return Results.Ok(activeDexNames);
-});
+});*/
 
 
-app.MapGet("/keys", (DexService dexService) =>
+/*app.MapGet("/keys", (DexService dexService) =>
 {
 
     if(apiKeysSection == null) return Results.Ok(null);
     return Results.Ok(apiKeysSection);
-});
+});*/
 
 app.MapGet("/dexes", async (DataContext context) => await context.dex.ToListAsync());
 
