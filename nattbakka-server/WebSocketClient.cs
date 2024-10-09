@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using nattbakka_server.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.WebSockets;
 using System.Text;
@@ -8,15 +9,23 @@ namespace nattbakka_server
     public class WebSocketClient
     {
         private readonly ClientWebSocket _clientWebSocket;
-        public WebSocketClient()
+        private List<string> _apiKeys;
+
+        public WebSocketClient(List<string> apiKeys)
         {
             _clientWebSocket = new ClientWebSocket();
+            _apiKeys = new List<string>(apiKeys);
         }
 
         // Method to connect to the WebSocket server
         public async Task ConnectAsync()
         {
-            string apiKey = "OytKNDHdJokVRhcx";
+            if (_apiKeys.Count == 0)
+            {
+                throw new InvalidOperationException("No API keys available.");
+            }
+
+            string apiKey = _apiKeys[new Random().Next(_apiKeys.Count)];
             string wssUri = $"wss://rpc.shyft.to?api_key={apiKey}";
 
             Uri serverUri = new Uri(wssUri);

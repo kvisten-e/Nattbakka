@@ -8,17 +8,16 @@ namespace nattbakka_server.Services
     public class DexService
     {
         private readonly DexRepository _dexRepository;
-        private readonly ConcurrentDictionary<string, WebSocketClient> _activeWebSockets;
+        private readonly List<string> _activeWebSockets = new List<string> {};
         //private readonly TransactionRepository _transactionRepository;
 
         public DexService(DexRepository dexRepository)
         {
             _dexRepository = dexRepository;
-            _activeWebSockets = new ConcurrentDictionary<string, WebSocketClient>();
             //_transactionRepository = transactionRepository;
         }
 
-        public async Task MonitorDexesAsync()
+        public async Task MonitorDexesAsync(List<string> apiKeysSection)
         {
             List<Dex> dexes = await _dexRepository.GetDexesAsync();
 
@@ -27,11 +26,11 @@ namespace nattbakka_server.Services
                 if (dex.active)
                 {
                     Console.WriteLine(dex.name);
-                    var webSocketClient = new WebSocketClient();
+                    var webSocketClient = new WebSocketClient(apiKeysSection);
                     await webSocketClient.ConnectAsync();
                     await webSocketClient.SendAsync(dex.address);
 
-                    _activeWebSockets.TryAdd(dex.name, webSocketClient);
+                    _activeWebSockets.Add(dex.name);
                     Console.WriteLine($"Active WebSockets: {_activeWebSockets.Count}");
                     GetActiveDexNames();
 
@@ -56,7 +55,7 @@ namespace nattbakka_server.Services
                         }
                         finally
                         {
-                            _activeWebSockets.TryRemove(dex.address, out _);
+                            _activeWebSockets.Remove(dex.address);
                             Console.WriteLine($"WebSocket closed. Active WebSockets: {_activeWebSockets.Count}");
                         }
 
@@ -70,14 +69,7 @@ namespace nattbakka_server.Services
         {
             Console.WriteLine($"Checking active WebSockets. Current count: {_activeWebSockets.Count()}");
 
-            List<string> activeDexes = new List<string>();
-            foreach (string name in _activeWebSockets.Keys)
-            {
-                Console.WriteLine($"Active DEX name: {name}");
-                activeDexes.Add(name);
-            }
-
-            return activeDexes;
+            return _activeWebSockets;
         }
 
 

@@ -1,9 +1,12 @@
 using System.Net.WebSockets;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using nattbakka_server;
 using nattbakka_server.Data;
+using nattbakka_server.Models;
 using nattbakka_server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,10 +19,16 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+var apiKeysSection = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
+
+
 builder.Services.AddScoped<DexRepository>();
 builder.Services.AddScoped<DexService>();
 
+
 var app = builder.Build();
+
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,6 +46,7 @@ app.MapGet("/balance", () =>
     return 10;
 });
 
+// Pausad, fungerar ej
 app.MapGet("/active-websockets", (DexService dexService) =>
 {
     // Get the active DEX names
@@ -47,13 +57,20 @@ app.MapGet("/active-websockets", (DexService dexService) =>
 });
 
 
+app.MapGet("/keys", (DexService dexService) =>
+{
+
+    if(apiKeysSection == null) return Results.Ok(null);
+    return Results.Ok(apiKeysSection);
+});
+
 app.MapGet("/dexes", async (DataContext context) => await context.dex.ToListAsync());
 
 // Starta websockets
 using (var scope = app.Services.CreateScope())
 {
     var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    await dexService.MonitorDexesAsync(); 
+    await dexService.MonitorDexesAsync(apiKeysSection); 
 }
 
 app.Run();
