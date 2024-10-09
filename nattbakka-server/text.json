@@ -1,0 +1,49 @@
+{
+  "WasSuccessful": true,
+  "WasHttpRequestSuccessful": true,
+  "WasRequestSuccessfullyHandled": true,
+  "Reason": "OK",
+  "Result": {
+    "Slot": 294676220,
+    "BlockTime": 1728501693,
+    "Transaction": {
+      "Signatures": [ "2nzHPxi93WNw6TJ96rbJc9mM75MXdD5t6DqEyi6E7v7rY1NckSz4E2dNqFUvhrZZrsVL6NYFkTG5FQpac3Vyc64i" ],
+      "Message": {
+        "AccountKeys": [ "2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm", "B6JnN3rCXnerycPYJTdjU2kqKruL8aP4YPLt3vuQvLfu", "11111111111111111111111111111111", "ComputeBudget111111111111111111111111111111" ],
+        "Header": {
+          "NumRequiredSignatures": 1,
+          "NumReadonlySignedAccounts": 0,
+          "NumReadonlyUnsignedAccounts": 2
+        },
+        "RecentBlockhash": "9FinZSrvBLJvtzW74exajzqRnd8ZEDk6neWMpNzznGC5",
+        "Instructions": [
+          {
+            "ProgramIdIndex": 2,
+            "Accounts": [ 0, 1 ],
+            "Data": "3Bxs4QciiuFMrJwy"
+          },
+          {
+            "ProgramIdIndex": 3,
+            "Accounts": [],
+            "Data": "3uedW6ymeow5"
+          }
+        ]
+      }
+    },
+    "Meta": {
+      "err": null,
+      "Fee": 35000,
+      "PreBalances": [ 115998147852186, 41343995, 1, 1 ],
+      "PostBalances": [ 115997649216084, 539945097, 1, 1 ],
+      "InnerInstructions": [],
+      "PreTokenBalances": [],
+      "PostTokenBalances": [],
+      "LogMessages": [ "Program 11111111111111111111111111111111 invoke [1]", "Program 11111111111111111111111111111111 success", "Program ComputeBudget111111111111111111111111111111 invoke [1]", "Program ComputeBudget111111111111111111111111111111 success" ]
+    }
+  },
+  "HttpStatusCode": 200,
+  "ServerErrorCode": 0,
+  "ErrorData": null,
+  "RawRpcRequest": "{\u0022method\u0022:\u0022getTransaction\u0022,\u0022params\u0022:[\u00222nzHPxi93WNw6TJ96rbJc9mM75MXdD5t6DqEyi6E7v7rY1NckSz4E2dNqFUvhrZZrsVL6NYFkTG5FQpac3Vyc64i\u0022,{\u0022encoding\u0022:\u0022json\u0022}],\u0022jsonrpc\u0022:\u00222.0\u0022,\u0022id\u0022:0}",
+  "RawRpcResponse": "{\u0022jsonrpc\u0022:\u00222.0\u0022,\u0022result\u0022:{\u0022blockTime\u0022:1728501693,\u0022meta\u0022:{\u0022computeUnitsConsumed\u0022:300,\u0022err\u0022:null,\u0022fee\u0022:35000,\u0022innerInstructions\u0022:[],\u0022loadedAddresses\u0022:{\u0022readonly\u0022:[],\u0022writable\u0022:[]},\u0022logMessages\u0022:[\u0022Program 11111111111111111111111111111111 invoke [1]\u0022,\u0022Program 11111111111111111111111111111111 success\u0022,\u0022Program ComputeBudget111111111111111111111111111111 invoke [1]\u0022,\u0022Program ComputeBudget111111111111111111111111111111 success\u0022],\u0022postBalances\u0022:[115997649216084,539945097,1,1],\u0022postTokenBalances\u0022:[],\u0022preBalances\u0022:[115998147852186,41343995,1,1],\u0022preTokenBalances\u0022:[],\u0022rewards\u0022:[],\u0022status\u0022:{\u0022Ok\u0022:null}},\u0022slot\u0022:294676220,\u0022transaction\u0022:{\u0022message\u0022:{\u0022accountKeys\u0022:[\u00222AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm\u0022,\u0022B6JnN3rCXnerycPYJTdjU2kqKruL8aP4YPLt3vuQvLfu\u0022,\u002211111111111111111111111111111111\u0022,\u0022ComputeBudget111111111111111111111111111111\u0022],\u0022header\u0022:{\u0022numReadonlySignedAccounts\u0022:0,\u0022numReadonlyUnsignedAccounts\u0022:2,\u0022numRequiredSignatures\u0022:1},\u0022instructions\u0022:[{\u0022accounts\u0022:[0,1],\u0022data\u0022:\u00223Bxs4QciiuFMrJwy\u0022,\u0022programIdIndex\u0022:2,\u0022stackHeight\u0022:null},{\u0022accounts\u0022:[],\u0022data\u0022:\u00223uedW6ymeow5\u0022,\u0022programIdIndex\u0022:3,\u0022stackHeight\u0022:null}],\u0022recentBlockhash\u0022:\u00229FinZSrvBLJvtzW74exajzqRnd8ZEDk6neWMpNzznGC5\u0022},\u0022signatures\u0022:[\u00222nzHPxi93WNw6TJ96rbJc9mM75MXdD5t6DqEyi6E7v7rY1NckSz4E2dNqFUvhrZZrsVL6NYFkTG5FQpac3Vyc64i\u0022]}},\u0022id\u0022:0}"
+}

@@ -1,6 +1,10 @@
 ﻿using nattbakka_server.Data;
 using nattbakka_server.Models;
 using System.Collections.Concurrent;
+using Solnet.Programs;
+using Solnet.Rpc;
+using Solnet.Rpc.Types;
+using System.Text.Json;
 
 namespace nattbakka_server.Services
 {
@@ -24,6 +28,7 @@ namespace nattbakka_server.Services
                 if (dex.active)
                 {
                     var webSocketClient = new WebSocketClient(apiKeysSection);
+                    SolanaServices solanaServices = new SolanaServices(apiKeysSection);
                     await webSocketClient.ConnectAsync();
                     await webSocketClient.SendAsync(dex.address);
                     _activeWebSockets.Add(dex.name);
@@ -37,16 +42,14 @@ namespace nattbakka_server.Services
                         {
                             while (true)
                             {
-                                string message = await webSocketClient.ReceiveMessageAsync();
+                                string signature = await webSocketClient.ReceiveMessageAsync();
 
-                                if (prevMessages.TryAdd(message, true))
+                                if (prevMessages.TryAdd(signature, true) && signature.Length > 0)
                                 {
-                                    Console.WriteLine($"Message from {dex.name}: {message}");
-
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Exist! " + message);
+                                    Console.WriteLine($"Message from {dex.name}: {signature}");
+                                    var parsedTransaction = await solanaServices.GetConfirmedTransactionAsync(signature);
+                                    string testing = JsonSerializer.Serialize(parsedTransaction);
+                                    Console.WriteLine(testing);
                                 }
                             }
                         }
