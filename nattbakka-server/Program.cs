@@ -16,11 +16,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextFactory<DataContext>(options => 
 {
-    string connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
+    string? connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-var apiKeysSection = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
+var apiKeys = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
 
 
 builder.Services.AddScoped<DatabaseComponents>();
@@ -49,7 +49,7 @@ app.MapGet("/dexes", async (DataContext context) => await context.dex.ToListAsyn
 using (var scope = app.Services.CreateScope())
 {
     var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    await dexService.MonitorDexesAsync(apiKeysSection);
+    await dexService.MonitorDexesAsync(apiKeys);
 
 }
 
@@ -70,19 +70,6 @@ app.Run();
 
 
 
-public record State(string DB);
-
-
-
-
-/*info: Microsoft.EntityFrameworkCore.Database.Command[20101]
-      Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
-      INSERT INTO `transactions` (`address`, `dex_id`, `group_id`, `sol`, `sol_changed`, `tx`)
-      VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
-      SELECT `id`
-      FROM `transactions`
-      WHERE ROW_COUNT() = 1 AND `id` = LAST_INSERT_ID();*/
-
 
 
 
@@ -97,13 +84,6 @@ public record State(string DB);
     return Results.Ok(activeDexNames);
 });*/
 
-
-/*app.MapGet("/keys", (DexService dexService) =>
-{
-
-    if(apiKeysSection == null) return Results.Ok(null);
-    return Results.Ok(apiKeysSection);
-});*/
 
 
 

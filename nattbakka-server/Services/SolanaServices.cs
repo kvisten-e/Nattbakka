@@ -9,30 +9,25 @@ namespace nattbakka_server.Services
 {
     public class SolanaServices
     {
-        //private readonly IRpcClient _rpcClient;
         private readonly List<string> _apiKeys;
 
         public SolanaServices(List<string> apiKeys)
         {
+            if (apiKeys == null || apiKeys.Count == 0)
+            {
+                throw new InvalidOperationException("API keys cannot be null or empty. Please configure at least one API key.");
+            }
             _apiKeys = apiKeys;
-
         }
-        //
         public async Task<ParsedTransaction> GetConfirmedTransactionAsync(string signature)
         {
             var rpc = Rpc();
-            if (rpc is null) return null;
-
-            // Fetch the transaction details using the RPC client
             var transactionDetails = await rpc.GetTransactionAsync(signature);
 
             if (!transactionDetails.WasSuccessful)
             {
                 throw new Exception(transactionDetails.Reason);
             }
-
-            //string jsonString = JsonSerializer.Serialize(transactionDetails);
-            //Console.WriteLine("transactionDetails: " + jsonString);
 
             double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
 
@@ -52,16 +47,11 @@ namespace nattbakka_server.Services
         public IRpcClient Rpc()
         {
             string api = RotateApiList();
-            Console.WriteLine("Api: " + api);
-            if (api is null) return null;
-
             return ClientFactory.GetClient($"https://rpc.shyft.to?api_key={api}");
         }
 
         public string RotateApiList()
         {
-            if (_apiKeys.Count == 0) return null;
-
             string currentApi = _apiKeys[0];
             _apiKeys.Remove(currentApi);
             _apiKeys.Add(currentApi);
