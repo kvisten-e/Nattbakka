@@ -10,21 +10,21 @@ namespace nattbakka_server.Services
 {
     public class DexService
     {
-        private readonly DexRepository _dexRepository;
+        private readonly DatabaseComponents _databaseComponents;
         private readonly List<string> _activeWebSockets = new List<string>();
         private readonly ConcurrentDictionary<string, bool> prevMessages = new ConcurrentDictionary<string, bool>();
 
-        public DexService(DexRepository dexRepository)
+        public DexService(DatabaseComponents databaseComponents)
         {
-            _dexRepository = dexRepository;
+            _databaseComponents = databaseComponents;
         }
 
         public async Task MonitorDexesAsync(List<string> apiKeysSection)
         {
-            List<Dex> dexes = await _dexRepository.GetDexesAsync();
+            List<Dex> dexes = await _databaseComponents.GetDexesAsync();
 
             foreach (Dex dex in dexes)
-            {
+            { 
                 if (dex.active)
                 {
                     var webSocketClient = new WebSocketClient(apiKeysSection);
@@ -48,8 +48,11 @@ namespace nattbakka_server.Services
                                 {
                                     Console.WriteLine($"Message from {dex.name}: {signature}");
                                     var parsedTransaction = await solanaServices.GetConfirmedTransactionAsync(signature);
-                                    string testing = JsonSerializer.Serialize(parsedTransaction);
-                                    Console.WriteLine(testing);
+                                    Console.WriteLine("Starting job for PostTransaction: " + parsedTransaction.sol);
+                                    await _databaseComponents.PostTransaction(parsedTransaction, dex.id);
+
+                                    //string testing = JsonSerializer.Serialize(parsedTransaction);
+
                                 }
                             }
                         }
@@ -73,17 +76,6 @@ namespace nattbakka_server.Services
             return _activeWebSockets;
         }
 
-        // private Transaction ParseTransaction(string message, int dexId)
-        // {
-        //     // Parse the WebSocket message and return a transaction object
-        //     // This is a placeholder for actual message parsing logic
-        //     return new Transaction
-        //     {
-        //         tx = dexId,
-        //         TxHash = "parsed_tx_hash",   // Extract tx_hash from message
-        //         Amount = 0.5M,               // message amount from message
-        //         Timestamp = DateTime.Now     // Extract timestamp from message
-        //     };
-        // }
+
     }
 }

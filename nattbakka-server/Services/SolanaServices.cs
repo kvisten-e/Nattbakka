@@ -31,8 +31,7 @@ namespace nattbakka_server.Services
                 throw new Exception(transactionDetails.Reason);
             }
 
-            string jsonString = JsonSerializer.Serialize(transactionDetails);
-
+            //string jsonString = JsonSerializer.Serialize(transactionDetails);
             //Console.WriteLine("transactionDetails: " + jsonString);
 
             double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
