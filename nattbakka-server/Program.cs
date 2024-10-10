@@ -1,14 +1,6 @@
-using System.Net.WebSockets;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using nattbakka_server;
 using nattbakka_server.Data;
-using nattbakka_server.Models;
 using nattbakka_server.Services;
-using Solnet.Programs.Models.Stake;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -19,17 +11,15 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
     string? connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+builder.Services.AddHostedService<GroupService>();
+
 
 var apiKeys = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
-
 
 builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<DexService>();
 
-
 var app = builder.Build();
-
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,18 +32,46 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-
-app.MapGet("/dexes", async (DataContext context) => await context.dex.ToListAsync());
-
-// Starta websockets
 using (var scope = app.Services.CreateScope())
 {
+    // Starta bevakning av dexes, spara transaktioner till databasen
     var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
     await dexService.MonitorDexesAsync(apiKeys);
 
+    // Leta/skapa grupper
+
+    // Uppdatera grupper och markera förändrade wallets
+
+    // Sätt upp APIer till frontend
+
+
+
+
+
 }
 
+app.Run();
 
+
+
+
+
+
+
+
+// Fungerar
+/*
+ app.MapGet("/dexes", async (DataContext context) => await context.dex.ToListAsync());
+ */
+
+
+
+// Fungerar
+/*
+ * 
+ * 
+ * 
+ * 
 app.MapPost("/save-transaction", async (DatabaseComponents databaseComponents) =>
 {
     var pt = new ParsedTransaction() {
@@ -65,13 +83,7 @@ app.MapPost("/save-transaction", async (DatabaseComponents databaseComponents) =
     Console.WriteLine("Sendning..");
     await databaseComponents.PostTransaction(pt, 1);
 });
-
-app.Run();
-
-
-
-
-
+*/
 
 
 // Pausad, fungerar ej

@@ -3,6 +3,8 @@ using Org.BouncyCastle.Crypto.Agreement.Srp;
 using Solnet.Rpc;
 using Solnet.Rpc.Models;
 using System.Text.Json;
+using Solnet.Wallet;
+
 
 namespace nattbakka_server.Services
 
@@ -42,7 +44,17 @@ namespace nattbakka_server.Services
             return parsedTransaction;
         }
 
-
+        public async Task<double> GetAddressBalance(string address)
+        {
+            var rpc = Rpc();
+            var balance = await rpc.GetBalanceAsync(new PublicKey(address));
+            if (balance.WasSuccessful)
+            {
+                var balanceConverted = ConvertLamportsToSol(balance.Result.Value);
+                return balanceConverted;
+            }
+            throw new Exception(balance.Reason);
+        }
 
         public IRpcClient Rpc()
         {
@@ -56,6 +68,11 @@ namespace nattbakka_server.Services
             _apiKeys.Remove(currentApi);
             _apiKeys.Add(currentApi);
             return currentApi;
+        }
+
+        public static double ConvertLamportsToSol(ulong lamports)
+        {
+            return (double)(lamports / 1_000_000_000);
         }
     }
 }
