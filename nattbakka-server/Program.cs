@@ -11,8 +11,9 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
     string? connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
-builder.Services.AddHostedService<GroupService>();
 
+builder.Services.AddScoped<GroupService>();
+builder.Services.AddHostedService<GroupServiceRunner>();
 
 var apiKeys = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
 
@@ -36,7 +37,7 @@ using (var scope = app.Services.CreateScope())
 {
     // Starta bevakning av dexes, spara transaktioner till databasen
     var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    await dexService.MonitorDexesAsync(apiKeys);
+    //await dexService.MonitorDexesAsync(apiKeys);
 
     // Leta/skapa grupper
 

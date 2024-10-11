@@ -43,5 +43,39 @@ namespace nattbakka_server.Data
             return data;
         }
 
+        public async Task<List<Transaction>> GetTransactions(int dexId)
+        {
+            DateTime time_history = DateTime.Now.AddDays(-1);
+
+            using var context = _contextFactory.CreateDbContext();
+
+            var data = await context.transactions.Where(d =>
+                d.dex_id == dexId
+            ).ToListAsync();
+            return data;
+        }
+
+        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 0, int maxSol = 100, int group_id = 0, bool sol_changed = false)
+        {
+            DateTime time_history = DateTime.Now.AddDays(-1);
+            
+            using var context = _contextFactory.CreateDbContext();
+
+            var data = await context.transactions.Where(d => 
+                d.dex_id == dexId &&
+                d.sol > minSol &&
+                d.sol < maxSol &&
+                d.group_id == group_id &&
+                d.sol_changed == sol_changed &&
+                d.timestamp > time_history
+            ).ToListAsync();
+            return data;
+        }
+
     }
+    public interface IScopedProcessingService
+    {
+        Task DoWorkAsync(CancellationToken stoppingToken);
+    }
+
 }
