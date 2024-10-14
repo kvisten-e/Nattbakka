@@ -11,5 +11,18 @@ namespace nattbakka_server.Data
         }
         public DbSet<Dex> dex { get; set; }
         public DbSet<Transaction> transactions { get; set; }
+
+        public DbSet<Group> dex_groups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.dex_groups)
+                .WithMany(g => g.transactions)
+                .HasForeignKey(t => t.group_id);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

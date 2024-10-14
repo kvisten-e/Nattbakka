@@ -3,6 +3,7 @@ using nattbakka_server.Models;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace nattbakka_server.Data
 {
@@ -55,9 +56,9 @@ namespace nattbakka_server.Data
             return data;
         }
 
-        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 0, int maxSol = 100, int group_id = 0, bool sol_changed = false)
+        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false)
         {
-            DateTime time_history = DateTime.Now.AddDays(-1);
+            DateTime time_history = DateTime.Now.AddDays(-5);
             
             using var context = _contextFactory.CreateDbContext();
 
@@ -71,6 +72,35 @@ namespace nattbakka_server.Data
             ).ToListAsync();
             return data;
         }
+
+
+        public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
+        {
+            using var context = _contextFactory.CreateDbContext();
+            Console.WriteLine("HEJ");
+            var data = await context.transactions
+                .Include(t => t.dex_groups)  // Join with DexGroup
+                .Select(t => new TransactionWithGroup
+                {
+                    id = t.id,
+                    tx = t.tx,
+                    address = t.address,
+                    sol = t.sol,
+                    sol_changed = t.sol_changed,
+                    dex_id = t.dex_id,
+                    group_id = t.group_id,
+                    timestamp = t.timestamp,
+
+                    total_wallets = t.dex_groups.total_wallets,
+                    inactive_wallets = t.dex_groups.inactive_wallets,
+                    time_different_unix = t.dex_groups.time_different_unix,
+                    created = t.dex_groups.created
+                }).ToListAsync();
+            Console.WriteLine("RETURNING");
+
+            return data;
+        }
+
 
     }
     public interface IScopedProcessingService

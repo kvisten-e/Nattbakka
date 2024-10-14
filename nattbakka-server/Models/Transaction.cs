@@ -11,5 +11,7 @@
         public int group_id { get; set;}
 
         public DateTime timestamp { get; set; }
+
+        public Group dex_groups { get; set; }
     }
 }
