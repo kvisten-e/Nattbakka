@@ -49,9 +49,9 @@ namespace nattbakka_server.Data
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             using var context = _contextFactory.CreateDbContext();
-
             var data = await context.transactions.Where(d =>
-                d.dex_id == dexId
+                d.dex_id == dexId &&
+                d.group_id == 0
             ).ToListAsync();
             return data;
         }
@@ -77,7 +77,6 @@ namespace nattbakka_server.Data
         public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
         {
             using var context = _contextFactory.CreateDbContext();
-            Console.WriteLine("HEJ");
             var data = await context.transactions
                 .Include(t => t.dex_groups)  // Join with DexGroup
                 .Select(t => new TransactionWithGroup
@@ -96,7 +95,6 @@ namespace nattbakka_server.Data
                     time_different_unix = t.dex_groups.time_different_unix,
                     created = t.dex_groups.created
                 }).ToListAsync();
-            Console.WriteLine("RETURNING");
 
             return data;
         }

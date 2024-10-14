@@ -34,35 +34,36 @@ namespace nattbakka_server.Services
             {
                 await GetCurrentDexGroups();
 
-                foreach (var group in _dexGroups)
+                //foreach (var group in _dexGroups)
+                //{
+                //    string json = JsonConvert.SerializeObject(group, Formatting.Indented);
+                //    Console.WriteLine(json);
+                //}
+
+                int binanceId = _dexes.FirstOrDefault(b => b.name == "Binance2")?.id ?? -1;
+                _transactions = await _databaseComponents.GetTransactions(binanceId);
+
+
+                foreach (var transaction in _transactions)
                 {
-                    string json = JsonConvert.SerializeObject(group, Formatting.Indented);
-                    Console.WriteLine(json);
+                    // 1. Kolla om transaktionen kan läggas till en aktiv grupp som ligger live
+                    if (AddTxToActiveGroups(transaction)) continue;
+                    // 2. Kolla om transaktionen redan finns med i en GroupList
+                    if (CheckTxInCurrentGroupList(transaction)) continue;
+                    // 3. Försök skapa en ny group med transaktionen
+                    CreateGroup(transaction);
                 }
 
-                //int binanceId = _dexes.Single(b => b.name == "Binance2").id;
-                //_transactions = await _databaseComponents.GetTransactions(binanceId);
+                int counter = 1;
+                foreach (var group in _createdGroupsList)
+                {
+                    Console.WriteLine($"Group {counter++} - Length: {group.Count}");
 
-                //foreach (var transaction in _transactions)
-                //{
-                //    // 1. Kolla om transaktionen kan läggas till en aktiv grupp som ligger live
-                //    if (AddTxToActiveGroups(transaction)) continue;
-                //    // 2. Kolla om transaktionen redan finns med i en GroupList
-                //    if (CheckTxInCurrentGroupList(transaction)) continue;
-                //    // 3. Försök skapa en ny group med transaktionen
-                //    CreateGroup(transaction);
-                //}
-
-                //int counter = 1;
-                //foreach (var group in _createdGroupsList)
-                //{
-                //    Console.WriteLine($"Group {counter++} - Length: {group.Count}");
-
-                //    foreach (var tx in group)
-                //    {
-                //        Console.WriteLine($"Time: {tx.timestamp} - Sol: {tx.sol}");
-                //    }
-                //}
+                    foreach (var tx in group)
+                    {
+                        Console.WriteLine($"Time: {tx.timestamp} - Sol: {tx.sol}");
+                    }
+                }
 
 
 
@@ -78,15 +79,24 @@ namespace nattbakka_server.Services
             _dexGroups = await _databaseComponents.GetTransactionsWithGroups();
         }
 
-        private bool AddTxToActiveGroups(Transaction transaction) {
-            int timeLimitUnix = 3600;
-            var groupIdFound = _dexGroups.First(t =>
-                t.dex_id == transaction.dex_id &&
-                ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.created) <= timeLimitUnix &&
-                GetTransactionSolDecimals(t.sol) == GetTransactionSolDecimals(transaction.sol)
-            ).group_id;
+        private bool AddTxToActiveGroups(Transaction transaction)
+        {
 
+                int timeLimitUnix = 3600;
 
+            var groupIdFound = _dexGroups
+                .FirstOrDefault(t =>
+                    t.dex_id == transaction.dex_id &&
+                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.created) <= timeLimitUnix &&
+                    GetTransactionSolDecimals(t.sol) == GetTransactionSolDecimals(transaction.sol)
+                )?.group_id;
+
+            if(groupIdFound is not null)
+            {
+                Console.WriteLine("groupIdFound: " + groupIdFound);
+                Console.WriteLine("transaction id: " + transaction.id);
+                return true;
+            }
 
             return false;
         }
@@ -145,12 +155,10 @@ namespace nattbakka_server.Services
         {
             int decimalsMax = 3;
 
-            Console.WriteLine("Inside sol: " + sol);
             int firstDecimalIndex = (int)sol.ToString().IndexOf(",");
             
             if(firstDecimalIndex < 0)
             {
-                Console.WriteLine("Värdet har inga decimaler");
                 return (int)sol;
             }
             string solToString = sol.ToString();
