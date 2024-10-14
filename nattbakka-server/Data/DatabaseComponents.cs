@@ -3,7 +3,7 @@ using nattbakka_server.Models;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
-using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace nattbakka_server.Data
 {
@@ -18,7 +18,6 @@ namespace nattbakka_server.Data
 
         public async Task PostTransaction(ParsedTransaction pt, int dexId)
         {
-            Console.WriteLine("Converting transaction");
 
             using var context = _contextFactory.CreateDbContext();
 
@@ -30,10 +29,71 @@ namespace nattbakka_server.Data
                 dex_id = dexId,
             };
 
-            Console.WriteLine("Saving to database: " + transaction.address);
-
             context.transactions.Add(transaction);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AddGroupIdToTransaction(int transactionId, int groupId)
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                await context.transactions
+                    .Where(u => u.id == transactionId)
+                    .ExecuteUpdateAsync(u =>
+                        u.SetProperty(u => u.group_id, groupId)
+                    );
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Something went wrong file adding group id {groupId} to tx {transactionId} - error: {ex}");
+                return false;
+            }
+
+        }
+
+        public async Task UpdateTotalWalletsInGroup(int groupId)
+        {
+            int amount = await GetGroupAmount(groupId);
+            using var context = _contextFactory.CreateDbContext();
+           
+            await context.dex_groups
+                .Where(u => u.id == groupId)
+                .ExecuteUpdateAsync(u =>
+                    u.SetProperty(u => u.total_wallets, amount)
+                );
+            await context.SaveChangesAsync();
+
+
+        }
+
+        public async Task<int> CreateDexGroup(int totalWallets, int timeDifferentUnix)
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            var group = new Group()
+            {
+                total_wallets = totalWallets,
+                time_different_unix = timeDifferentUnix,
+                created = DateTime.Now
+            };
+
+            context.dex_groups.Add(group);
+            await context.SaveChangesAsync();
+            int id = group.id;
+
+            return id;
+        }
+
+        public async Task<int> GetGroupAmount(int groupId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            int amount = await context.transactions
+                .Where(d => d.group_id == groupId)
+                .CountAsync();
+            return amount;
         }
 
         public async Task<List<Dex>> GetDexesAsync()
@@ -55,6 +115,7 @@ namespace nattbakka_server.Data
             ).ToListAsync();
             return data;
         }
+
 
         public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false)
         {

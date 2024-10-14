@@ -34,36 +34,41 @@ namespace nattbakka_server.Services
             {
                 await GetCurrentDexGroups();
 
-                //foreach (var group in _dexGroups)
-                //{
-                //    string json = JsonConvert.SerializeObject(group, Formatting.Indented);
-                //    Console.WriteLine(json);
-                //}
-
                 int binanceId = _dexes.FirstOrDefault(b => b.name == "Binance2")?.id ?? -1;
                 _transactions = await _databaseComponents.GetTransactions(binanceId);
-
 
                 foreach (var transaction in _transactions)
                 {
                     // 1. Kolla om transaktionen kan läggas till en aktiv grupp som ligger live
-                    if (AddTxToActiveGroups(transaction)) continue;
+                    if (await AddTxToActiveGroups(transaction)) continue;
                     // 2. Kolla om transaktionen redan finns med i en GroupList
                     if (CheckTxInCurrentGroupList(transaction)) continue;
                     // 3. Försök skapa en ny group med transaktionen
                     CreateGroup(transaction);
                 }
 
-                int counter = 1;
+                    
                 foreach (var group in _createdGroupsList)
                 {
-                    Console.WriteLine($"Group {counter++} - Length: {group.Count}");
+                    Console.WriteLine($"Group Length: {group.Count}");
+                    // 4. Skapa row i dex_groups - retunera id som skapas
+                    int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count -1].timestamp);
+                    int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
+                    
+                    Console.WriteLine("idCreatedGroup: " + idCreatedGroup + " - Group amount" + group.Count);
 
+                    if (idCreatedGroup == 0) continue;
+                    
                     foreach (var tx in group)
                     {
-                        Console.WriteLine($"Time: {tx.timestamp} - Sol: {tx.sol}");
+                        // 5. Uppdatera varje transaktion i grupp med det id:et
+                        await _databaseComponents.AddGroupIdToTransaction(tx.id, idCreatedGroup);
+                        
                     }
+
                 }
+
+                _createdGroupsList.Clear();
 
 
 
@@ -79,22 +84,26 @@ namespace nattbakka_server.Services
             _dexGroups = await _databaseComponents.GetTransactionsWithGroups();
         }
 
-        private bool AddTxToActiveGroups(Transaction transaction)
+        private async Task<bool> AddTxToActiveGroups(Transaction transaction)
         {
 
-                int timeLimitUnix = 3600;
+            int timeLimitUnix = 180;
 
-            var groupIdFound = _dexGroups
+            int? groupIdFound = _dexGroups
                 .FirstOrDefault(t =>
                     t.dex_id == transaction.dex_id &&
                     ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.created) <= timeLimitUnix &&
                     GetTransactionSolDecimals(t.sol) == GetTransactionSolDecimals(transaction.sol)
                 )?.group_id;
 
-            if(groupIdFound is not null)
+            if (groupIdFound.HasValue && groupIdFound.Value > 0)
             {
-                Console.WriteLine("groupIdFound: " + groupIdFound);
-                Console.WriteLine("transaction id: " + transaction.id);
+                Console.WriteLine($"Group {groupIdFound.Value} found for transaction id: {transaction.id}");
+                bool status = await _databaseComponents.AddGroupIdToTransaction(transaction.id, groupIdFound.Value);
+                if (status)
+                {
+                    await _databaseComponents.UpdateTotalWalletsInGroup(groupIdFound.Value);
+                }
                 return true;
             }
 
@@ -114,7 +123,6 @@ namespace nattbakka_server.Services
             }
             return false;
         }
-
 
         private void CreateGroup(Transaction transaction)
         {
@@ -187,5 +195,12 @@ namespace nattbakka_server.Services
         {
             return (long)date.Subtract(DateTime.UnixEpoch).TotalSeconds;
         }
+        
+        private int CalculateUnixDifferent(DateTime first, DateTime last)
+        {
+            int unixSeconds = (int)(ConvertDatetimeToUnix(last) - ConvertDatetimeToUnix(first));
+            return unixSeconds;
+        }
+    
     }
 }
