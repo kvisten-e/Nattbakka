@@ -127,7 +127,7 @@ namespace nattbakka_server.Data
 
         public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false, bool asNoTracking = false)
         {
-            DateTime time_history = DateTime.Now.AddDays(-5);
+            DateTime time_history = DateTime.Now.AddDays(-1);
             
             using var context = _contextFactory.CreateDbContext();
 

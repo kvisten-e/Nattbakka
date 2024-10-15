@@ -40,8 +40,10 @@ using (var scope = app.Services.CreateScope())
     await dexService.MonitorDexesAsync(apiKeys);
 
     // Leta/skapa grupper
+    /// -> Startas automatisk med GroupService
 
     // Uppdatera grupper och markera förändrade wallets
+
 
     // Sätt upp APIer till frontend
 
@@ -51,7 +53,7 @@ using (var scope = app.Services.CreateScope())
 
 }
 
-app.Run();
+await app.RunAsync();
 
 
 
