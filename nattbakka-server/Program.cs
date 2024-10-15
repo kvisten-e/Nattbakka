@@ -37,7 +37,7 @@ using (var scope = app.Services.CreateScope())
 {
     // Starta bevakning av dexes, spara transaktioner till databasen
     var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    //await dexService.MonitorDexesAsync(apiKeys);
+    await dexService.MonitorDexesAsync(apiKeys);
 
     // Leta/skapa grupper
 

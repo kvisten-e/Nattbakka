@@ -35,7 +35,8 @@ namespace nattbakka_server.Services
                 await GetCurrentDexGroups();
 
                 int binanceId = _dexes.FirstOrDefault(b => b.name == "Binance2")?.id ?? -1;
-                _transactions = await _databaseComponents.GetTransactions(binanceId);
+                _transactions = await _databaseComponents.GetTransactions(binanceId, asNoTracking: true);
+
 
                 foreach (var transaction in _transactions)
                 {
@@ -47,29 +48,27 @@ namespace nattbakka_server.Services
                     CreateGroup(transaction);
                 }
 
-                    
+
                 foreach (var group in _createdGroupsList)
                 {
-                    Console.WriteLine($"Group Length: {group.Count}");
-                    // 4. Skapa row i dex_groups - retunera id som skapas
-                    int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count -1].timestamp);
-                    int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
-                    
-                    Console.WriteLine("idCreatedGroup: " + idCreatedGroup + " - Group amount" + group.Count);
 
-                    if (idCreatedGroup == 0) continue;
-                    
+                    // 4. Skapa row i dex_groups - retunera id som skapas
+                    int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count - 1].timestamp);
+                    int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
+
+                    if (idCreatedGroup <= 0) continue;
+
                     foreach (var tx in group)
                     {
                         // 5. Uppdatera varje transaktion i grupp med det id:et
                         await _databaseComponents.AddGroupIdToTransaction(tx.id, idCreatedGroup);
-                        
-                    }
 
+                    }
                 }
 
                 _createdGroupsList.Clear();
-
+                _transactions.Clear();
+                _dexGroups.Clear();
 
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
@@ -89,16 +88,17 @@ namespace nattbakka_server.Services
 
             int timeLimitUnix = 180;
 
+
             int? groupIdFound = _dexGroups
                 .FirstOrDefault(t =>
                     t.dex_id == transaction.dex_id &&
-                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.created) <= timeLimitUnix &&
+                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) <= timeLimitUnix &&
+                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) >= 0 &&
                     GetTransactionSolDecimals(t.sol) == GetTransactionSolDecimals(transaction.sol)
                 )?.group_id;
 
             if (groupIdFound.HasValue && groupIdFound.Value > 0)
             {
-                Console.WriteLine($"Group {groupIdFound.Value} found for transaction id: {transaction.id}");
                 bool status = await _databaseComponents.AddGroupIdToTransaction(transaction.id, groupIdFound.Value);
                 if (status)
                 {
@@ -129,7 +129,6 @@ namespace nattbakka_server.Services
             var leaderData = transaction;
             List<Transaction> createdGroup = new List<Transaction> { leaderData };
 
-            Console.WriteLine("Transaction id: " + leaderData.id);
 
             while (true)
             {
@@ -142,11 +141,9 @@ namespace nattbakka_server.Services
 
                 if (newLeader == null)
                 {
-                    Console.WriteLine("newLeader is null");
                     break;
                 };
 
-                Console.WriteLine("New leader: " + newLeader.address);
                 createdGroup.Add(newLeader);
                 leaderData = newLeader;
             }

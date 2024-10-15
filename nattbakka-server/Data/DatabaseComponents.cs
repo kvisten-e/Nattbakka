@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Http.HttpResults;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace nattbakka_server.Data
 {
@@ -27,6 +28,7 @@ namespace nattbakka_server.Data
                 address = pt.receivingAddress,
                 sol = pt.sol,
                 dex_id = dexId,
+                timestamp = DateTime.Now
             };
 
             context.transactions.Add(transaction);
@@ -104,34 +106,46 @@ namespace nattbakka_server.Data
             return data;
         }
 
-        public async Task<List<Transaction>> GetTransactions(int dexId)
+        public async Task<List<Transaction>> GetTransactions(int dexId, bool asNoTracking = false)
         {
+            using var context = _contextFactory.CreateDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            using var context = _contextFactory.CreateDbContext();
-            var data = await context.transactions.Where(d =>
-                d.dex_id == dexId &&
-                d.group_id == 0
-            ).ToListAsync();
-            return data;
+            var query = context.transactions.Where(t => 
+                t.dex_id == dexId && 
+                t.group_id == 0 && 
+                t.timestamp > time_history
+                );
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.ToListAsync();
         }
 
-
-        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false)
+        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false, bool asNoTracking = false)
         {
             DateTime time_history = DateTime.Now.AddDays(-5);
             
             using var context = _contextFactory.CreateDbContext();
 
-            var data = await context.transactions.Where(d => 
+            var query = context.transactions.Where(d =>
                 d.dex_id == dexId &&
                 d.sol > minSol &&
                 d.sol < maxSol &&
                 d.group_id == group_id &&
                 d.sol_changed == sol_changed &&
                 d.timestamp > time_history
-            ).ToListAsync();
-            return data;
+            );          
+            
+                if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.ToListAsync();
         }
 
 

@@ -98,7 +98,7 @@ namespace nattbakka_server
                     result = await _clientWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     resultBuffer.AddRange(buffer.Take(result.Count));
 
-                } while (!result.EndOfMessage);  // Continue receiving until the entire message is received
+                } while (!result.EndOfMessage);
 
                 // Convert the accumulated byte array to a string
                 string responseJson = Encoding.UTF8.GetString(resultBuffer.ToArray());
