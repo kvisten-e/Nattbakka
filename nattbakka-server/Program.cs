@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using nattbakka_server.Data;
 using nattbakka_server.Services;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -15,10 +17,12 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
 
-var apiKeys = builder.Configuration.GetSection("ApiKeys").Get<List<string>>();
+var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
 
 builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<DexService>();
+builder.Services.AddScoped<CexTransactionsService>();
+
 
 var app = builder.Build();
 
@@ -36,8 +40,11 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     // Starta bevakning av dexes, spara transaktioner till databasen
-    var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    await dexService.MonitorDexesAsync(apiKeys);
+    //var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
+    //await dexService.MonitorDexesAsync(apiKeys);
+
+    var cexService = scope.ServiceProvider.GetRequiredService<CexTransactionsService>();
+    await cexService.SolanaTransactionsWebSocket(apiKeysShyft);
 
     // Leta/skapa grupper
     /// -> Startas automatisk med GroupService
@@ -49,7 +56,7 @@ using (var scope = app.Services.CreateScope())
 
 
 
-
+    // wss://mainnet.helius-rpc.com/?api-key=ab19f7c7-c836-4bbc-ae73-74ea4eb2c9f8
 
 }
 

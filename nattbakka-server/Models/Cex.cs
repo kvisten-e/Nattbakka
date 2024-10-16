@@ -1,6 +1,6 @@
 ﻿namespace nattbakka_server.Models
 {
-    public class Dex
+    public class Cex
     {
         public int id {  get; set; }
         public string name { get; set; }

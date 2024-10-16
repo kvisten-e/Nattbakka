@@ -5,7 +5,6 @@ using Solnet.Rpc.Models;
 using System.Text.Json;
 using Solnet.Wallet;
 
-
 namespace nattbakka_server.Services
 
 {
@@ -23,25 +22,33 @@ namespace nattbakka_server.Services
         }
         public async Task<ParsedTransaction> GetConfirmedTransactionAsync(string signature)
         {
-            var rpc = Rpc();
-            var transactionDetails = await rpc.GetTransactionAsync(signature);
-
-            if (!transactionDetails.WasSuccessful)
+            int attempts = 0;
+            while(attempts < 10)
             {
-                throw new Exception(transactionDetails.Reason);
+                var rpc = Rpc();
+                var transactionDetails = await rpc.GetTransactionAsync(signature);
+
+                if (!transactionDetails.WasSuccessful)
+                {
+                    attempts++;
+                    Console.WriteLine($"Failed to parse signature: {signature} - Attempt left: {10 - attempts}");
+                    Thread.Sleep(500);
+                    continue;
+                }
+                
+                double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
+
+                var parsedTransaction = new ParsedTransaction
+                {
+                    tx = signature,
+                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1],
+                    sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0],
+                    sol = sol
+                };
+
+                return parsedTransaction;
             }
-
-            double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
-
-            var parsedTransaction = new ParsedTransaction
-            {
-                tx = signature,
-                receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1],
-                sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0],
-                sol = sol
-            };
-
-            return parsedTransaction;
+            return null;
         }
 
         public async Task<double> GetAddressBalance(string address)
@@ -59,7 +66,8 @@ namespace nattbakka_server.Services
         public IRpcClient Rpc()
         {
             string api = RotateApiList();
-            return ClientFactory.GetClient($"https://rpc.shyft.to?api_key={api}");
+            string wss = $"https://rpc.shyft.to?api_key={api}";
+            return ClientFactory.GetClient(wss);
         }
 
         public string RotateApiList()

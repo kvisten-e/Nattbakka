@@ -9,7 +9,7 @@ namespace nattbakka_server.Data
         {
 
         }
-        public DbSet<Dex> dex { get; set; }
+        public DbSet<Cex> cex { get; set; }
         public DbSet<Transaction> transactions { get; set; }
 
         public DbSet<Group> dex_groups { get; set; }

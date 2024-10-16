@@ -98,11 +98,11 @@ namespace nattbakka_server.Data
             return amount;
         }
 
-        public async Task<List<Dex>> GetDexesAsync()
+        public async Task<List<Cex>> GetCexesAsync()
         {
             using var context = _contextFactory.CreateDbContext();
 
-            var data = await context.dex.Where(d => d.active == true).ToListAsync();
+            var data = await context.cex.Where(d => d.active == true).ToListAsync();
             return data;
         }
 

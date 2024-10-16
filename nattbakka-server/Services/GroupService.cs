@@ -16,7 +16,7 @@ namespace nattbakka_server.Services
         public List<List<Transaction>> _createdGroupsList = new List<List<Transaction>>();
         public List<TransactionWithGroup> _dexGroups = new List<TransactionWithGroup>();
         public List<Transaction> _transactions = new List<Transaction>();
-        public List<Dex> _dexes = new List<Dex>();
+        public List<Cex> _dexes = new List<Cex>();
 
 
         public GroupService(ILogger<GroupService> logger, DatabaseComponents databaseComponents)
@@ -28,7 +28,7 @@ namespace nattbakka_server.Services
         public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Timed Background Service running.");
-            _dexes = await _databaseComponents.GetDexesAsync();
+            _dexes = await _databaseComponents.GetCexesAsync();
 
             while (!stoppingToken.IsCancellationRequested)
             {
