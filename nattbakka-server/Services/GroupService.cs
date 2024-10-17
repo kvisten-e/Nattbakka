@@ -32,7 +32,7 @@ namespace nattbakka_server.Services
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                await GetCurrentDexGroups();
+                await GetCurrentCexGroups();
 
                 int minSol = 1;
                 _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
@@ -77,7 +77,7 @@ namespace nattbakka_server.Services
             _logger.LogInformation("Timed Background Service is stopping.");
         }
 
-        private async Task GetCurrentDexGroups()
+        private async Task GetCurrentCexGroups()
         {
             _cexGroups = await _databaseComponents.GetTransactionsWithGroups();
         }
@@ -134,9 +134,9 @@ namespace nattbakka_server.Services
                 var newLeader = _transactions.FirstOrDefault(d =>
                     d.dex_id == leaderData.dex_id &&
                     d.timestamp > leaderData.timestamp &&
-                    //CheckTransactionSolDecimals(d.sol) == CheckTransactionSolDecimals(leaderData.sol) &&
                     GetTransactionSolDecimals(d.sol).Equals(GetTransactionSolDecimals(leaderData.sol)) &&
-                    (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180
+                    (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180 &&
+                    _cexes.Any(a => a.address != transaction.address)
                     );
 
                 if (newLeader == null)

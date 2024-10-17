@@ -70,11 +70,14 @@ namespace nattbakka_server.Services
             int cexId = _cexList.Where(n => n.name == cexName).Select(n => n.id).FirstOrDefault();
             var parsedTransaction = await _solanaServices.GetConfirmedTransactionAsync(signature);
 
-            if (parsedTransaction == null || cexId == 0)
+            if (parsedTransaction == null ||
+                cexId == 0 ||
+                _cexList.Any(a => a.address == parsedTransaction.receivingAddress)
+                )                
             {
                 return;
             }
-
+            
             await _databaseComponents.PostTransaction(parsedTransaction, cexId);
         }
 

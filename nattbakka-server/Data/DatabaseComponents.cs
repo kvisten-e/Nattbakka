@@ -19,7 +19,6 @@ namespace nattbakka_server.Data
 
         public async Task PostTransaction(ParsedTransaction pt, int dexId)
         {
-
             using var context = _contextFactory.CreateDbContext();
 
             var transaction = new Transaction()
