@@ -14,9 +14,9 @@ namespace nattbakka_server.Services
         private readonly ILogger<GroupService> _logger;
         private readonly DatabaseComponents _databaseComponents;
         public List<List<Transaction>> _createdGroupsList = new List<List<Transaction>>();
-        public List<TransactionWithGroup> _dexGroups = new List<TransactionWithGroup>();
+        public List<TransactionWithGroup> _cexGroups = new List<TransactionWithGroup>();
         public List<Transaction> _transactions = new List<Transaction>();
-        public List<Cex> _dexes = new List<Cex>();
+        public List<Cex> _cexes = new List<Cex>();
 
 
         public GroupService(ILogger<GroupService> logger, DatabaseComponents databaseComponents)
@@ -28,14 +28,15 @@ namespace nattbakka_server.Services
         public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Timed Background Service running.");
-            _dexes = await _databaseComponents.GetCexesAsync();
+            _cexes = await _databaseComponents.GetCexesAsync();
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 await GetCurrentDexGroups();
 
-                int binanceId = _dexes.FirstOrDefault(b => b.name == "Binance2")?.id ?? -1;
-                _transactions = await _databaseComponents.GetTransactions(binanceId, asNoTracking: true);
+                int minSol = 1;
+                _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
+
 
 
                 foreach (var transaction in _transactions)
@@ -51,7 +52,6 @@ namespace nattbakka_server.Services
 
                 foreach (var group in _createdGroupsList)
                 {
-
                     // 4. Skapa row i dex_groups - retunera id som skapas
                     int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count - 1].timestamp);
                     int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
@@ -68,7 +68,7 @@ namespace nattbakka_server.Services
 
                 _createdGroupsList.Clear();
                 _transactions.Clear();
-                _dexGroups.Clear();
+                _cexGroups.Clear();
 
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
@@ -80,7 +80,7 @@ namespace nattbakka_server.Services
 
         private async Task GetCurrentDexGroups()
         {
-            _dexGroups = await _databaseComponents.GetTransactionsWithGroups();
+            _cexGroups = await _databaseComponents.GetTransactionsWithGroups();
         }
 
         private async Task<bool> AddTxToActiveGroups(Transaction transaction)
@@ -88,8 +88,7 @@ namespace nattbakka_server.Services
 
             int timeLimitUnix = 180;
 
-
-            int? groupIdFound = _dexGroups
+            int? groupIdFound = _cexGroups
                 .FirstOrDefault(t =>
                     t.dex_id == transaction.dex_id &&
                     ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) <= timeLimitUnix &&
@@ -134,6 +133,7 @@ namespace nattbakka_server.Services
             {
 
                 var newLeader = _transactions.FirstOrDefault(d =>
+                    d.dex_id == leaderData.dex_id &&
                     d.timestamp > leaderData.timestamp &&
                     GetTransactionSolDecimals(d.sol) == GetTransactionSolDecimals(leaderData.sol) &&
                     (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180
@@ -159,7 +159,7 @@ namespace nattbakka_server.Services
         private int GetTransactionSolDecimals(double sol)
         {
             int decimalsMax = 3;
-
+            string decimalValue;
             int firstDecimalIndex = (int)sol.ToString().IndexOf(",");
             
             if(firstDecimalIndex < 0)
@@ -170,24 +170,26 @@ namespace nattbakka_server.Services
 
             int acuallyDeciamlsOfSolValue = solToString.Length - firstDecimalIndex - 1;
 
-
             if (acuallyDeciamlsOfSolValue >= decimalsMax)
             {
-                string decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, decimalsMax);
-                int decimalValueInt = Convert.ToInt32(decimalValue);
-                return decimalValueInt;
+                decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, decimalsMax);
             }
             else
             {
-                string decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, acuallyDeciamlsOfSolValue);
+                decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, acuallyDeciamlsOfSolValue);
+            }
+
+            bool correctFormat = decimalValue.IndexOf("-") == -1;
+            if(correctFormat)
+            {
                 int decimalValueInt = Convert.ToInt32(decimalValue);
                 return decimalValueInt;
             }
-
-
+            
+            return 0;
 
         }
-    
+
         private long ConvertDatetimeToUnix(DateTime date)
         {
             return (long)date.Subtract(DateTime.UnixEpoch).TotalSeconds;

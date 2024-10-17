@@ -4,13 +4,14 @@ using Solnet.Rpc;
 using Solnet.Rpc.Models;
 using System.Text.Json;
 using Solnet.Wallet;
+using Newtonsoft.Json;
 
 namespace nattbakka_server.Services
 
 {
     public class SolanaServices
     {
-        private readonly List<string> _apiKeys;
+        private List<string> _apiKeys;
 
         public SolanaServices(List<string> apiKeys)
         {
@@ -25,8 +26,7 @@ namespace nattbakka_server.Services
             int attempts = 0;
             while(attempts < 10)
             {
-                var rpc = Rpc();
-                var transactionDetails = await rpc.GetTransactionAsync(signature);
+                var transactionDetails = await Rpc().GetTransactionAsync(signature);
 
                 if (!transactionDetails.WasSuccessful)
                 {
@@ -35,14 +35,22 @@ namespace nattbakka_server.Services
                     Thread.Sleep(500);
                     continue;
                 }
-                
+
                 double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
+                
+                string sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0];
+                string receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1];
+                
+                if (sendingAddress == "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9")
+                {
+                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[2];
+                }
 
                 var parsedTransaction = new ParsedTransaction
                 {
                     tx = signature,
-                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1],
-                    sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0],
+                    receivingAddress = receivingAddress,
+                    sendingAddress = sendingAddress,
                     sol = sol
                 };
 
@@ -50,6 +58,7 @@ namespace nattbakka_server.Services
             }
             return null;
         }
+
 
         public async Task<double> GetAddressBalance(string address)
         {
@@ -72,9 +81,17 @@ namespace nattbakka_server.Services
 
         public string RotateApiList()
         {
+            List<string> backupApiKeys = _apiKeys;
             string currentApi = _apiKeys[0];
-            _apiKeys.Remove(currentApi);
-            _apiKeys.Add(currentApi);
+            try
+            {
+                _apiKeys.Remove(currentApi);
+                _apiKeys.Add(currentApi);
+            }
+            catch
+            {
+                _apiKeys = backupApiKeys;
+            }
             return currentApi;
         }
 

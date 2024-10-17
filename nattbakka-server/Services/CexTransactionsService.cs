@@ -5,6 +5,7 @@ using WebSocketSharp;
 using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Utilities.Encoders;
+using Newtonsoft.Json;
 
 namespace nattbakka_server.Services
 {
@@ -24,11 +25,11 @@ namespace nattbakka_server.Services
             _databaseComponents = databaseComponents;
         }
 
-        public async Task SolanaTransactionsWebSocket(List<string> apiKeys)
+        public async Task SolanaTransactionsWebSocket(List<string> apiKeys, List<string> apiKeysHelius)
         {
             _solanaServices = new SolanaServices(apiKeys);
             _cexList = await _databaseComponents.GetCexesAsync();
-            var solanaWs = new SolanaWebSocketClient(apiKeys);
+            var solanaWs = new SolanaWebSocketClient(apiKeysHelius);
 
             foreach (Cex cex in _cexList)
             {
@@ -69,10 +70,12 @@ namespace nattbakka_server.Services
         {
             int cexId = _cexList.Where(n => n.name == cexName).Select(n => n.id).FirstOrDefault();
             var parsedTransaction = await _solanaServices.GetConfirmedTransactionAsync(signature);
+
             if (parsedTransaction == null || cexId == 0)
             {
                 return;
             }
+
             await _databaseComponents.PostTransaction(parsedTransaction, cexId);
         }
 

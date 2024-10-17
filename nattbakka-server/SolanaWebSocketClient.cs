@@ -8,9 +8,9 @@ namespace nattbakka_server
     public class SolanaWebSocketClient
     {
         private List<string> _apiKeys;
-        public SolanaWebSocketClient(List<string> apiKeys) {
+        public SolanaWebSocketClient(List<string> apiKeysHelius) {
             
-            _apiKeys = new List<string>(apiKeys);
+            _apiKeys = new List<string>(apiKeysHelius);
         }
 
         public async Task<WebSocket> CreateWebSocketConnection(string cex)
@@ -20,9 +20,8 @@ namespace nattbakka_server
                 throw new InvalidOperationException("No API keys available.");
             }
 
-            string apiKey = _apiKeys[new Random().Next(_apiKeys.Count)];
-            string wssUri = $"wss://rpc.shyft.to?api_key={apiKey}";
-            string wssHelius = "wss://mainnet.helius-rpc.com/?api-key=6f9b778a-be64-496b-b57e-158b59c3fd25";
+            string apiKey = RotateApiList();
+            string wssHelius = $"wss://mainnet.helius-rpc.com/?api-key={apiKey}";
             var websocketRequest = new
             {
                 jsonrpc = "2.0",
@@ -73,6 +72,14 @@ namespace nattbakka_server
         private void Ws_OnClose(object? sender, CloseEventArgs e)
         {
             Console.WriteLine("WebSocket closed: " + e.Reason);
+        }
+
+        private string RotateApiList()
+        {
+            string currentApi = _apiKeys[0];
+            _apiKeys.Remove(currentApi);
+            _apiKeys.Add(currentApi);
+            return currentApi;
         }
     }
 }

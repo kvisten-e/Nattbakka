@@ -18,9 +18,10 @@ builder.Services.AddScoped<GroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
 
 var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
+var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<string>>();
+
 
 builder.Services.AddScoped<DatabaseComponents>();
-builder.Services.AddScoped<DexService>();
 builder.Services.AddScoped<CexTransactionsService>();
 
 
@@ -40,11 +41,8 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     // Starta bevakning av dexes, spara transaktioner till databasen
-    //var dexService = scope.ServiceProvider.GetRequiredService<DexService>();
-    //await dexService.MonitorDexesAsync(apiKeys);
-
     var cexService = scope.ServiceProvider.GetRequiredService<CexTransactionsService>();
-    await cexService.SolanaTransactionsWebSocket(apiKeysShyft);
+    await cexService.SolanaTransactionsWebSocket(apiKeysShyft, apiKeysHelius);
 
     // Leta/skapa grupper
     /// -> Startas automatisk med GroupService

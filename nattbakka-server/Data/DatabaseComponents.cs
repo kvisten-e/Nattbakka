@@ -106,13 +106,31 @@ namespace nattbakka_server.Data
             return data;
         }
 
-        public async Task<List<Transaction>> GetTransactions(int dexId, bool asNoTracking = false)
+        public async Task<List<Transaction>> GetTransactions(bool asNoTracking = false)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            DateTime time_history = DateTime.Now.AddDays(-1);
+
+            var query = context.transactions.Where(t =>
+                t.group_id == 0 &&
+                t.timestamp > time_history
+                );
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Transaction>> GetTransactions(int minSol, bool asNoTracking = false)
         {
             using var context = _contextFactory.CreateDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transactions.Where(t => 
-                t.dex_id == dexId && 
+                t.sol >= minSol && 
                 t.group_id == 0 && 
                 t.timestamp > time_history
                 );
