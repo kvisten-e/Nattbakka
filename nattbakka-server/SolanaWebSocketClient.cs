@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using nattbakka_server.Helpers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using WebSocketSharp;
@@ -8,6 +9,7 @@ namespace nattbakka_server
     public class SolanaWebSocketClient
     {
         private List<string> _apiKeys;
+        private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new RandomizeRpcEndpoint();
         public SolanaWebSocketClient(List<string> apiKeysHelius) {
             
             _apiKeys = new List<string>(apiKeysHelius);
@@ -20,7 +22,7 @@ namespace nattbakka_server
                 throw new InvalidOperationException("No API keys available.");
             }
 
-            string apiKey = RotateApiList();
+            string apiKey = _randomizeRpcEndpoint.RandomListApiKeys(_apiKeys);
             string wssHelius = $"wss://mainnet.helius-rpc.com/?api-key={apiKey}";
             var websocketRequest = new
             {
@@ -74,12 +76,5 @@ namespace nattbakka_server
             Console.WriteLine("WebSocket closed: " + e.Reason);
         }
 
-        private string RotateApiList()
-        {
-            string currentApi = _apiKeys[0];
-            _apiKeys.Remove(currentApi);
-            _apiKeys.Add(currentApi);
-            return currentApi;
-        }
     }
 }

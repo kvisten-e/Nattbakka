@@ -5,6 +5,7 @@ using Solnet.Rpc.Models;
 using System.Text.Json;
 using Solnet.Wallet;
 using Newtonsoft.Json;
+using nattbakka_server.Helpers;
 
 namespace nattbakka_server.Services
 
@@ -12,6 +13,7 @@ namespace nattbakka_server.Services
     public class SolanaServices
     {
         private List<string> _apiKeys;
+        private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new RandomizeRpcEndpoint();
 
         public SolanaServices(List<string> apiKeys)
         {
@@ -32,7 +34,7 @@ namespace nattbakka_server.Services
                 {
                     attempts++;
                     Console.WriteLine($"Failed to parse signature: {signature} - Attempt left: {10 - attempts}");
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                     continue;
                 }
 
@@ -74,7 +76,7 @@ namespace nattbakka_server.Services
 
         public IRpcClient Rpc()
         {
-            string api = RotateApiList();
+            string api = _randomizeRpcEndpoint.RandomListApiKeys(_apiKeys);
             string wss = $"https://rpc.shyft.to?api_key={api}";
             return ClientFactory.GetClient(wss);
         }

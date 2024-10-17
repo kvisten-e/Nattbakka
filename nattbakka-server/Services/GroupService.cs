@@ -34,12 +34,9 @@ namespace nattbakka_server.Services
             {
                 await GetCurrentDexGroups();
 
-                int minSol = 0;
-                //_transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
-                _transactions = await _databaseComponents.GetTransactions(minSol, 13, asNoTracking: true);
-
-
-
+                int minSol = 1;
+                _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
+                //_transactions = await _databaseComponents.GetTransactions(minSol, 13, asNoTracking: true);
 
                 foreach (var transaction in _transactions)
                 {
@@ -137,8 +134,8 @@ namespace nattbakka_server.Services
                 var newLeader = _transactions.FirstOrDefault(d =>
                     d.dex_id == leaderData.dex_id &&
                     d.timestamp > leaderData.timestamp &&
-                    CheckTransactionSolDecimals(d.sol) == CheckTransactionSolDecimals(leaderData.sol) &&
-                    GetTransactionSolDecimals(d.sol) == GetTransactionSolDecimals(leaderData.sol) &&
+                    //CheckTransactionSolDecimals(d.sol) == CheckTransactionSolDecimals(leaderData.sol) &&
+                    GetTransactionSolDecimals(d.sol).Equals(GetTransactionSolDecimals(leaderData.sol)) &&
                     (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180
                     );
 
@@ -164,38 +161,19 @@ namespace nattbakka_server.Services
             return sol % 2 == 0;
         }
 
-        private int GetTransactionSolDecimals(double sol)
+        private string GetTransactionSolDecimals(double sol)
         {
             int decimalsMax = 3;
-            string decimalValue;
-            int firstDecimalIndex = (int)sol.ToString().IndexOf(",");
-            
-            if(firstDecimalIndex < 0)
+            int firstDecimalIndex = sol.ToString().IndexOf(",");
+
+            if (firstDecimalIndex < 0)
             {
-                return (int)sol;
+                return "0";
             }
             string solToString = sol.ToString();
-
-            int acuallyDeciamlsOfSolValue = solToString.Length - firstDecimalIndex - 1;
-
-            if (acuallyDeciamlsOfSolValue >= decimalsMax)
-            {
-                decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, decimalsMax);
-            }
-            else
-            {
-                decimalValue = sol.ToString().Substring(firstDecimalIndex + 1, acuallyDeciamlsOfSolValue);
-            }
-
-            bool correctFormat = decimalValue.IndexOf("-") == -1;
-            if(correctFormat)
-            {
-                int decimalValueInt = Convert.ToInt32(decimalValue);
-                return decimalValueInt;
-            }
-            
-            return 0;
-
+            string decimals = solToString.Split(',')[1];
+            decimals = (decimals.Length > 3) ? decimals[..decimalsMax] : decimals;
+            return decimals;
         }
 
         private long ConvertDatetimeToUnix(DateTime date)
