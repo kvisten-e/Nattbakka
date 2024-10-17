@@ -143,29 +143,25 @@ namespace nattbakka_server.Data
             return await query.ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactions(int dexId, int minSol = 1, int maxSol = 6, int group_id = 0, bool sol_changed = false, bool asNoTracking = false)
+        public async Task<List<Transaction>> GetTransactions(int minSol, int cex, bool asNoTracking = false)
         {
-            DateTime time_history = DateTime.Now.AddDays(-1);
-            
             using var context = _contextFactory.CreateDbContext();
+            DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transactions.Where(d =>
-                d.dex_id == dexId &&
-                d.sol > minSol &&
-                d.sol < maxSol &&
-                d.group_id == group_id &&
-                d.sol_changed == sol_changed &&
-                d.timestamp > time_history
-            );          
-            
-                if (asNoTracking)
+            var query = context.transactions.Where(t =>
+                t.sol >= minSol &&
+                t.dex_id == cex &&
+                t.group_id == 0 &&
+                t.timestamp > time_history
+                );
+
+            if (asNoTracking)
             {
                 query = query.AsNoTracking();
             }
 
             return await query.ToListAsync();
         }
-
 
         public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
         {

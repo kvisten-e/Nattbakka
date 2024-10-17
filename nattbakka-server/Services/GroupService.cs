@@ -34,8 +34,10 @@ namespace nattbakka_server.Services
             {
                 await GetCurrentDexGroups();
 
-                int minSol = 1;
-                _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
+                int minSol = 0;
+                //_transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
+                _transactions = await _databaseComponents.GetTransactions(minSol, 13, asNoTracking: true);
+
 
 
 
@@ -135,6 +137,7 @@ namespace nattbakka_server.Services
                 var newLeader = _transactions.FirstOrDefault(d =>
                     d.dex_id == leaderData.dex_id &&
                     d.timestamp > leaderData.timestamp &&
+                    CheckTransactionSolDecimals(d.sol) == CheckTransactionSolDecimals(leaderData.sol) &&
                     GetTransactionSolDecimals(d.sol) == GetTransactionSolDecimals(leaderData.sol) &&
                     (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180
                     );
@@ -154,6 +157,11 @@ namespace nattbakka_server.Services
                 _createdGroupsList.Add(createdGroup);
             }
 
+        }
+
+        private bool CheckTransactionSolDecimals(double sol)
+        {
+            return sol % 2 == 0;
         }
 
         private int GetTransactionSolDecimals(double sol)

@@ -57,6 +57,7 @@ namespace nattbakka_server.Services
         private async Task OnWebSocketMessage(string cexName, object? sender, MessageEventArgs e)
         {
             var jsonObject = JObject.Parse(e.Data);
+            Console.WriteLine("jsonObject: " + jsonObject);
             string signature = (string)jsonObject["params"]?["result"]?["value"]?["signature"];
             Console.WriteLine("Signature: " + signature);
 
