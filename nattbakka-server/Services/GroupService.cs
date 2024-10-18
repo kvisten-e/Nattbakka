@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using nattbakka_server.Data;
 using System.Linq;
-using System.Diagnostics;
 using Transaction = nattbakka_server.Models.Transaction;
 using TransactionWithGroup = nattbakka_server.Models.TransactionWithGroup;
 using nattbakka_server.Models;
-using Newtonsoft.Json;
 
 namespace nattbakka_server.Services
 {
@@ -36,15 +34,11 @@ namespace nattbakka_server.Services
 
                 int minSol = 1;
                 _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
-                //_transactions = await _databaseComponents.GetTransactions(minSol, 13, asNoTracking: true);
 
                 foreach (var transaction in _transactions)
                 {
-                    // 1. Kolla om transaktionen kan läggas till en aktiv grupp som ligger live
                     if (await AddTxToActiveGroups(transaction)) continue;
-                    // 2. Kolla om transaktionen redan finns med i en GroupList
                     if (CheckTxInCurrentGroupList(transaction)) continue;
-                    // 3. Försök skapa en ny group med transaktionen
                     CreateGroup(transaction);
                 }
 
@@ -53,7 +47,6 @@ namespace nattbakka_server.Services
                 {
                     if (group.Count < 3) continue;
 
-                    // 4. Skapa row i dex_groups - retunera id som skapas
                     int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count - 1].timestamp);
                     int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
 
@@ -61,9 +54,7 @@ namespace nattbakka_server.Services
 
                     foreach (var tx in group)
                     {
-                        // 5. Uppdatera varje transaktion i grupp med det id:et
                         await _databaseComponents.AddGroupIdToTransaction(tx.id, idCreatedGroup);
-
                     }
                 }
 
