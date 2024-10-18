@@ -51,6 +51,8 @@ namespace nattbakka_server.Services
 
                 foreach (var group in _createdGroupsList)
                 {
+                    if (group.Count < 3) continue;
+
                     // 4. Skapa row i dex_groups - retunera id som skapas
                     int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count - 1].timestamp);
                     int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
@@ -154,11 +156,6 @@ namespace nattbakka_server.Services
                 _createdGroupsList.Add(createdGroup);
             }
 
-        }
-
-        private bool CheckTransactionSolDecimals(double sol)
-        {
-            return sol % 2 == 0;
         }
 
         private string GetTransactionSolDecimals(double sol)
