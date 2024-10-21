@@ -13,7 +13,11 @@
         {
             using var scope = _serviceProvider.CreateScope();
             var groupService = scope.ServiceProvider.GetRequiredService<GroupService>();
+            var updateGroupService = scope.ServiceProvider.GetRequiredService<UpdateGroupService>();
+
             await groupService.ExecuteAsync(stoppingToken);
+            await updateGroupService.ExecuteAsync(stoppingToken);
+
         }
     }
 }

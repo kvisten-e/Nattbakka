@@ -7,7 +7,7 @@
         public string address { get; set; }
         public double sol { get; set; }
         public bool sol_changed { get; set; }
-        public int dex_id { get; set; }
+        public int cex_id { get; set; }
         public int group_id { get; set; }
 
         public DateTime timestamp { get; set; }

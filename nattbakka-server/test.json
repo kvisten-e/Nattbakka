@@ -1,0 +1,96 @@
+{
+  "WasSuccessful": true,
+  "WasHttpRequestSuccessful": true,
+  "WasRequestSuccessfullyHandled": true,
+  "Reason": "OK",
+  "Result": {
+    "Slot": 296292988,
+    "BlockTime": 1729245193,
+    "Transaction": {
+      "Signatures": [
+        "59Xvuy3aPcJiBVGuBgSMjMQfhxE5Fw3VnAETHB5vbWZgGRBtJF98jacFqmX6yHMeKt9uyv5ukJHUS8och96daAFP",
+        "3Ro5asm97jkwvKVgQGW8gAoDgFYtMfKPNi1xM7N3VGB68fcmujFH6mdhLpicEzvy5amC1EYjgUEe9fsmE63zt3w2"
+      ],
+      "Message": {
+        "AccountKeys": [
+          "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
+          "9nUNwTjTZASbbK9cigF7WKbo16oQ97uDG5kb38j4nd8H",
+          "9tPRPwuVKZr6dArLmJj5rRiCcprWrjXtxVLrGcqc8KMk",
+          "GsFsFEnB6xMGHWhpPxqGU6WYoujCEPB4xqvxLR7d7Myk",
+          "11111111111111111111111111111111",
+          "ComputeBudget111111111111111111111111111111",
+          "SysvarRecentB1ockHashes11111111111111111111"
+        ],
+        "Header": {
+          "NumRequiredSignatures": 2,
+          "NumReadonlySignedAccounts": 1,
+          "NumReadonlyUnsignedAccounts": 3
+        },
+        "RecentBlockhash": "3SmFekqeitt2Q9iHhd8CoQ4CdxSoTrGCicSLQRewEe2N",
+        "Instructions": [
+          {
+            "ProgramIdIndex": 4,
+            "Accounts": [
+              3,
+              6,
+              1
+            ],
+            "Data": "6vx8P"
+          },
+          {
+            "ProgramIdIndex": 5,
+            "Accounts": [],
+            "Data": "Fj2Eoy"
+          },
+          {
+            "ProgramIdIndex": 5,
+            "Accounts": [],
+            "Data": "3axL5qdEKYoR"
+          },
+          {
+            "ProgramIdIndex": 4,
+            "Accounts": [
+              0,
+              2
+            ],
+            "Data": "3Bxs4R1jhrKjL1yy"
+          }
+        ]
+      }
+    },
+    "Meta": {
+      "Error": null,
+      "Fee": 410000,
+      "PreBalances": [
+        285374177148794,
+        10372551560,
+        49000000,
+        1447880,
+        1,
+        1,
+        42706560
+      ],
+      "PostBalances": [
+        285373956968794,
+        10372551560,
+        268770000,
+        1447880,
+        1,
+        1,
+        42706560
+      ],
+      "InnerInstructions": [],
+      "PreTokenBalances": [],
+      "PostTokenBalances": [],
+      "LogMessages": [
+        "Program 11111111111111111111111111111111 invoke [1]",
+        "Program 11111111111111111111111111111111 success",
+        "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+        "Program ComputeBudget111111111111111111111111111111 success",
+        "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+        "Program ComputeBudget111111111111111111111111111111 success",
+        "Program 11111111111111111111111111111111 invoke [1]",
+        "Program 11111111111111111111111111111111 success"
+      ]
+    }
+  }

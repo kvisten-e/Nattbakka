@@ -23,8 +23,9 @@ namespace nattbakka_server.Services
             }
             _apiKeys = apiKeys;
         }
-        public async Task<ParsedTransaction> GetConfirmedTransactionAsync(string signature)
+        public async Task<dynamic> GetConfirmedTransactionAsync(string signature)
         {
+            Console.WriteLine("Signature: " + signature);
             int attempts = 0;
             while(attempts < 10)
             {
@@ -33,30 +34,12 @@ namespace nattbakka_server.Services
                 if (!transactionDetails.WasSuccessful)
                 {
                     attempts++;
-                    Console.WriteLine($"Failed to parse signature: {signature} - Attempt left: {10 - attempts}");
+                    Console.WriteLine($"Failed to get confirmed signature: {signature} - Attempt left: {10 - attempts}");
                     Thread.Sleep(1000);
                     continue;
                 }
 
-                double sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
-                
-                string sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0];
-                string receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1];
-                
-                if (sendingAddress == "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9")
-                {
-                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[2];
-                }
-
-                var parsedTransaction = new ParsedTransaction
-                {
-                    tx = signature,
-                    receivingAddress = receivingAddress,
-                    sendingAddress = sendingAddress,
-                    sol = sol
-                };
-
-                return parsedTransaction;
+                return transactionDetails;
             }
             return null;
         }
@@ -78,6 +61,7 @@ namespace nattbakka_server.Services
         {
             string api = _randomizeRpcEndpoint.RandomListApiKeys(_apiKeys);
             string wss = $"https://rpc.shyft.to?api_key={api}";
+            Console.WriteLine("WSS: " + wss);
             return ClientFactory.GetClient(wss);
         }
 

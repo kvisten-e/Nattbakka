@@ -4,6 +4,8 @@ using System.Linq;
 using Transaction = nattbakka_server.Models.Transaction;
 using TransactionWithGroup = nattbakka_server.Models.TransactionWithGroup;
 using nattbakka_server.Models;
+using nattbakka_server.Helpers;
+
 
 namespace nattbakka_server.Services
 {
@@ -15,6 +17,7 @@ namespace nattbakka_server.Services
         public List<TransactionWithGroup> _cexGroups = new List<TransactionWithGroup>();
         public List<Transaction> _transactions = new List<Transaction>();
         public List<Cex> _cexes = new List<Cex>();
+        private readonly GetTransactionSolDecimals _getDecimals = new GetTransactionSolDecimals();
 
 
         public GroupService(ILogger<GroupService> logger, DatabaseComponents databaseComponents)
@@ -25,7 +28,7 @@ namespace nattbakka_server.Services
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Timed Background Service running.");
+            _logger.LogInformation("GroupService running.");
             _cexes = await _databaseComponents.GetCexesAsync();
 
             while (!stoppingToken.IsCancellationRequested)
@@ -67,7 +70,7 @@ namespace nattbakka_server.Services
 
             }
 
-            _logger.LogInformation("Timed Background Service is stopping.");
+            _logger.LogInformation("GroupService is stopping.");
         }
 
         private async Task GetCurrentCexGroups()
@@ -82,10 +85,10 @@ namespace nattbakka_server.Services
 
             int? groupIdFound = _cexGroups
                 .FirstOrDefault(t =>
-                    t.dex_id == transaction.dex_id &&
+                    t.cex_id == transaction.cex_id &&
                     ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) <= timeLimitUnix &&
                     ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) >= 0 &&
-                    GetTransactionSolDecimals(t.sol) == GetTransactionSolDecimals(transaction.sol)
+                    _getDecimals.GetTransactionSolDecimal(t.sol) == _getDecimals.GetTransactionSolDecimal(transaction.sol)
                 )?.group_id;
 
             if (groupIdFound.HasValue && groupIdFound.Value > 0)
@@ -120,14 +123,13 @@ namespace nattbakka_server.Services
             var leaderData = transaction;
             List<Transaction> createdGroup = new List<Transaction> { leaderData };
 
-
             while (true)
             {
 
                 var newLeader = _transactions.FirstOrDefault(d =>
-                    d.dex_id == leaderData.dex_id &&
+                    d.cex_id == leaderData.cex_id &&
                     d.timestamp > leaderData.timestamp &&
-                    GetTransactionSolDecimals(d.sol).Equals(GetTransactionSolDecimals(leaderData.sol)) &&
+                    _getDecimals.GetTransactionSolDecimal(d.sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.sol)) &&
                     (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180 &&
                     _cexes.Any(a => a.address != transaction.address)
                     );
@@ -149,20 +151,6 @@ namespace nattbakka_server.Services
 
         }
 
-        private string GetTransactionSolDecimals(double sol)
-        {
-            int decimalsMax = 3;
-            int firstDecimalIndex = sol.ToString().IndexOf(",");
-
-            if (firstDecimalIndex < 0)
-            {
-                return "0";
-            }
-            string solToString = sol.ToString();
-            string decimals = solToString.Split(',')[1];
-            decimals = (decimals.Length > 3) ? decimals[..decimalsMax] : decimals;
-            return decimals;
-        }
 
         private long ConvertDatetimeToUnix(DateTime date)
         {

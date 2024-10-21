@@ -23,14 +23,14 @@ namespace nattbakka_server.Data
 
             var transaction = new Transaction()
             {
-                tx = pt.tx,
+                tx = pt.signature,
                 address = pt.receivingAddress,
                 sol = pt.sol,
-                dex_id = dexId,
+                cex_id = dexId,
                 timestamp = DateTime.Now
             };
 
-            context.transactions.Add(transaction);
+            context.transaction.Add(transaction);
             await context.SaveChangesAsync();
         }
 
@@ -39,7 +39,7 @@ namespace nattbakka_server.Data
             try
             {
                 using var context = _contextFactory.CreateDbContext();
-                await context.transactions
+                await context.transaction
                     .Where(u => u.id == transactionId)
                     .ExecuteUpdateAsync(u =>
                         u.SetProperty(u => u.group_id, groupId)
@@ -60,7 +60,7 @@ namespace nattbakka_server.Data
             int amount = await GetGroupAmount(groupId);
             using var context = _contextFactory.CreateDbContext();
            
-            await context.dex_groups
+            await context.cex_group
                 .Where(u => u.id == groupId)
                 .ExecuteUpdateAsync(u =>
                     u.SetProperty(u => u.total_wallets, amount)
@@ -81,7 +81,7 @@ namespace nattbakka_server.Data
                 created = DateTime.Now
             };
 
-            context.dex_groups.Add(group);
+            context.cex_group.Add(group);
             await context.SaveChangesAsync();
             int id = group.id;
 
@@ -91,7 +91,7 @@ namespace nattbakka_server.Data
         public async Task<int> GetGroupAmount(int groupId)
         {
             using var context = _contextFactory.CreateDbContext();
-            int amount = await context.transactions
+            int amount = await context.transaction
                 .Where(d => d.group_id == groupId)
                 .CountAsync();
             return amount;
@@ -110,7 +110,7 @@ namespace nattbakka_server.Data
             using var context = _contextFactory.CreateDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transactions.Where(t =>
+            var query = context.transaction.Where(t =>
                 t.group_id == 0 &&
                 t.timestamp > time_history
                 );
@@ -128,7 +128,7 @@ namespace nattbakka_server.Data
             using var context = _contextFactory.CreateDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transactions.Where(t => 
+            var query = context.transaction.Where(t => 
                 t.sol >= minSol && 
                 t.group_id == 0 && 
                 t.timestamp > time_history
@@ -147,9 +147,9 @@ namespace nattbakka_server.Data
             using var context = _contextFactory.CreateDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transactions.Where(t =>
+            var query = context.transaction.Where(t =>
                 t.sol >= minSol &&
-                t.dex_id == cex &&
+                t.cex_id == cex &&
                 t.group_id == 0 &&
                 t.timestamp > time_history
                 );
@@ -165,8 +165,8 @@ namespace nattbakka_server.Data
         public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
         {
             using var context = _contextFactory.CreateDbContext();
-            var data = await context.transactions
-                .Include(t => t.dex_groups)  // Join with DexGroup
+            var data = await context.transaction
+                .Include(t => t.cex_group)  // Join with DexGroup
                 .Select(t => new TransactionWithGroup
                 {
                     id = t.id,
@@ -174,14 +174,14 @@ namespace nattbakka_server.Data
                     address = t.address,
                     sol = t.sol,
                     sol_changed = t.sol_changed,
-                    dex_id = t.dex_id,
+                    cex_id = t.cex_id,
                     group_id = t.group_id,
                     timestamp = t.timestamp,
 
-                    total_wallets = t.dex_groups.total_wallets,
-                    inactive_wallets = t.dex_groups.inactive_wallets,
-                    time_different_unix = t.dex_groups.time_different_unix,
-                    created = t.dex_groups.created
+                    total_wallets = t.cex_group.total_wallets,
+                    inactive_wallets = t.cex_group.inactive_wallets,
+                    time_different_unix = t.cex_group.time_different_unix,
+                    created = t.cex_group.created
                 }).ToListAsync();
 
             return data;

@@ -10,6 +10,6 @@ namespace nattbakka_server.Models
         public int time_different_unix { get; set; }
         public DateTime created { get; set; }
 
-        public ICollection<Transaction> transactions { get; set; }
+        public ICollection<Transaction> transaction { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Utilities.Encoders;
 using Newtonsoft.Json;
+using nattbakka_server.Helpers;
 
 namespace nattbakka_server.Services
 {
@@ -20,6 +21,8 @@ namespace nattbakka_server.Services
         private bool _shouldReconnect = true;
         private ConcurrentDictionary<string, bool> _prevMessages = new ConcurrentDictionary<string, bool>();
         private SolanaServices? _solanaServices = null;
+        private readonly CexTransactionTemplate _transactionTemplate = new CexTransactionTemplate();
+
 
         public CexTransactionsService(DatabaseComponents databaseComponents) {
             _databaseComponents = databaseComponents;
@@ -33,7 +36,7 @@ namespace nattbakka_server.Services
 
             foreach (Cex cex in _cexList)
             {
-                await CreateAndMonitorWebSocket(solanaWs, cex.address, cex.name);
+                await CreateAndMonitorWebSocket(solanaWs, cex);
             }
 
             int counter = 1;
@@ -44,52 +47,58 @@ namespace nattbakka_server.Services
 
         }
 
-        private async Task CreateAndMonitorWebSocket(SolanaWebSocketClient solanaWs, string cexAddress, string cexName)
+        private async Task CreateAndMonitorWebSocket(SolanaWebSocketClient solanaWs, Cex cex)
         {
-            var ws = await solanaWs.CreateWebSocketConnection(cexAddress);
-            ws.OnClose += async (sender, e) => await OnWebSocketClosed(cexName, cexAddress, solanaWs, e);
-            ws.OnMessage += async (sender, e) => await OnWebSocketMessage(cexName, sender, e);
+            string address = cex.address;
+            string name = cex.name;
+            var ws = await solanaWs.CreateWebSocketConnection(address);
+            ws.OnClose += async (sender, e) => await OnWebSocketClosed(cex, solanaWs, e);
+            ws.OnMessage += async (sender, e) => await OnWebSocketMessage(cex, sender, e);
 
-            ActiveCexWebSockets acw = new(cexName, ws);
+            ActiveCexWebSockets acw = new(name, ws);
             _activeWs.Add(acw);
         }
 
-        private async Task OnWebSocketMessage(string cexName, object? sender, MessageEventArgs e)
+        private async Task OnWebSocketMessage(Cex cex, object? sender, MessageEventArgs e)
         {
             var jsonObject = JObject.Parse(e.Data);
             string signature = (string)jsonObject["params"]?["result"]?["value"]?["signature"];
 
             if (!string.IsNullOrEmpty(signature) && _prevMessages.TryAdd(signature, true))
             {
-                await ParseSignatureFromMessage(signature, cexName);
+                await ParseSignatureFromMessage(signature, cex);
             }
         }
 
-        private async Task ParseSignatureFromMessage(string signature, string cexName)
+        private async Task ParseSignatureFromMessage(string signature, Cex cex)
         {
-            int cexId = _cexList.Where(n => n.name == cexName).Select(n => n.id).FirstOrDefault();
-            var parsedTransaction = await _solanaServices.GetConfirmedTransactionAsync(signature);
+            var transactionDetails = await _solanaServices.GetConfirmedTransactionAsync(signature);
+            if (transactionDetails == null) return;
 
-            if (parsedTransaction == null ||
-                cexId == 0 ||
-                _cexList.Any(a => a.address == parsedTransaction.receivingAddress)
-                )                
-            {
-                return;
-            }
-            
-            await _databaseComponents.PostTransaction(parsedTransaction, cexId);
+            string json = JsonConvert.SerializeObject(transactionDetails, Formatting.Indented);
+            Console.WriteLine(json);
+
+            var parsedTransaction = _transactionTemplate.ParsedTransaction(transactionDetails);
+
+            if (parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) return;
+
+            parsedTransaction.signature = signature;
+
+            Console.WriteLine($"ParsedTransaction: {parsedTransaction.signature} \nReceiving: {parsedTransaction.receivingAddress} \nSender: {(cex.address == parsedTransaction.sendingAddress ? cex.name : parsedTransaction.sendingAddress)}");
+
+            //await _databaseComponents.PostTransaction(parsedTransaction, cex.id);
+
         }
 
-        private async Task OnWebSocketClosed(string cexName, string cexAddress, SolanaWebSocketClient solanaWs, CloseEventArgs e)
+        private async Task OnWebSocketClosed(Cex cex, SolanaWebSocketClient solanaWs, CloseEventArgs e)
         {
-            Console.WriteLine($"WebSocket for {cexName} closed: {e.Reason}");
+            Console.WriteLine($"WebSocket for {cex.name} closed: {e.Reason}");
 
             if (_shouldReconnect)
             {
-                Console.WriteLine($"Attempting to reconnect WebSocket for {cexName}...");
+                Console.WriteLine($"Attempting to reconnect WebSocket for {cex.name}...");
                 await Task.Delay(5000);
-                await CreateAndMonitorWebSocket(solanaWs, cexAddress, cexName); 
+                await CreateAndMonitorWebSocket(solanaWs, cex); 
             }
         }
 

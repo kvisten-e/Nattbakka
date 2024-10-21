@@ -10,15 +10,15 @@ namespace nattbakka_server.Data
 
         }
         public DbSet<Cex> cex { get; set; }
-        public DbSet<Transaction> transactions { get; set; }
+        public DbSet<Transaction> transaction { get; set; }
 
-        public DbSet<Group> dex_groups { get; set; }
+        public DbSet<Group> cex_group { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.dex_groups)
-                .WithMany(g => g.transactions)
+                .HasOne(t => t.cex_group)
+                .WithMany(g => g.transaction)
                 .HasForeignKey(t => t.group_id);
 
             base.OnModelCreating(modelBuilder);
