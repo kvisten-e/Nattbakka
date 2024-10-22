@@ -5,68 +5,74 @@ namespace nattbakka_server.Helpers
 {
     public class CexTransactionTemplate
     {
+        private int _AccountKeysLength;
+        private int _PostBalancesLength;
+        private double _solReceiver = 0;
+        private string? _receivingAddress = null;
+        private string? _sendingAddress = null;
+        private string _cexAddress = "";
+        private dynamic _transactionDetails;
 
-        public ParsedTransaction ParsedTransaction(dynamic transactionDetails)
+        public ParsedTransaction ParsedTransaction(dynamic transactionDetails, Cex cex)
         {
-            double sol = 0;
-            string receivingAddress = "";
-            string sendingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[0];
+            _transactionDetails = transactionDetails;
+            _AccountKeysLength = transactionDetails.Result.Transaction.Message.AccountKeys.Length;
+            _PostBalancesLength = transactionDetails.Result.Meta.PostBalances.Length;
+            _cexAddress = cex.address;
 
-            switch (sendingAddress)
+            int indexSender = FindSenderAddress();
+
+            if(indexSender >= 0)
             {
-                case "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9":
-                    sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
-                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[2];
-                    break;
-                case "u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w":
-
-                    break;
-                case "2AQdpHJ2JpcEgPiATUXjQxA8QmafFegfQwSLWSprPicm":
-
-                    break;
-                case "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5":
-
-                    break;
-                case "ASTyfSima4LLAdDgoFGkgqoKowG1LZFDr9fAQrg7iaJZ":
-
-                    break;
-                case "BmFdpraQhkiDQE6SnfG5omcA1VwzqfXrwtNYBwWTymy6":
-
-                    break;
-                case "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2":
-                    sol = (double)transactionDetails.Result.Meta.PostBalances[2] - (transactionDetails.Result.Meta.PreBalances[2]) / 1_000_000_000;
-                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[2];
-                    break;
-                case "5VCwKtCXgCJ6kit5FybXjvriW3xELsFDhYrPSqtJNmcD":
-
-                    break;
-                case "AobVSwdW9BbpMdJvTqeCN4hPAmh4rHm7vwLnQ5ATSyrS":
-
-                    break;
-                case "A77HErqtfN1hLLpvZ9pCtu66FEtM8BveoaKbbMoZ4RiR":
-
-                    break;
-                case "G2YxRa6wt1qePMwfJzdXZG62ej4qaTC7YURzuh2Lwd3t":
-
-                    break;
-                case "5ndLnEYqSFiA5yUFHo6LVZ1eWc6Rhh11K5CfJNkoHEPs":
-
-                    break;
-                default:
-                    sol = (double)(transactionDetails.Result.Meta.PreBalances[0] - transactionDetails.Result.Meta.PostBalances[0]) / 1_000_000_000;
-                    receivingAddress = transactionDetails.Result.Transaction.Message.AccountKeys[1];
-                    break;
+                int indexReceiving = FindReceivingAddress(indexSender);
+                
+                if(indexSender > indexReceiving)
+                {
+                    return null;
+                }
             }
-
 
             return new ParsedTransaction
             {
-                receivingAddress = receivingAddress,
-                sendingAddress = sendingAddress,
-                sol = sol
+                receivingAddress = _receivingAddress,
+                sendingAddress = _sendingAddress,
+                sol = _solReceiver
             };
         }
 
+        private int FindSenderAddress()
+        {
+            for (int i = 0; i < _AccountKeysLength; i++)
+            {
+                string address = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
+                if (address == _cexAddress)
+                {
+                    _sendingAddress = address;
+                    Console.WriteLine($"Index sendingAddress: {i}");
+                    Console.WriteLine($"_sendingAddress: {_sendingAddress}");
 
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+
+        private int FindReceivingAddress(int index)
+        {
+            for (int i = index + 1; i < _PostBalancesLength; i++)
+            {
+                double potentialReceivingSol = ((double)_transactionDetails.Result.Meta.PostBalances[i] - _transactionDetails.Result.Meta.PreBalances[i]) / 1_000_000_000;
+
+
+                if (potentialReceivingSol >= 0.05)
+                {
+                    _receivingAddress = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
+                    _solReceiver = potentialReceivingSol;
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 }

@@ -25,7 +25,6 @@ namespace nattbakka_server.Services
         }
         public async Task<dynamic> GetConfirmedTransactionAsync(string signature)
         {
-            Console.WriteLine("Signature: " + signature);
             int attempts = 0;
             while(attempts < 10)
             {
@@ -34,13 +33,14 @@ namespace nattbakka_server.Services
                 if (!transactionDetails.WasSuccessful)
                 {
                     attempts++;
-                    Console.WriteLine($"Failed to get confirmed signature: {signature} - Attempt left: {10 - attempts}");
+                    //Console.WriteLine($"Failed to get confirmed signature: {signature} - Attempt left: {10 - attempts}");
                     Thread.Sleep(1000);
                     continue;
                 }
 
                 return transactionDetails;
             }
+            Console.WriteLine($"Failed to get confirmed signature: {signature} - rip");
             return null;
         }
 
@@ -61,7 +61,6 @@ namespace nattbakka_server.Services
         {
             string api = _randomizeRpcEndpoint.RandomListApiKeys(_apiKeys);
             string wss = $"https://rpc.shyft.to?api_key={api}";
-            Console.WriteLine("WSS: " + wss);
             return ClientFactory.GetClient(wss);
         }
 
