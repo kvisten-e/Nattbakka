@@ -14,9 +14,9 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-//builder.Services.AddScoped<GroupService>();
-//builder.Services.AddScoped<UpdateGroupService>();
-//builder.Services.AddHostedService<GroupServiceRunner>();
+builder.Services.AddScoped<GroupService>();
+builder.Services.AddScoped<UpdateGroupService>();
+builder.Services.AddHostedService<GroupServiceRunner>();
 
 var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
 var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<string>>();

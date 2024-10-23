@@ -1,10 +1,8 @@
 ﻿using nattbakka_server.Data;
 using nattbakka_server.Models;
-using Solnet.Programs.TokenSwap.Models;
 using WebSocketSharp;
 using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Utilities.Encoders;
 using Newtonsoft.Json;
 using nattbakka_server.Helpers;
 
@@ -74,37 +72,24 @@ namespace nattbakka_server.Services
         {
             var transactionDetails = await _solanaServices.GetConfirmedTransactionAsync(signature);
 
-            string json = JsonConvert.SerializeObject(transactionDetails, Formatting.Indented);
-            Console.WriteLine(json);
-
-
             if (transactionDetails == null ||
                 transactionDetails?.Result.Meta.InnerInstructions.Length != 0 ||
                 transactionDetails?.Result.Meta.PreTokenBalances.Length != 0 ||
                 transactionDetails?.Result.Meta.PostTokenBalances.Length != 0)
             {
-                Console.WriteLine("############ SKIP ############");
                 return;
             };
 
 
             var parsedTransaction = _transactionTemplate.ParsedTransaction(transactionDetails, cex);
 
-            if (parsedTransaction is null) return;
-
-            parsedTransaction.signature = signature;
-
-            Console.WriteLine($"\n\nParsedTransaction: {parsedTransaction.signature}\n Sol:{parsedTransaction.sol} \nReceiving: {parsedTransaction.receivingAddress} \nSender: {(cex.address == parsedTransaction.sendingAddress ? cex.name : parsedTransaction.sendingAddress)}\n\n");
-
-
-            if (parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) {
+            if (parsedTransaction is null || parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) {
                 return;
             };
+            
+            parsedTransaction.signature = signature;
 
-
-            Console.WriteLine("####### Confimed ######");
-
-            //await _databaseComponents.PostTransaction(parsedTransaction, cex.id);
+            await _databaseComponents.PostTransaction(parsedTransaction, cex.id);
 
         }
 

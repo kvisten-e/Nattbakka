@@ -48,9 +48,6 @@ namespace nattbakka_server.Helpers
                 if (address == _cexAddress)
                 {
                     _sendingAddress = address;
-                    Console.WriteLine($"Index sendingAddress: {i}");
-                    Console.WriteLine($"_sendingAddress: {_sendingAddress}");
-
                     return i;
                 }
             }
