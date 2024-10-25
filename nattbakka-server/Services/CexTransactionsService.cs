@@ -20,9 +20,11 @@ namespace nattbakka_server.Services
         private ConcurrentDictionary<string, bool> _prevMessages = new ConcurrentDictionary<string, bool>();
         private SolanaServices? _solanaServices = null;
         private readonly CexTransactionTemplate _transactionTemplate = new CexTransactionTemplate();
+        //private readonly SolanaTransactionCacheService _cacheService;
 
 
-        public CexTransactionsService(DatabaseComponents databaseComponents) {
+        public CexTransactionsService(DatabaseComponents databaseComponents)
+        {
             _databaseComponents = databaseComponents;
         }
 
@@ -86,11 +88,29 @@ namespace nattbakka_server.Services
             if (parsedTransaction is null || parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) {
                 return;
             };
-            
+
+
+            // Save to database directly
             parsedTransaction.signature = signature;
+            parsedTransaction.cex_id = cex.id;
+            await _databaseComponents.PostTransaction(parsedTransaction);
 
-            await _databaseComponents.PostTransaction(parsedTransaction, cex.id);
 
+            // Save to cache
+
+            //var transaction = new TransactionMemCache()
+            //{
+            //    signature = signature,
+            //    address = parsedTransaction.receivingAddress,
+            //    sol = parsedTransaction.sol,
+            //    sol_changed = false,
+            //    cex_id = cex.id,
+            //    group_id = 0,
+            //    timestamp = DateTime.Now
+            //};
+
+
+            //await _cacheService.StoreTransactionAsync(transaction);
         }
 
         private async Task OnWebSocketClosed(Cex cex, SolanaWebSocketClient solanaWs, CloseEventArgs e)

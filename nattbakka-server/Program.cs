@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using nattbakka_server.Data;
+using nattbakka_server.Models;
 using nattbakka_server.Services;
 
 
@@ -14,9 +16,13 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
+
+//builder.Services.AddEnyimMemcached();
+//builder.Services.AddEnyimMemcached<SaveTransaction>(builder.Configuration, "transactionbodyMemcached");
 
 var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
 var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<string>>();
@@ -24,7 +30,7 @@ var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<s
 
 builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<CexTransactionsService>();
-
+//builder.Services.AddScoped<SolanaTransactionCacheService>();
 
 var app = builder.Build();
 
@@ -38,6 +44,7 @@ app.UseWebSockets();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+//app.UseEnyimMemcached();
 
 using (var scope = app.Services.CreateScope())
 {

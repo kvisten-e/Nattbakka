@@ -17,7 +17,7 @@ namespace nattbakka_server.Data
             _contextFactory = contextFactory;
         }
 
-        public async Task PostTransaction(ParsedTransaction pt, int dexId)
+        public async Task PostTransaction(ParsedTransaction pt)
         {
             using var context = _contextFactory.CreateDbContext();
 
@@ -26,7 +26,7 @@ namespace nattbakka_server.Data
                 tx = pt.signature,
                 address = pt.receivingAddress,
                 sol = pt.sol,
-                cex_id = dexId,
+                cex_id = pt.cex_id,
                 timestamp = DateTime.Now
             };
 
