@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using nattbakka_server.Data;
 using nattbakka_server.Models;
 using nattbakka_server.Services;
+using nattbakka_server.Options;
+
 
 
 
@@ -26,6 +28,12 @@ builder.Services.AddHostedService<GroupServiceRunner>();
 
 var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
 var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<string>>();
+
+builder.Services.Configure<RpcApiKeysOptions>(options =>
+{
+    options.ShyftApiKeys = builder.Configuration.GetSection(RpcApiKeysOptions.ApiKeysShyft).Get<List<string>>();
+    options.HeliusApiKeys = builder.Configuration.GetSection(RpcApiKeysOptions.ApiKeysHelius).Get<List<string>>();
+});
 
 
 builder.Services.AddScoped<DatabaseComponents>();

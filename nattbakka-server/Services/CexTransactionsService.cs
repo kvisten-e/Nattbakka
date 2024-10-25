@@ -5,6 +5,8 @@ using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using nattbakka_server.Helpers;
+using Microsoft.Extensions.Options;
+using nattbakka_server.Options;
 
 namespace nattbakka_server.Services
 {
@@ -21,18 +23,23 @@ namespace nattbakka_server.Services
         private SolanaServices? _solanaServices = null;
         private readonly CexTransactionTemplate _transactionTemplate = new CexTransactionTemplate();
         //private readonly SolanaTransactionCacheService _cacheService;
+        private readonly List<string> _apiKeysShyft;
+        private readonly List<string> _apiKeysHelius;
 
 
-        public CexTransactionsService(DatabaseComponents databaseComponents)
+        public CexTransactionsService(DatabaseComponents databaseComponents, IOptions<RpcApiKeysOptions> rpcApiKeysOptions)
         {
             _databaseComponents = databaseComponents;
+            _apiKeysShyft = rpcApiKeysOptions.Value.ShyftApiKeys;
+            _apiKeysHelius = rpcApiKeysOptions.Value.HeliusApiKeys;
+
         }
 
-        public async Task SolanaTransactionsWebSocket(List<string> apiKeys, List<string> apiKeysHelius)
+        public async Task SolanaTransactionsWebSocket()
         {
-            _solanaServices = new SolanaServices(apiKeys);
+            _solanaServices = new SolanaServices(_apiKeysShyft);
             _cexList = await _databaseComponents.GetCexesAsync();
-            var solanaWs = new SolanaWebSocketClient(apiKeysHelius);
+            var solanaWs = new SolanaWebSocketClient(_apiKeysHelius);
 
             foreach (Cex cex in _cexList)
             {
