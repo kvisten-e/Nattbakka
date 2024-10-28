@@ -42,14 +42,21 @@ namespace nattbakka_server.Helpers
 
         private int FindSenderAddress()
         {
-            for (int i = 0; i < _AccountKeysLength; i++)
+            try
             {
-                string address = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
-                if (address == _cexAddress)
+                for (int i = 0; i < _AccountKeysLength; i++)
                 {
-                    _sendingAddress = address;
-                    return i;
+                    string address = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
+                    if (address == _cexAddress)
+                    {
+                        _sendingAddress = address;
+                        return i;
+                    }
                 }
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
             return -1;
         }
@@ -57,18 +64,32 @@ namespace nattbakka_server.Helpers
 
         private int FindReceivingAddress(int index)
         {
-            for (int i = index + 1; i < _PostBalancesLength; i++)
+
+            try
             {
-                double potentialReceivingSol = ((double)_transactionDetails.Result.Meta.PostBalances[i] - _transactionDetails.Result.Meta.PreBalances[i]) / 1_000_000_000;
-
-
-                if (potentialReceivingSol >= 0.05)
+                if (_PostBalancesLength <= 0)
                 {
-                    _receivingAddress = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
-                    _solReceiver = potentialReceivingSol;
-                    return i;
+                    return -1;
+                }
+
+                for (int i = index + 1; i < _PostBalancesLength; i++)
+                {
+                    double potentialReceivingSol = ((double)_transactionDetails.Result.Meta.PostBalances[i] - _transactionDetails.Result.Meta.PreBalances[i]) / 1_000_000_000;
+
+
+                    if (potentialReceivingSol >= 0.05)
+                    {
+                        _receivingAddress = _transactionDetails.Result.Transaction.Message.AccountKeys[i];
+                        _solReceiver = potentialReceivingSol;
+                        return i;
+                    }
                 }
             }
+            catch (IndexOutOfRangeException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
             return -1;
         }
     }
