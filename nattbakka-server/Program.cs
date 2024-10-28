@@ -18,16 +18,16 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
+{
+    options.UseInMemoryDatabase("TestDb");
+});
+
 
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
 
-//builder.Services.AddEnyimMemcached();
-//builder.Services.AddEnyimMemcached<SaveTransaction>(builder.Configuration, "transactionbodyMemcached");
-
-var apiKeysShyft = builder.Configuration.GetSection("ApiKeysShyft").Get<List<string>>();
-var apiKeysHelius = builder.Configuration.GetSection("ApiKeysHelius").Get<List<string>>();
 
 builder.Services.Configure<RpcApiKeysOptions>(options =>
 {
@@ -38,7 +38,6 @@ builder.Services.Configure<RpcApiKeysOptions>(options =>
 
 builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<CexTransactionsService>();
-//builder.Services.AddScoped<SolanaTransactionCacheService>();
 
 var app = builder.Build();
 
@@ -52,13 +51,12 @@ app.UseWebSockets();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-//app.UseEnyimMemcached();
 
 using (var scope = app.Services.CreateScope())
 {
     // Starta bevakning av dexes, spara transaktioner till databasen
     var cexService = scope.ServiceProvider.GetRequiredService<CexTransactionsService>();
-    await cexService.SolanaTransactionsWebSocket(apiKeysShyft, apiKeysHelius);
+    await cexService.SolanaTransactionsWebSocket();
 
     // Leta/skapa grupper
     /// -> Startas automatisk med GroupService

@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using nattbakka_server.Helpers;
 using Microsoft.Extensions.Options;
 using nattbakka_server.Options;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace nattbakka_server.Services
 {
@@ -25,14 +27,15 @@ namespace nattbakka_server.Services
         //private readonly SolanaTransactionCacheService _cacheService;
         private readonly List<string> _apiKeysShyft;
         private readonly List<string> _apiKeysHelius;
+        private readonly IDbContextFactory<InMemoryDataContext> _inMemoryDataContext;
 
 
-        public CexTransactionsService(DatabaseComponents databaseComponents, IOptions<RpcApiKeysOptions> rpcApiKeysOptions)
+        public CexTransactionsService(DatabaseComponents databaseComponents, IOptions<RpcApiKeysOptions> rpcApiKeysOptions, IDbContextFactory<InMemoryDataContext> inMemoryDataContext )
         {
             _databaseComponents = databaseComponents;
             _apiKeysShyft = rpcApiKeysOptions.Value.ShyftApiKeys;
             _apiKeysHelius = rpcApiKeysOptions.Value.HeliusApiKeys;
-
+            _inMemoryDataContext = inMemoryDataContext;
         }
 
         public async Task SolanaTransactionsWebSocket()
@@ -100,7 +103,7 @@ namespace nattbakka_server.Services
             // Save to database directly
             parsedTransaction.signature = signature;
             parsedTransaction.cex_id = cex.id;
-            await _databaseComponents.PostTransaction(parsedTransaction);
+            //await _databaseComponents.PostTransaction(parsedTransaction);
 
 
             // Save to cache
