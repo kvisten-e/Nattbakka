@@ -10,17 +10,28 @@ namespace nattbakka_server.Data
 {
     public class DatabaseComponents
     {
-        //private readonly DataContext _context;
+        private readonly IDbContextFactory<InMemoryDataContext> _inMemoryDataContext;
         private readonly IDbContextFactory<DataContext> _contextFactory;
 
-        public DatabaseComponents(IDbContextFactory<DataContext> contextFactory) {
+        public DatabaseComponents(IDbContextFactory<DataContext> contextFactory, IDbContextFactory<InMemoryDataContext> inMemoryDataContext)
+        {
             _contextFactory = contextFactory;
+            _inMemoryDataContext = inMemoryDataContext;
+        }
+
+        private async Task<InMemoryDataContext> GetInMemoryDbContext()
+        {
+            return await Task.FromResult(_inMemoryDataContext.CreateDbContext());
+        }
+
+        private async Task<DataContext> GetDbContext()
+        {
+            return await Task.FromResult(_contextFactory.CreateDbContext());
         }
 
         public async Task PostTransaction(ParsedTransaction pt)
         {
-            using var context = _contextFactory.CreateDbContext();
-
+            using var context = await GetInMemoryDbContext();
             var transaction = new Transaction()
             {
                 tx = pt.signature,
@@ -38,42 +49,50 @@ namespace nattbakka_server.Data
         {
             try
             {
-                using var context = _contextFactory.CreateDbContext();
-                await context.transaction
-                    .Where(u => u.id == transactionId)
-                    .ExecuteUpdateAsync(u =>
-                        u.SetProperty(u => u.group_id, groupId)
-                    );
+                using var context = await GetInMemoryDbContext();
+
+                var transaction = await context.transaction.FirstOrDefaultAsync(u => u.id == transactionId);
+
+                if (transaction == null)
+                {
+                    Console.WriteLine($"Transaction with ID {transactionId} not found.");
+                    return false;
+                }
+
+                transaction.group_id = groupId;
+
                 await context.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Something went wrong file adding group id {groupId} to tx {transactionId} - error: {ex}");
+                Console.WriteLine($"Something went wrong while adding group id {groupId} to tx {transactionId} - error: {ex}");
                 return false;
             }
-
         }
 
         public async Task UpdateTotalWalletsInGroup(int groupId)
         {
             int amount = await GetGroupAmount(groupId);
-            using var context = _contextFactory.CreateDbContext();
-           
-            await context.cex_group
-                .Where(u => u.id == groupId)
-                .ExecuteUpdateAsync(u =>
-                    u.SetProperty(u => u.total_wallets, amount)
-                );
+            using var context = await GetInMemoryDbContext();
+
+            var group = await context.cex_group.FirstOrDefaultAsync(u => u.id == groupId);
+
+            if (group == null)
+            {
+                Console.WriteLine($"Group with ID {groupId} not found.");
+                return;
+            }
+
+            group.total_wallets = amount;
+
             await context.SaveChangesAsync();
-
-
         }
+
 
         public async Task<int> CreateDexGroup(int totalWallets, int timeDifferentUnix)
         {
-            using var context = _contextFactory.CreateDbContext();
-
+            using var context = await GetInMemoryDbContext();
             var group = new Group()
             {
                 total_wallets = totalWallets,
@@ -83,14 +102,12 @@ namespace nattbakka_server.Data
 
             context.cex_group.Add(group);
             await context.SaveChangesAsync();
-            int id = group.id;
-
-            return id;
+            return group.id;
         }
 
         public async Task<int> GetGroupAmount(int groupId)
         {
-            using var context = _contextFactory.CreateDbContext();
+            using var context = await GetInMemoryDbContext();
             int amount = await context.transaction
                 .Where(d => d.group_id == groupId)
                 .CountAsync();
@@ -99,21 +116,20 @@ namespace nattbakka_server.Data
 
         public async Task<List<Cex>> GetCexesAsync()
         {
-            using var context = _contextFactory.CreateDbContext();
-
+            using var context = await GetDbContext();
             var data = await context.cex.Where(d => d.active == true).ToListAsync();
             return data;
         }
 
         public async Task<List<Transaction>> GetTransactions(bool asNoTracking = false)
         {
-            using var context = _contextFactory.CreateDbContext();
+            using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
                 t.group_id == 0 &&
                 t.timestamp > time_history
-                );
+            );
 
             if (asNoTracking)
             {
@@ -125,14 +141,14 @@ namespace nattbakka_server.Data
 
         public async Task<List<Transaction>> GetTransactions(int minSol, bool asNoTracking = false)
         {
-            using var context = _contextFactory.CreateDbContext();
+            using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transaction.Where(t => 
-                t.sol >= minSol && 
-                t.group_id == 0 && 
+            var query = context.transaction.Where(t =>
+                t.sol >= minSol &&
+                t.group_id == 0 &&
                 t.timestamp > time_history
-                );
+            );
 
             if (asNoTracking)
             {
@@ -144,7 +160,7 @@ namespace nattbakka_server.Data
 
         public async Task<List<Transaction>> GetTransactions(int minSol, int cex, bool asNoTracking = false)
         {
-            using var context = _contextFactory.CreateDbContext();
+            using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
@@ -152,7 +168,7 @@ namespace nattbakka_server.Data
                 t.cex_id == cex &&
                 t.group_id == 0 &&
                 t.timestamp > time_history
-                );
+            );
 
             if (asNoTracking)
             {
@@ -164,9 +180,9 @@ namespace nattbakka_server.Data
 
         public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
         {
-            using var context = _contextFactory.CreateDbContext();
+            using var context = await GetInMemoryDbContext();
+
             var data = await context.transaction
-                .Include(t => t.cex_group)  // Join with DexGroup
                 .Select(t => new TransactionWithGroup
                 {
                     id = t.id,
@@ -177,21 +193,13 @@ namespace nattbakka_server.Data
                     cex_id = t.cex_id,
                     group_id = t.group_id,
                     timestamp = t.timestamp,
-
-                    total_wallets = t.cex_group.total_wallets,
-                    inactive_wallets = t.cex_group.inactive_wallets,
-                    time_different_unix = t.cex_group.time_different_unix,
-                    created = t.cex_group.created
+                    total_wallets = t.cex_group != null ? t.cex_group.total_wallets : 0,
+                    inactive_wallets = t.cex_group != null ? t.cex_group.inactive_wallets : 0,
+                    time_different_unix = t.cex_group != null ? t.cex_group.time_different_unix : 0,
+                    created = t.cex_group != null ? t.cex_group.created : DateTime.MinValue
                 }).ToListAsync();
 
             return data;
         }
-
-
     }
-    public interface IScopedProcessingService
-    {
-        Task DoWorkAsync(CancellationToken stoppingToken);
-    }
-
 }

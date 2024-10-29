@@ -20,7 +20,7 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
 
 builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
 {
-    options.UseInMemoryDatabase("TestDb");
+    options.UseInMemoryDatabase("TransactionsDb");
 });
 
 

@@ -24,18 +24,17 @@ namespace nattbakka_server.Services
         private ConcurrentDictionary<string, bool> _prevMessages = new ConcurrentDictionary<string, bool>();
         private SolanaServices? _solanaServices = null;
         private readonly CexTransactionTemplate _transactionTemplate = new CexTransactionTemplate();
-        //private readonly SolanaTransactionCacheService _cacheService;
         private readonly List<string> _apiKeysShyft;
         private readonly List<string> _apiKeysHelius;
-        private readonly IDbContextFactory<InMemoryDataContext> _inMemoryDataContext;
+        
 
 
-        public CexTransactionsService(DatabaseComponents databaseComponents, IOptions<RpcApiKeysOptions> rpcApiKeysOptions, IDbContextFactory<InMemoryDataContext> inMemoryDataContext )
+        public CexTransactionsService(DatabaseComponents databaseComponents, IOptions<RpcApiKeysOptions> rpcApiKeysOptions)
         {
             _databaseComponents = databaseComponents;
             _apiKeysShyft = rpcApiKeysOptions.Value.ShyftApiKeys;
             _apiKeysHelius = rpcApiKeysOptions.Value.HeliusApiKeys;
-            _inMemoryDataContext = inMemoryDataContext;
+            
         }
 
         public async Task SolanaTransactionsWebSocket()
@@ -103,24 +102,13 @@ namespace nattbakka_server.Services
             // Save to database directly
             parsedTransaction.signature = signature;
             parsedTransaction.cex_id = cex.id;
-            //await _databaseComponents.PostTransaction(parsedTransaction);
 
 
-            // Save to cache
-
-            //var transaction = new TransactionMemCache()
-            //{
-            //    signature = signature,
-            //    address = parsedTransaction.receivingAddress,
-            //    sol = parsedTransaction.sol,
-            //    sol_changed = false,
-            //    cex_id = cex.id,
-            //    group_id = 0,
-            //    timestamp = DateTime.Now
-            //};
+            await _databaseComponents.PostTransaction(parsedTransaction);
 
 
-            //await _cacheService.StoreTransactionAsync(transaction);
+
+
         }
 
         private async Task OnWebSocketClosed(Cex cex, SolanaWebSocketClient solanaWs, CloseEventArgs e)
