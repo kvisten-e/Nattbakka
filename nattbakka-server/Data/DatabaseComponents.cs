@@ -84,8 +84,6 @@ namespace nattbakka_server.Data
                 return;
             }
 
-            group.total_wallets = amount;
-
             await context.SaveChangesAsync();
         }
 
@@ -95,7 +93,6 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             var group = new Group()
             {
-                total_wallets = totalWallets,
                 time_different_unix = timeDifferentUnix,
                 created = DateTime.Now
             };
@@ -182,8 +179,19 @@ namespace nattbakka_server.Data
         {
             using var context = await GetInMemoryDbContext();
 
-            var data = await context.transaction
-                .Select(t => new TransactionWithGroup
+            var transactions = await context.transaction
+                .Where(t => t.group_id != 0)
+                .ToListAsync();
+
+            var groups = await context.cex_group
+                .Where(g => g.id != 0)
+                .ToListAsync();
+
+            var data = transactions.Select(t =>
+            {
+                var group = groups.FirstOrDefault(g => g.id == t.group_id);
+
+                return new TransactionWithGroup
                 {
                     id = t.id,
                     tx = t.tx,
@@ -193,13 +201,13 @@ namespace nattbakka_server.Data
                     cex_id = t.cex_id,
                     group_id = t.group_id,
                     timestamp = t.timestamp,
-                    total_wallets = t.cex_group != null ? t.cex_group.total_wallets : 0,
-                    inactive_wallets = t.cex_group != null ? t.cex_group.inactive_wallets : 0,
-                    time_different_unix = t.cex_group != null ? t.cex_group.time_different_unix : 0,
-                    created = t.cex_group != null ? t.cex_group.created : DateTime.MinValue
-                }).ToListAsync();
+                    time_different_unix = group?.time_different_unix ?? 0,
+                    created = group?.created ?? DateTime.MinValue
+                };
+            }).ToList();
 
             return data;
         }
+
     }
 }

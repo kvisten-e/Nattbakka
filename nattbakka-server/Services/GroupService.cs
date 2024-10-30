@@ -76,6 +76,12 @@ namespace nattbakka_server.Services
         private async Task GetCurrentCexGroups()
         {
             _cexGroups = await _databaseComponents.GetTransactionsWithGroups();
+            
+            //if(_cexGroups.Count == 0) return;
+            //foreach(var group in _cexGroups)
+            //{
+            //    _logger.LogInformation($"GroupId: {group.group_id} - Addres: {group.address} - Sol: {group.sol} - Cex: {group.cex_id} - Timestamp: {group.timestamp}");
+            //}
         }
 
         private async Task<bool> AddTxToActiveGroups(Transaction transaction)

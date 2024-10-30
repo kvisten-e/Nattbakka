@@ -1,0 +1,314 @@
+2024-10-30 06:27:59.250 +01:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-10-30 06:28:04.752 +01:00 [INF] GroupService running.
+2024-10-30 06:28:04.809 +01:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-10-30 06:28:05.113 +01:00 [INF] Now listening on: https://localhost:7066
+2024-10-30 06:28:05.113 +01:00 [INF] Now listening on: http://localhost:5168
+2024-10-30 06:28:05.114 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-30 06:28:05.115 +01:00 [INF] Hosting environment: Development
+2024-10-30 06:28:05.115 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-10-30 06:28:08.651 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.html - null null
+2024-10-30 06:28:08.894 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.html - 200 null text/html;charset=utf-8 460.2707ms
+2024-10-30 06:28:08.925 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-30 06:28:08.934 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.js - null null
+2024-10-30 06:28:08.941 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.js - 200 null application/javascript;charset=utf-8 12.746ms
+2024-10-30 06:28:08.951 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/_framework/aspnetcore-browser-refresh.js - 200 13768 application/javascript; charset=utf-8 27.6242ms
+2024-10-30 06:28:08.991 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/_vs/browserLink - null null
+2024-10-30 06:28:09.067 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/_vs/browserLink - 200 null text/javascript; charset=UTF-8 76.3953ms
+2024-10-30 06:28:09.353 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - null null
+2024-10-30 06:28:09.553 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 200.3983ms
+2024-10-30 06:28:10.302 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:14.025 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:14.966 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:16.417 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:16.513 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:16.738 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:18.118 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:18.218 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:18.349 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:18.377 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:18.820 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:19.145 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:19.309 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:19.470 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:27.189 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:35.264 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:36.224 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:38.619 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:41.063 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:43.637 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:51.230 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:53.608 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:28:57.534 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:10.413 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:11.208 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:14.910 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:15.021 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:16.299 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:16.798 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:17.411 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:17.414 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:20.357 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:29.146 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.062 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.504 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.589 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.710 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.758 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:31.842 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:32.532 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:33.234 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:33.510 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:35.151 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:35.202 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:35.203 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:35.203 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:29:40.642 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-10-30 06:29:40.702 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:29:40.773 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-10-30 06:29:40.801 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-10-30 06:29:40.833 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 54.4963ms
+2024-10-30 06:29:40.834 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:29:40.836 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 197.0952ms
+2024-10-30 06:29:41.634 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:31.443 +01:00 [INF] Executed DbCommand (57ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-10-30 06:32:34.506 +01:00 [INF] GroupService running.
+2024-10-30 06:32:34.540 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-10-30 06:32:35.283 +01:00 [INF] Now listening on: https://localhost:7066
+2024-10-30 06:32:35.283 +01:00 [INF] Now listening on: http://localhost:5168
+2024-10-30 06:32:35.284 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-30 06:32:35.285 +01:00 [INF] Hosting environment: Development
+2024-10-30 06:32:35.285 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-10-30 06:32:37.657 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:38.016 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.html - null null
+2024-10-30 06:32:38.227 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.html - 200 null text/html;charset=utf-8 220.3513ms
+2024-10-30 06:32:38.234 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.js - null null
+2024-10-30 06:32:38.234 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/_framework/aspnetcore-browser-refresh.js - null null
+2024-10-30 06:32:38.244 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.js - 200 null application/javascript;charset=utf-8 10.4259ms
+2024-10-30 06:32:38.261 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/_framework/aspnetcore-browser-refresh.js - 200 13768 application/javascript; charset=utf-8 28.8206ms
+2024-10-30 06:32:38.297 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/_vs/browserLink - null null
+2024-10-30 06:32:38.352 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/_vs/browserLink - 200 null text/javascript; charset=UTF-8 55.2491ms
+2024-10-30 06:32:38.527 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - null null
+2024-10-30 06:32:38.645 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 117.5284ms
+2024-10-30 06:32:51.376 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:51.936 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:52.066 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:52.103 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:52.789 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:32:56.934 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:00.509 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:08.272 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:10.255 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:10.335 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:11.305 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:13.800 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:14.222 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:14.655 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:15.061 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:15.940 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:16.135 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:16.608 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:25.763 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:28.967 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:33.110 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:37.011 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:38.194 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:38.514 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:38.668 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:38.984 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:39.485 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:50.050 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:50.673 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:54.865 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:33:55.263 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:07.529 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:12.894 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:13.099 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:14.026 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:14.123 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:14.211 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:16.351 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:16.615 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:16.711 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:16.915 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:18.134 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:30.521 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:30.824 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:31.217 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:31.379 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:33.453 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:33.834 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:33.965 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:34.372 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:35.037 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:36.764 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-10-30 06:34:36.825 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:34:36.905 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-10-30 06:34:36.944 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-10-30 06:34:36.971 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 61.1289ms
+2024-10-30 06:34:36.972 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:34:36.975 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 214.1393ms
+2024-10-30 06:34:42.201 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:49.011 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:49.095 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:51.367 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:52.628 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:53.055 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:54.305 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:54.480 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:34:55.479 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:00.219 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:10.900 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:11.529 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:14.121 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:15.000 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:15.228 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:17.775 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:21.266 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:25.545 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:30.812 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:32.335 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:32.675 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:32.760 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:33.281 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:34.803 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:34.981 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:35.313 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:35.446 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:35.588 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:36.635 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:47.099 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:51.399 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:52.734 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:54.394 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:56.379 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:35:57.618 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:08.093 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:09.663 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:11.683 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:11.765 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:11.851 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:12.955 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:12.994 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:13.017 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:13.383 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:14.280 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:14.630 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:14.808 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:15.440 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:21.467 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:25.628 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:27.001 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:27.927 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:32.006 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:35.415 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:35.469 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:35.598 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:36.101 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:47.309 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:52.920 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:54.106 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:56.070 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:56.160 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:57.261 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:36:57.310 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:05.558 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:12.727 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:14.155 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:14.456 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:14.679 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:15.121 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:15.492 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:16.497 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:18.749 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:20.033 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:21.189 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:23.928 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:32.383 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:33.224 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:33.307 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:34.315 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:36.153 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:36.465 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:36.717 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:36.817 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:36.878 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:37.085 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:37.562 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:37.678 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:37.870 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:39.047 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:41.798 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:47.095 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:52.946 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:54.496 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:54.807 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:55.081 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:37:56.394 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:04.641 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:05.561 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:05.662 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:05.663 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:05.663 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:10.803 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:12.190 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:13.609 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:14.626 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:16.693 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:18.377 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:19.634 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:24.175 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:25.019 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-10-30 06:38:25.081 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:25.104 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-10-30 06:38:25.123 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-10-30 06:38:25.155 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 49.7773ms
+2024-10-30 06:38:25.156 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:25.157 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 143.6609ms
+2024-10-30 06:38:29.624 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:29.972 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-10-30 06:38:29.975 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:29.976 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-10-30 06:38:29.989 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-10-30 06:38:29.990 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 13.563ms
+2024-10-30 06:38:29.990 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:29.990 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 17.748ms
+2024-10-30 06:38:30.489 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:31.088 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:31.797 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:32.668 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:33.465 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:33.478 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:33.513 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:33.697 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:33.986 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:35.704 +01:00 [INF] GroupId: 1 - Addres: G9or6k589e1bjBPRi1w97fwZjiBAwRDSAoAXUxdTxRCq - Sol: 39,99 - Cex: 1 - Timestamp: 2024-10-30 06:36:52
+2024-10-30 06:38:35.704 +01:00 [INF] GroupId: 1 - Addres: HispUGFc9xH4UVUvRTmfdB87Qxkc4ai3d5CpWNhP8EJY - Sol: 1,99 - Cex: 1 - Timestamp: 2024-10-30 06:37:41
+2024-10-30 06:38:35.704 +01:00 [INF] GroupId: 1 - Addres: CvpWN4yHJsfV7h27zLknPuHjjX4zy4AYB8EFHaC8YNvf - Sol: 2,99 - Cex: 1 - Timestamp: 2024-10-30 06:37:54
+2024-10-30 06:38:36.247 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:45.809 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:45.821 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:53.006 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:53.146 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:53.149 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:53.231 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:53.261 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:54.356 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-10-30 06:38:57.121 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-10-30 06:38:57.121 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:57.122 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-10-30 06:38:57.123 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-10-30 06:38:57.123 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 1.2646ms
+2024-10-30 06:38:57.123 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-10-30 06:38:57.123 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 4.2505ms

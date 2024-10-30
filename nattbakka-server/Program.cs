@@ -4,6 +4,7 @@ using nattbakka_server.Data;
 using nattbakka_server.Models;
 using nattbakka_server.Services;
 using nattbakka_server.Options;
+using Serilog;
 
 
 
@@ -24,6 +25,16 @@ builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
 });
 
 
+var logger = new LoggerConfiguration()
+    .WriteTo.File("./Logs/CexGroups.log", rollingInterval: RollingInterval.Day)
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
@@ -40,6 +51,7 @@ builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<CexTransactionsService>();
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {

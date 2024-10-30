@@ -12,6 +12,5 @@
 
         public DateTime timestamp { get; set; }
 
-        public Group cex_group { get; set; }
     }
 }
