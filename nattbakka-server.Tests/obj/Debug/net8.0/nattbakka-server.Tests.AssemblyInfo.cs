@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("nattbakka-server.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bb6205bb650b52cbb6efc533c44bd492a3c0954")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a5181371434191536943e551db03c10aea7704a")]
 [assembly: System.Reflection.AssemblyProductAttribute("nattbakka-server.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("nattbakka-server.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

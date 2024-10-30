@@ -9,6 +9,9 @@ using Serilog;
 
 
 
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +41,12 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379"; 
+    options.InstanceName = "TransactionCache";
+});
 
 
 builder.Services.Configure<RpcApiKeysOptions>(options =>
