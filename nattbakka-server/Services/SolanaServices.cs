@@ -14,7 +14,6 @@ namespace nattbakka_server.Services
     {
         private List<string> _apiKeys;
         private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new RandomizeRpcEndpoint();
-
         public SolanaServices(List<string> apiKeys)
         {
             if (apiKeys == null || apiKeys.Count == 0)

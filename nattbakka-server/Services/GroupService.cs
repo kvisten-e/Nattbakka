@@ -2,9 +2,10 @@
 using nattbakka_server.Data;
 using System.Linq;
 using Transaction = nattbakka_server.Models.Transaction;
-using TransactionWithGroup = nattbakka_server.Models.TransactionWithGroup;
 using nattbakka_server.Models;
 using nattbakka_server.Helpers;
+using nattbakka_server.Repositories.Interfaces;
+
 
 
 namespace nattbakka_server.Services
@@ -14,16 +15,18 @@ namespace nattbakka_server.Services
         private readonly ILogger<GroupService> _logger;
         private readonly DatabaseComponents _databaseComponents;
         public List<List<Transaction>> _createdGroupsList = new List<List<Transaction>>();
-        public List<TransactionWithGroup> _cexGroups = new List<TransactionWithGroup>();
+        public List<TransactionGroup> _cexGroups = new List<TransactionGroup>();
         public List<Transaction> _transactions = new List<Transaction>();
         public List<Cex> _cexes = new List<Cex>();
         private readonly GetTransactionSolDecimals _getDecimals = new GetTransactionSolDecimals();
+        private readonly ITransactionRepository _transactionRepository;
 
 
-        public GroupService(ILogger<GroupService> logger, DatabaseComponents databaseComponents)
+        public GroupService(ILogger<GroupService> logger, DatabaseComponents databaseComponents, ITransactionRepository transactionRepository)
         {
             _logger = logger;
             _databaseComponents = databaseComponents;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,7 +38,7 @@ namespace nattbakka_server.Services
             {
                 await GetCurrentCexGroups();
 
-                int minSol = 1;
+                double minSol = 0.1;
                 _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
 
                 foreach (var transaction in _transactions)
@@ -50,17 +53,24 @@ namespace nattbakka_server.Services
                 {
                     if (group.Count < 3) continue;
 
-                    int timeDifferent = CalculateUnixDifferent(group[0].timestamp, group[group.Count - 1].timestamp);
-                    int idCreatedGroup = await _databaseComponents.CreateDexGroup(group.Count, timeDifferent);
+                    int timeDifferent = CalculateUnixDifferent(group[0].Timestamp, group[group.Count - 1].Timestamp);
+                    var createdGroup = await _databaseComponents.CreateDexGroup(timeDifferent);
 
-                    if (idCreatedGroup <= 0) continue;
+                    if (createdGroup.Id <= 0) continue;
 
-                    foreach (var tx in group)
+                    var transactionsWithId = await _databaseComponents.AddGroupIdToTransactions(group, createdGroup.Id);
+                    if (transactionsWithId is not null)
                     {
-                        await _databaseComponents.AddGroupIdToTransaction(tx.id, idCreatedGroup);
+                        await _transactionRepository.AddTransactionGroupAsync(new TransactionGroup
+                        {
+                            Id = createdGroup.Id,
+                            Created = createdGroup.Created,
+                            TimeDifferentUnix = timeDifferent,
+                            Transactions = group
+                        });
                     }
                 }
-
+                
                 _createdGroupsList.Clear();
                 _transactions.Clear();
                 _cexGroups.Clear();
@@ -76,46 +86,49 @@ namespace nattbakka_server.Services
         private async Task GetCurrentCexGroups()
         {
             _cexGroups = await _databaseComponents.GetTransactionsWithGroups();
-            
-            //if(_cexGroups.Count == 0) return;
-            //foreach(var group in _cexGroups)
-            //{
-            //    _logger.LogInformation($"GroupId: {group.group_id} - Addres: {group.address} - Sol: {group.sol} - Cex: {group.cex_id} - Timestamp: {group.timestamp}");
-            //}
+
+            if (_cexGroups.Count == 0) return;
+            foreach (var group in _cexGroups)
+            {
+                foreach(var transaction in group.Transactions)
+                {
+                    _logger.LogInformation($"GroupId: {group.Id} - Addres: {transaction.Address} - Sol: {transaction.Sol} - Cex: {transaction.CexId} - Timestamp: {transaction.Timestamp}");
+                }
+
+            }
         }
 
         private async Task<bool> AddTxToActiveGroups(Transaction transaction)
         {
-
             int timeLimitUnix = 180;
 
             int? groupIdFound = _cexGroups
-                .FirstOrDefault(t =>
-                    t.cex_id == transaction.cex_id &&
-                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) <= timeLimitUnix &&
-                    ConvertDatetimeToUnix(transaction.timestamp) - ConvertDatetimeToUnix(t.timestamp) >= 0 &&
-                    _getDecimals.GetTransactionSolDecimal(t.sol) == _getDecimals.GetTransactionSolDecimal(transaction.sol)
-                )?.group_id;
+                .FirstOrDefault(group => group.Transactions.Any(t =>
+                    t.CexId == transaction.CexId &&
+                    ConvertDatetimeToUnix(transaction.Timestamp) - ConvertDatetimeToUnix(t.Timestamp) <= timeLimitUnix &&
+                    ConvertDatetimeToUnix(transaction.Timestamp) - ConvertDatetimeToUnix(t.Timestamp) >= 0 &&
+                    _getDecimals.GetTransactionSolDecimal(t.Sol) == _getDecimals.GetTransactionSolDecimal(transaction.Sol)
+                ))?.Id;
 
             if (groupIdFound.HasValue && groupIdFound.Value > 0)
             {
-                bool status = await _databaseComponents.AddGroupIdToTransaction(transaction.id, groupIdFound.Value);
-                if (status)
+                var transactionWithId = await _databaseComponents.AddGroupIdToTransactions(transaction, groupIdFound.Value);
+                if (transactionWithId is not null)
                 {
-                    await _databaseComponents.UpdateTotalWalletsInGroup(groupIdFound.Value);
+                    await _transactionRepository.AddTransactionAsync(transactionWithId);
                 }
-                return true;
             }
 
             return false;
         }
+
 
         private bool CheckTxInCurrentGroupList(Transaction transaction) {
 
 
             foreach(var createdGroup in _createdGroupsList)
             {
-                bool exist = createdGroup.Any(tr => tr.id == transaction.id);
+                bool exist = createdGroup.Any(tr => tr.Id == transaction.Id);
                 if (exist)
                 {
                     return true;
@@ -133,11 +146,11 @@ namespace nattbakka_server.Services
             {
 
                 var newLeader = _transactions.FirstOrDefault(d =>
-                    d.cex_id == leaderData.cex_id &&
-                    d.timestamp > leaderData.timestamp &&
-                    _getDecimals.GetTransactionSolDecimal(d.sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.sol)) &&
-                    (ConvertDatetimeToUnix(d.timestamp) - ConvertDatetimeToUnix(leaderData.timestamp)) <= 180 &&
-                    _cexes.Any(a => a.address != transaction.address)
+                    d.CexId == leaderData.CexId &&
+                    d.Timestamp > leaderData.Timestamp &&
+                    _getDecimals.GetTransactionSolDecimal(d.Sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.Sol)) &&
+                    (ConvertDatetimeToUnix(d.Timestamp) - ConvertDatetimeToUnix(leaderData.Timestamp)) <= 180 &&
+                    _cexes.Any(a => a.address != transaction.Address)
                     );
 
                 if (newLeader == null)

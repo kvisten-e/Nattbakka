@@ -104,7 +104,7 @@ namespace nattbakka_server.Services
             parsedTransaction.cex_id = cex.id;
 
 
-            await _databaseComponents.PostTransaction(parsedTransaction);
+            await _databaseComponents.PostTransactionInMemory(parsedTransaction);
 
 
 

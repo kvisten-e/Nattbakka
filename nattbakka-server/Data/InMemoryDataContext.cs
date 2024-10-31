@@ -10,6 +10,7 @@ namespace nattbakka_server.Data
         public DbSet<Transaction> transaction { get; set; }
 
         public DbSet<Group> cex_group { get; set; }
-        public DbSet<TransactionWithGroup> TransactionWithGroup { get; set; }
+        public DbSet<TransactionGroup> TransactionGroup { get; set; }
+
     }
 }

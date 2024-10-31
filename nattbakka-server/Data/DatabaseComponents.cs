@@ -29,87 +29,101 @@ namespace nattbakka_server.Data
             return await Task.FromResult(_contextFactory.CreateDbContext());
         }
 
-        public async Task PostTransaction(ParsedTransaction pt)
+        public async Task PostTransactionInMemory(ParsedTransaction pt)
         {
             using var context = await GetInMemoryDbContext();
             var transaction = new Transaction()
             {
-                tx = pt.signature,
-                address = pt.receivingAddress,
-                sol = pt.sol,
-                cex_id = pt.cex_id,
-                timestamp = DateTime.Now
+                Tx = pt.signature,
+                Address = pt.receivingAddress,
+                Sol = pt.sol,
+                CexId = pt.cex_id,
+                Timestamp = DateTime.Now
             };
 
             context.transaction.Add(transaction);
             await context.SaveChangesAsync();
         }
-
-        public async Task<bool> AddGroupIdToTransaction(int transactionId, int groupId)
+        public async Task PostTransactionDatabase(TransactionGroup group)
+        {
+            using var context = await GetDbContext();
+            foreach (var transaction in group.Transactions)
+            {   
+                context.transaction.Add(transaction);
+            }
+            await context.SaveChangesAsync();
+        }
+        public async Task PostTransactionDatabase(Transaction transaction)
+        {
+            using var context = await GetDbContext();
+            context.transaction.Add(transaction);
+            await context.SaveChangesAsync();
+        }
+        
+        
+        public async Task<List<Transaction>> AddGroupIdToTransactions(List<Transaction> transactions, int groupId)
         {
             try
             {
-                using var context = await GetInMemoryDbContext();
+                using var inMemoryContext = await GetInMemoryDbContext();
 
-                var transaction = await context.transaction.FirstOrDefaultAsync(u => u.id == transactionId);
-
-                if (transaction == null)
+                foreach (var transaction in transactions)
                 {
-                    Console.WriteLine($"Transaction with ID {transactionId} not found.");
-                    return false;
+                    inMemoryContext.Attach(transaction);
+                    transaction.GroupId = groupId;
+                    inMemoryContext.Entry(transaction).Property(t => t.GroupId).IsModified = true;
                 }
+                await inMemoryContext.SaveChangesAsync();
 
-                transaction.group_id = groupId;
-
-                await context.SaveChangesAsync();
-                return true;
+                return transactions;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Something went wrong while adding group id {groupId} to tx {transactionId} - error: {ex}");
-                return false;
+                Console.WriteLine($"Something went wrong while adding group id {groupId} to transactions - error: {ex}");
+                return null;
             }
         }
 
-        public async Task UpdateTotalWalletsInGroup(int groupId)
+        public async Task<Transaction> AddGroupIdToTransactions(Transaction transaction, int groupId)
         {
-            int amount = await GetGroupAmount(groupId);
-            using var context = await GetInMemoryDbContext();
-
-            var group = await context.cex_group.FirstOrDefaultAsync(u => u.id == groupId);
-
-            if (group == null)
+            try
             {
-                Console.WriteLine($"Group with ID {groupId} not found.");
-                return;
-            }
+                using var inMemoryContext = await GetInMemoryDbContext();
 
-            await context.SaveChangesAsync();
+                inMemoryContext.Attach(transaction);
+                transaction.GroupId = groupId;
+                inMemoryContext.Entry(transaction).Property(t => t.GroupId).IsModified = true;
+                await inMemoryContext.SaveChangesAsync();
+                return transaction;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Something went wrong while adding group id {groupId} to transaction - error: {ex}");
+                return null;
+            }
         }
 
 
-        public async Task<int> CreateDexGroup(int totalWallets, int timeDifferentUnix)
+
+        public async Task<Group> CreateDexGroup(int timeDifferentUnix)
         {
-            using var context = await GetInMemoryDbContext();
+            using var inMemoryContext = await GetInMemoryDbContext();
+            using var dbContext = await GetDbContext();
+
             var group = new Group()
             {
-                time_different_unix = timeDifferentUnix,
-                created = DateTime.Now
+                TimeDifferentUnix = timeDifferentUnix,
+                Created = DateTime.Now
             };
 
-            context.cex_group.Add(group);
-            await context.SaveChangesAsync();
-            return group.id;
+            inMemoryContext.cex_group.Add(group);
+            await inMemoryContext.SaveChangesAsync();
+
+            return group;
         }
 
-        public async Task<int> GetGroupAmount(int groupId)
-        {
-            using var context = await GetInMemoryDbContext();
-            int amount = await context.transaction
-                .Where(d => d.group_id == groupId)
-                .CountAsync();
-            return amount;
-        }
+
+
 
         public async Task<List<Cex>> GetCexesAsync()
         {
@@ -124,8 +138,8 @@ namespace nattbakka_server.Data
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
-                t.group_id == 0 &&
-                t.timestamp > time_history
+                t.GroupId == 0 &&
+                t.Timestamp > time_history
             );
 
             if (asNoTracking)
@@ -136,15 +150,15 @@ namespace nattbakka_server.Data
             return await query.ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactions(int minSol, bool asNoTracking = false)
+        public async Task<List<Transaction>> GetTransactions(double minSol, bool asNoTracking = false)
         {
             using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
-                t.sol >= minSol &&
-                t.group_id == 0 &&
-                t.timestamp > time_history
+                t.Sol >= minSol &&
+                t.GroupId == 0 &&
+                t.Timestamp > time_history
             );
 
             if (asNoTracking)
@@ -161,10 +175,10 @@ namespace nattbakka_server.Data
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
-                t.sol >= minSol &&
-                t.cex_id == cex &&
-                t.group_id == 0 &&
-                t.timestamp > time_history
+                t.Sol >= minSol &&
+                t.CexId == cex &&
+                t.GroupId == 0 &&
+                t.Timestamp > time_history
             );
 
             if (asNoTracking)
@@ -175,38 +189,29 @@ namespace nattbakka_server.Data
             return await query.ToListAsync();
         }
 
-        public async Task<List<TransactionWithGroup>> GetTransactionsWithGroups()
+        public async Task<List<TransactionGroup>> GetTransactionsWithGroups()
         {
             using var context = await GetInMemoryDbContext();
 
             var transactions = await context.transaction
-                .Where(t => t.group_id != 0)
+                .Where(t => t.GroupId != 0)
                 .ToListAsync();
 
             var groups = await context.cex_group
-                .Where(g => g.id != 0)
+                .Where(g => g.Id != 0)
                 .ToListAsync();
 
-            var data = transactions.Select(t =>
+            var transactionGroups = groups.Select(g => new TransactionGroup
             {
-                var group = groups.FirstOrDefault(g => g.id == t.group_id);
+                Id = g.Id,
+                Created = g.Created,
+                TimeDifferentUnix = g.TimeDifferentUnix,
+                Transactions = transactions
+                    .Where(t => t.GroupId == g.Id)
+                    .ToList()
+            }).Where(g => g.Transactions.Any()).ToList();
 
-                return new TransactionWithGroup
-                {
-                    id = t.id,
-                    tx = t.tx,
-                    address = t.address,
-                    sol = t.sol,
-                    sol_changed = t.sol_changed,
-                    cex_id = t.cex_id,
-                    group_id = t.group_id,
-                    timestamp = t.timestamp,
-                    time_different_unix = group?.time_different_unix ?? 0,
-                    created = group?.created ?? DateTime.MinValue
-                };
-            }).ToList();
-
-            return data;
+            return transactionGroups;
         }
 
     }

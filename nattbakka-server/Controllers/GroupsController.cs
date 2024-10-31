@@ -44,7 +44,7 @@ namespace nattbakka_server.Controllers
 
         private bool GroupExists(int id)
         {
-            return _context.cex_group.Any(e => e.id == id);
+            return _context.cex_group.Any(e => e.Id == id);
         }
     }
 }

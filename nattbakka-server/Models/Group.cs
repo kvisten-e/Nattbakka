@@ -4,9 +4,9 @@ namespace nattbakka_server.Models
 {
     public class Group
     {
-        public int id { get; set; }
-        public int time_different_unix { get; set; }
-        public DateTime created { get; set; }
+        public int Id { get; set; }
+        public int TimeDifferentUnix { get; set; }
+        public DateTime Created { get; set; }
 
     }
 }

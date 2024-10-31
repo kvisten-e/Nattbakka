@@ -33,7 +33,7 @@ namespace nattbakka_server.Controllers
         public async Task<ActionResult<List<Transaction>>> GetTransactionsByGroup(int id)
         {
             var transactionsByGroup = await _context.transaction
-                .Where(x => x.group_id == id)
+                .Where(x => x.GroupId == id)
                 .ToListAsync();
 
             if (transactionsByGroup == null || !transactionsByGroup.Any())

@@ -2,7 +2,7 @@
 using nattbakka_server.Data;
 using System.Linq;
 using Transaction = nattbakka_server.Models.Transaction;
-using TransactionWithGroup = nattbakka_server.Models.TransactionWithGroup;
+using TransactionGroup = nattbakka_server.Models.TransactionGroup;
 using nattbakka_server.Models;
 using System.Collections.Concurrent;
 using nattbakka_server.Helpers;
@@ -14,7 +14,7 @@ namespace nattbakka_server.Services
         private readonly ILogger<GroupService> _logger;
         private readonly DatabaseComponents _databaseComponents;
         private readonly GetTransactionSolDecimals _solDecimals = new GetTransactionSolDecimals();
-        public List<TransactionWithGroup> _cexGroups = new List<TransactionWithGroup>();
+        public List<TransactionGroup> _cexGroups = new List<TransactionGroup>();
         private ConcurrentDictionary<int, bool> _changedTransactions = new ConcurrentDictionary<int, bool>();
         
 
@@ -42,7 +42,7 @@ namespace nattbakka_server.Services
 
         private async Task GetCurrentCexGroups()
         {
-            _cexGroups = await _databaseComponents.GetTransactionsWithGroups();
+            //_cexGroups = await _databaseComponents.GetTransactionsWithGroups();
         }
 
         //private async Task<ConcurrentDictionary<int, bool>> GetChangedSolBalabce(List<TransactionWithGroup> group)

@@ -4,13 +4,9 @@ using nattbakka_server.Data;
 using nattbakka_server.Models;
 using nattbakka_server.Services;
 using nattbakka_server.Options;
+using nattbakka_server.Repositories.Implementations;
+using nattbakka_server.Repositories.Interfaces;
 using Serilog;
-
-
-
-
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -28,25 +24,30 @@ builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
 });
 
 
-var logger = new LoggerConfiguration()
+var cexGroupLog = new LoggerConfiguration()
     .WriteTo.File("./Logs/CexGroups.log", rollingInterval: RollingInterval.Day)
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
 
 
+
+
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+builder.Logging.AddSerilog(cexGroupLog);
+
+
 
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
 builder.Services.AddHostedService<GroupServiceRunner>();
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = "localhost:6379"; 
-    options.InstanceName = "TransactionCache";
-});
+// builder.Services.AddStackExchangeRedisCache(options =>
+// {
+//     options.Configuration = "localhost:6379,connectTimeout=5000,syncTimeout=10000"; 
+//     options.InstanceName = "TransactionCache";
+// });
+
 
 
 builder.Services.Configure<RpcApiKeysOptions>(options =>
@@ -58,6 +59,8 @@ builder.Services.Configure<RpcApiKeysOptions>(options =>
 
 builder.Services.AddScoped<DatabaseComponents>();
 builder.Services.AddScoped<CexTransactionsService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 
 var app = builder.Build();
 
@@ -82,10 +85,10 @@ using (var scope = app.Services.CreateScope())
     // Leta/skapa grupper
     /// -> Startas automatisk med GroupService
 
-    // Uppdatera grupper och markera förändrade wallets
+    // Uppdatera grupper och markera fï¿½rï¿½ndrade wallets
 
 
-    // Sätt upp APIer till frontend
+    // Sï¿½tt upp APIer till frontend
 
 
 
