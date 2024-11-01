@@ -200,3 +200,693 @@ WHERE `c`.`active`
 2024-11-01 06:17:13.067 +01:00 [INF] Saved 1 entities to in-memory store.
 2024-11-01 06:17:19.373 +01:00 [INF] Saved 1 entities to in-memory store.
 2024-11-01 06:17:19.566 +01:00 [INF] Application is shutting down...
+2024-11-01 07:19:02.671 +01:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 07:19:03.023 +01:00 [INF] Executed DbCommand (117ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 07:19:03.043 +01:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 07:19:03.058 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-11-01 07:19:03.083 +01:00 [INF] Applying migration '20241101061714_Initial'.
+2024-11-01 07:19:03.155 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2024-11-01 07:19:03.197 +01:00 [INF] Executed DbCommand (42ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `cex` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `active` tinyint(1) NOT NULL,
+    CONSTRAINT `PK_cex` PRIMARY KEY (`id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 07:19:03.254 +01:00 [INF] Executed DbCommand (57ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `cex_group` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `TimeDifferentUnix` int NOT NULL,
+    `Created` datetime(6) NOT NULL,
+    CONSTRAINT `PK_cex_group` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 07:19:03.299 +01:00 [INF] Executed DbCommand (44ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `TransactionGroup` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Created` datetime(6) NOT NULL,
+    `TimeDifferentUnix` int NOT NULL,
+    CONSTRAINT `PK_TransactionGroup` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 07:19:03.363 +01:00 [INF] Executed DbCommand (63ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `transaction` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Tx` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Sol` double NOT NULL,
+    `SolChanged` tinyint(1) NOT NULL,
+    `CexId` int NOT NULL,
+    `GroupId` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Timestamp` datetime(6) NOT NULL,
+    CONSTRAINT `PK_transaction` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `TransactionGroup` (`Id`) ON DELETE CASCADE
+) CHARACTER SET=utf8mb4;
+2024-11-01 07:19:03.404 +01:00 [INF] Executed DbCommand (40ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX `IX_transaction_GroupId` ON `transaction` (`GroupId`);
+2024-11-01 07:19:03.418 +01:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20241101061714_Initial', '8.0.10');
+2024-11-01 07:50:33.784 +01:00 [INF] Executed DbCommand (41ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-11-01 07:50:38.337 +01:00 [INF] GroupService running.
+2024-11-01 07:50:38.389 +01:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-11-01 07:50:38.503 +01:00 [INF] Now listening on: https://localhost:7066
+2024-11-01 07:50:38.503 +01:00 [INF] Now listening on: http://localhost:5168
+2024-11-01 07:50:38.504 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-01 07:50:38.505 +01:00 [INF] Hosting environment: Development
+2024-11-01 07:50:38.505 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-11-01 07:50:39.684 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.html - null null
+2024-11-01 07:50:39.935 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.html - 200 null text/html;charset=utf-8 254.7264ms
+2024-11-01 07:50:40.108 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.js - null null
+2024-11-01 07:50:40.118 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.js - 200 null application/javascript;charset=utf-8 9.6954ms
+2024-11-01 07:50:42.164 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - null null
+2024-11-01 07:50:42.308 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 143.1458ms
+2024-11-01 07:50:44.990 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:50.800 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:51.281 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:54.751 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:54.977 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:55.106 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:55.540 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:56.074 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:56.137 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:56.254 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:56.371 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:56.760 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:57.172 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:57.420 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:58.595 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:50:58.674 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:01.489 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:12.531 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:12.539 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:13.690 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:14.556 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:15.335 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:15.437 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:15.823 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:15.832 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:17.096 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:18.311 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:18.808 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:32.912 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.007 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.183 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.393 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.448 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.511 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:34.911 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:35.594 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:36.003 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:36.074 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:36.425 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:38.655 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 07:51:38.671 +01:00 [INF] Saved 3 entities to in-memory store.
+2024-11-01 07:51:39.043 +01:00 [ERR] Failed executing DbCommand (145ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 255), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 255), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 255), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2024-11-01 07:51:39.075 +01:00 [ERR] An exception occurred in the database while saving changes for context type 'nattbakka_server.Data.DataContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2024-11-01 07:51:39.145 +01:00 [INF] Executed DbCommand (22ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 07:51:39.152 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 07:51:39.154 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 07:51:39.161 +01:00 [ERR] Failed executing DbCommand (6ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 255), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 255), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 255), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2024-11-01 07:51:39.163 +01:00 [ERR] An exception occurred in the database while saving changes for context type 'nattbakka_server.Data.DataContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2024-11-01 07:51:39.168 +01:00 [ERR] BackgroundService failed
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at nattbakka_server.Data.DatabaseComponents.HandleDuplicatedEntriesDb(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 90
+   at nattbakka_server.Data.DatabaseComponents.PostTransactionDatabase(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 63
+   at nattbakka_server.Repositories.Implementations.TransactionRepository.AddTransactionGroupAsync(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Repositories\Implementations\TransactionRepository.cs:line 26
+   at nattbakka_server.Services.GroupService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupService.cs:line 64
+   at nattbakka_server.Services.GroupServiceRunner.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupServiceRunner.cs:line 18
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2024-11-01 07:51:39.172 +01:00 [FTL] The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at nattbakka_server.Data.DatabaseComponents.HandleDuplicatedEntriesDb(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 90
+   at nattbakka_server.Data.DatabaseComponents.PostTransactionDatabase(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 63
+   at nattbakka_server.Repositories.Implementations.TransactionRepository.AddTransactionGroupAsync(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Repositories\Implementations\TransactionRepository.cs:line 26
+   at nattbakka_server.Services.GroupService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupService.cs:line 64
+   at nattbakka_server.Services.GroupServiceRunner.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupServiceRunner.cs:line 18
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2024-11-01 07:51:39.174 +01:00 [INF] Application is shutting down...
+2024-11-01 07:59:32.753 +01:00 [INF] Executed DbCommand (52ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 07:59:32.798 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 07:59:32.837 +01:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-11-01 07:59:32.847 +01:00 [INF] No migrations were applied. The database is already up to date.
+2024-11-01 08:01:37.864 +01:00 [INF] Executed DbCommand (97ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-11-01 08:01:42.405 +01:00 [INF] GroupService running.
+2024-11-01 08:01:42.447 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `cex` AS `c`
+WHERE `c`.`active`
+2024-11-01 08:01:42.577 +01:00 [INF] Now listening on: https://localhost:7066
+2024-11-01 08:01:42.578 +01:00 [INF] Now listening on: http://localhost:5168
+2024-11-01 08:01:42.578 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-01 08:01:42.579 +01:00 [INF] Hosting environment: Development
+2024-11-01 08:01:42.579 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-11-01 08:01:42.760 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.html - null null
+2024-11-01 08:01:43.031 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.html - 200 null text/html;charset=utf-8 273.8514ms
+2024-11-01 08:01:44.370 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.js - null null
+2024-11-01 08:01:44.379 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.js - 200 null application/javascript;charset=utf-8 9.1764ms
+2024-11-01 08:01:46.147 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - null null
+2024-11-01 08:01:46.341 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 193.4803ms
+2024-11-01 08:01:52.680 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:01:52.842 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:02.209 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:13.068 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:14.422 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:32.470 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:32.470 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:33.667 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:40.808 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:49.540 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:50.729 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:51.382 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:51.949 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:02:52.366 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:02.346 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:04.753 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:06.393 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Transactions - null null
+2024-11-01 08:03:06.412 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server)'
+2024-11-01 08:03:06.450 +01:00 [INF] Route matched with {action = "Gettransaction", controller = "Transactions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Transaction]]] Gettransaction() on controller nattbakka_server.Controllers.TransactionsController (nattbakka-server).
+2024-11-01 08:03:06.462 +01:00 [INF] Executing action method nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server) - Validation state: "Valid"
+2024-11-01 08:03:06.482 +01:00 [INF] Executed action method nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 16.5247ms.
+2024-11-01 08:03:06.493 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Transaction, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-01 08:03:06.528 +01:00 [INF] Executed action nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server) in 74.0938ms
+2024-11-01 08:03:06.528 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server)'
+2024-11-01 08:03:06.532 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Transactions - 200 null application/json; charset=utf-8 138.64ms
+2024-11-01 08:03:08.438 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:08.457 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:12.002 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:17.813 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:18.639 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:18.823 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:20.399 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:22.993 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:23.558 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:23.572 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:23.992 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:26.080 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:30.158 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:30.236 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:37.207 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:41.248 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:43.135 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:43.135 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:45.286 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:50.403 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:03:54.736 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:10.629 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:13.889 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:15.909 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:20.413 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:21.333 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:22.780 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:23.681 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:24.175 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:24.791 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:25.165 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:26.542 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:27.218 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:39.431 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:41.244 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:42.227 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:42.227 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:42.740 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:43.817 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:44.130 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:44.165 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:45.139 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:04:46.447 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-11-01 08:04:46.450 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-11-01 08:04:46.455 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-11-01 08:04:46.456 +01:00 [INF] Executing action method nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) - Validation state: "Valid"
+2024-11-01 08:04:46.462 +01:00 [INF] Executed action method nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 5.0721ms.
+2024-11-01 08:04:46.462 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-01 08:04:46.464 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 8.8031ms
+2024-11-01 08:04:46.464 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-11-01 08:04:46.465 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 17.3454ms
+2024-11-01 08:04:48.053 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Groups - null null
+2024-11-01 08:04:48.054 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-11-01 08:04:48.054 +01:00 [INF] Route matched with {action = "Getcex_group", controller = "Groups"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Group]]] Getcex_group() on controller nattbakka_server.Controllers.GroupsController (nattbakka-server).
+2024-11-01 08:04:48.055 +01:00 [INF] Executing action method nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) - Validation state: "Valid"
+2024-11-01 08:04:48.056 +01:00 [INF] Executed action method nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.2676ms.
+2024-11-01 08:04:48.056 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Group, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-01 08:04:48.056 +01:00 [INF] Executed action nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server) in 1.4221ms
+2024-11-01 08:04:48.056 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.GroupsController.Getcex_group (nattbakka-server)'
+2024-11-01 08:04:48.056 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Groups - 200 null application/json; charset=utf-8 2.7795ms
+2024-11-01 08:05:00.638 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:01.644 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:01.963 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:02.449 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:02.735 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:03.688 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:12.808 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-01 08:05:12.833 +01:00 [INF] Saved 4 entities to in-memory store.
+2024-11-01 08:05:13.133 +01:00 [ERR] Failed executing DbCommand (55ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 255), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 255), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 255), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000), @p24='?' (Size = 255), @p25='?' (Size = 4000), @p26='?' (DbType = Int32), @p27='?' (Size = 255), @p28='?' (DbType = Double), @p29='?' (DbType = Boolean), @p30='?' (DbType = DateTime), @p31='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23),
+(@p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31);
+2024-11-01 08:05:13.168 +01:00 [ERR] An exception occurred in the database while saving changes for context type 'nattbakka_server.Data.DataContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2024-11-01 08:05:13.226 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 08:05:13.232 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 08:05:13.233 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 08:05:13.234 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__transaction_Id_0='?' (Size = 255), @__transaction_Tx_1='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `transaction` AS `t`
+    WHERE (`t`.`Id` = @__transaction_Id_0) OR (`t`.`Tx` = @__transaction_Tx_1))
+2024-11-01 08:05:13.241 +01:00 [ERR] Failed executing DbCommand (5ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 255), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 255), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 255), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000), @p24='?' (Size = 255), @p25='?' (Size = 4000), @p26='?' (DbType = Int32), @p27='?' (Size = 255), @p28='?' (DbType = Double), @p29='?' (DbType = Boolean), @p30='?' (DbType = DateTime), @p31='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23),
+(@p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31);
+2024-11-01 08:05:13.242 +01:00 [ERR] An exception occurred in the database while saving changes for context type 'nattbakka_server.Data.DataContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2024-11-01 08:05:13.249 +01:00 [ERR] BackgroundService failed
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at nattbakka_server.Data.DatabaseComponents.HandleDuplicatedEntriesDb(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 90
+   at nattbakka_server.Data.DatabaseComponents.PostTransactionDatabase(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 63
+   at nattbakka_server.Repositories.Implementations.TransactionRepository.AddTransactionGroupAsync(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Repositories\Implementations\TransactionRepository.cs:line 26
+   at nattbakka_server.Services.GroupService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupService.cs:line 64
+   at nattbakka_server.Services.GroupServiceRunner.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupServiceRunner.cs:line 18
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2024-11-01 08:05:13.258 +01:00 [FTL] The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> MySqlConnector.MySqlException (0x80004005): Cannot add or update a child row: a foreign key constraint fails (`nattbakka`.`transaction`, CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `transactiongroup` (`Id`) ON DELETE CASCADE)
+   at MySqlConnector.Core.ServerSession.ReceiveReplyAsync(IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 894
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 37
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.InitAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 483
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 357
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 350
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at nattbakka_server.Data.DatabaseComponents.HandleDuplicatedEntriesDb(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 90
+   at nattbakka_server.Data.DatabaseComponents.PostTransactionDatabase(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Data\DatabaseComponents.cs:line 63
+   at nattbakka_server.Repositories.Implementations.TransactionRepository.AddTransactionGroupAsync(TransactionGroup group) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Repositories\Implementations\TransactionRepository.cs:line 26
+   at nattbakka_server.Services.GroupService.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupService.cs:line 64
+   at nattbakka_server.Services.GroupServiceRunner.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\kvist\solana\nattbakka\nattbakka-server\Services\GroupServiceRunner.cs:line 18
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2024-11-01 08:05:13.260 +01:00 [INF] Application is shutting down...
+2024-11-01 08:27:56.587 +01:00 [INF] Executed DbCommand (255ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP DATABASE `nattbakka`;
+2024-11-01 08:32:32.269 +01:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 08:32:32.456 +01:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 08:32:32.470 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 08:32:32.473 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-11-01 08:32:32.486 +01:00 [INF] Applying migration '20241101072930_Initial'.
+2024-11-01 08:32:32.520 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2024-11-01 08:32:32.581 +01:00 [INF] Executed DbCommand (60ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `cex` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `active` tinyint(1) NOT NULL,
+    CONSTRAINT `PK_cex` PRIMARY KEY (`id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 08:32:32.631 +01:00 [INF] Executed DbCommand (49ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `TransactionGroup` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Created` datetime(6) NOT NULL,
+    `TimeDifferentUnix` int NOT NULL,
+    CONSTRAINT `PK_TransactionGroup` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 08:32:32.705 +01:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `transaction` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Tx` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Sol` double NOT NULL,
+    `SolChanged` tinyint(1) NOT NULL,
+    `CexId` int NOT NULL,
+    `GroupId` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Timestamp` datetime(6) NOT NULL,
+    CONSTRAINT `PK_transaction` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_transaction_TransactionGroup_GroupId` FOREIGN KEY (`GroupId`) REFERENCES `TransactionGroup` (`Id`) ON DELETE RESTRICT
+) CHARACTER SET=utf8mb4;
+2024-11-01 08:32:32.770 +01:00 [INF] Executed DbCommand (65ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX `IX_transaction_GroupId` ON `transaction` (`GroupId`);
+2024-11-01 08:32:32.864 +01:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20241101072930_Initial', '8.0.10');
+2024-11-01 10:15:30.209 +01:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 10:15:30.547 +01:00 [INF] Executed DbCommand (188ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 10:15:30.564 +01:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='nattbakka' AND TABLE_NAME='__EFMigrationsHistory';
+2024-11-01 10:15:30.573 +01:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-11-01 10:15:30.593 +01:00 [INF] Applying migration '20241101084349_Initial'.
+2024-11-01 10:15:30.656 +01:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2024-11-01 10:15:30.724 +01:00 [INF] Executed DbCommand (67ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Cex` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `active` tinyint(1) NOT NULL,
+    CONSTRAINT `PK_Cex` PRIMARY KEY (`id`)
+) CHARACTER SET=utf8mb4;
+2024-11-01 10:15:30.813 +01:00 [INF] Executed DbCommand (89ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Transaction` (
+    `Id` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Tx` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Address` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Sol` double NOT NULL,
+    `SolChanged` tinyint(1) NOT NULL,
+    `CexId` int NOT NULL,
+    `GroupId` longtext CHARACTER SET utf8mb4 NULL,
+    `Timestamp` datetime(6) NOT NULL,
+    CONSTRAINT `PK_Transaction` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_Transaction_Cex_CexId` FOREIGN KEY (`CexId`) REFERENCES `Cex` (`id`) ON DELETE RESTRICT
+) CHARACTER SET=utf8mb4;
+2024-11-01 10:15:30.894 +01:00 [INF] Executed DbCommand (81ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX `IX_Transaction_CexId` ON `Transaction` (`CexId`);
+2024-11-01 10:15:30.918 +01:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20241101084349_Initial', '8.0.10');
+2024-11-01 10:15:30.933 +01:00 [INF] Applying migration '20241101085734_ConfigureTransactionModel'.
+2024-11-01 10:15:30.957 +01:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20241101085734_ConfigureTransactionModel', '8.0.10');

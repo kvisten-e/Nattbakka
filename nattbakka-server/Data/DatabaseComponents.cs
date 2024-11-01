@@ -53,7 +53,7 @@ namespace nattbakka_server.Data
             {
                 foreach (var transaction in group.Transactions)
                 {
-                    context.transaction.Add(transaction);
+                    context.Transaction.Add(transaction);
                 }
                 await context.SaveChangesAsync();
             }
@@ -71,11 +71,11 @@ namespace nattbakka_server.Data
             {
                 try
                 {
-                    bool exists = await context.transaction
+                    bool exists = await context.Transaction
                         .AnyAsync(t => t.Id == transaction.Id || t.Tx == transaction.Tx);
                     if (!exists)
                     {
-                        context.transaction.Add(transaction);
+                        context.Transaction.Add(transaction);
                     }
                     else
                     {
@@ -95,7 +95,7 @@ namespace nattbakka_server.Data
             using var context = await GetDbContext();
             try
             {
-                context.transaction.Add(transaction);
+                context.Transaction.Add(transaction);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -110,11 +110,11 @@ namespace nattbakka_server.Data
             using var context = await GetDbContext();
             try
             {
-                bool exists = await context.transaction
+                bool exists = await context.Transaction
                     .AnyAsync(t => t.Id == transaction.Id || t.Tx == transaction.Tx);
                 if (!exists)
                 {
-                    context.transaction.Add(transaction);
+                    context.Transaction.Add(transaction);
                 }
                 else
                 {
@@ -196,7 +196,7 @@ namespace nattbakka_server.Data
         public async Task<List<Cex>> GetCexesAsync()
         {
             using var context = await GetDbContext();
-            var data = await context.cex.Where(d => d.active == true).ToListAsync();
+            var data = await context.Cex.Where(d => d.active == true).ToListAsync();
             return data;
         }
 

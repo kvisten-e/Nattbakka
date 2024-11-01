@@ -16,6 +16,7 @@ builder.Services.AddDbContextFactory<DataContext>(options =>
 {
     string? connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
 });
 
 builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
