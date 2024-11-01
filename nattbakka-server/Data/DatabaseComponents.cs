@@ -34,6 +34,7 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             var transaction = new Transaction()
             {
+
                 Tx = pt.signature,
                 Address = pt.receivingAddress,
                 Sol = pt.sol,
@@ -47,19 +48,84 @@ namespace nattbakka_server.Data
         public async Task PostTransactionDatabase(TransactionGroup group)
         {
             using var context = await GetDbContext();
+            try
+            {
+                foreach (var transaction in group.Transactions)
+                {
+                    context.transaction.Add(transaction);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"Error saving transaction {ex}");
+                await HandleDuplicatedEntriesDb(group);
+            }
+        }
+        
+        public async Task HandleDuplicatedEntriesDb(TransactionGroup group)
+        {
+            using var context = await GetDbContext();
             foreach (var transaction in group.Transactions)
-            {   
-                context.transaction.Add(transaction);
+            {
+                try
+                {
+                    bool exists = await context.transaction
+                        .AnyAsync(t => t.Id == transaction.Id || t.Tx == transaction.Tx);
+                    if (!exists)
+                    {
+                        context.transaction.Add(transaction);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Transaction with ID {transaction.Id} or Tx {transaction.Tx} already exists. Skipping...");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while processing transaction {transaction.Id}: {ex.Message}");
+                }
             }
             await context.SaveChangesAsync();
         }
+        
         public async Task PostTransactionDatabase(Transaction transaction)
         {
             using var context = await GetDbContext();
-            context.transaction.Add(transaction);
+            try
+            {
+                context.transaction.Add(transaction);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"Error saving transaction {ex}");
+                await HandleDuplicatedEntriesDb(transaction);
+            }
+        }
+
+        public async Task HandleDuplicatedEntriesDb(Transaction transaction)
+        {
+            using var context = await GetDbContext();
+            try
+            {
+                bool exists = await context.transaction
+                    .AnyAsync(t => t.Id == transaction.Id || t.Tx == transaction.Tx);
+                if (!exists)
+                {
+                    context.transaction.Add(transaction);
+                }
+                else
+                {
+                    Console.WriteLine($"Transaction with ID {transaction.Id} or Tx {transaction.Tx} already exists. Skipping...");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while processing transaction {transaction.Id}: {ex.Message}");
+            }
             await context.SaveChangesAsync();
         }
-        
         
         public async Task<List<Transaction>> AddGroupIdToTransactions(List<Transaction> transactions, int groupId)
         {
