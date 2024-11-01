@@ -56,7 +56,7 @@ namespace nattbakka_server.Services
                     int timeDifferent = CalculateUnixDifferent(group[0].Timestamp, group[group.Count - 1].Timestamp);
                     var createdGroup = await _databaseComponents.CreateDexGroup(timeDifferent);
 
-                    if (createdGroup.Id <= 0) continue;
+                    if (createdGroup.Id == "") continue;
 
                     var transactionsWithId = await _databaseComponents.AddGroupIdToTransactions(group, createdGroup.Id);
                     if (transactionsWithId is not null)
@@ -102,7 +102,7 @@ namespace nattbakka_server.Services
         {
             int timeLimitUnix = 180;
 
-            int? groupIdFound = _cexGroups
+            string? groupIdFound = _cexGroups
                 .FirstOrDefault(group => group.Transactions.Any(t =>
                     t.CexId == transaction.CexId &&
                     ConvertDatetimeToUnix(transaction.Timestamp) - ConvertDatetimeToUnix(t.Timestamp) <= timeLimitUnix &&
@@ -110,9 +110,9 @@ namespace nattbakka_server.Services
                     _getDecimals.GetTransactionSolDecimal(t.Sol) == _getDecimals.GetTransactionSolDecimal(transaction.Sol)
                 ))?.Id;
 
-            if (groupIdFound.HasValue && groupIdFound.Value > 0)
+            if (!string.IsNullOrEmpty(groupIdFound))
             {
-                var transactionWithId = await _databaseComponents.AddGroupIdToTransactions(transaction, groupIdFound.Value);
+                var transactionWithId = await _databaseComponents.AddGroupIdToTransactions(transaction, groupIdFound);
                 if (transactionWithId is not null)
                 {
                     await _transactionRepository.AddTransactionAsync(transactionWithId);

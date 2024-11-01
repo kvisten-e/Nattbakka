@@ -92,7 +92,7 @@ namespace nattbakka_server.Services
             };
 
 
-            var parsedTransaction = _transactionTemplate.ParsedTransaction(transactionDetails, cex);
+            ParsedTransaction parsedTransaction = _transactionTemplate.ParsedTransaction(transactionDetails, cex);
 
             if (parsedTransaction is null || parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) {
                 return;

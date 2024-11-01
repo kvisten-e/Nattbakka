@@ -32,7 +32,7 @@ namespace nattbakka_server.Services
                 if (!transactionDetails.WasSuccessful)
                 {
                     attempts++;
-                    //Console.WriteLine($"Failed to get confirmed signature: {signature} - Attempt left: {10 - attempts}");
+                    // Console.WriteLine($"Failed with rpc: {api}");
                     Thread.Sleep(1000);
                     continue;
                 }

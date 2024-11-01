@@ -27,23 +27,7 @@ namespace nattbakka_server.Controllers
         {
             return await _context.transaction.ToListAsync();
         }
-
-        // GET: api/Transactions/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<Transaction>>> GetTransactionsByGroup(int id)
-        {
-            var transactionsByGroup = await _context.transaction
-                .Where(x => x.GroupId == id)
-                .ToListAsync();
-
-            if (transactionsByGroup == null || !transactionsByGroup.Any())
-            {
-                return NotFound();
-            }
-
-            return transactionsByGroup;
-        }
-
+        
 
     }
 }

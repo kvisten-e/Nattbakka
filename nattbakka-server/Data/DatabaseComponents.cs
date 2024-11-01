@@ -34,11 +34,12 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             var transaction = new Transaction()
             {
-
+                Id = Guid.NewGuid().ToString(),
                 Tx = pt.signature,
                 Address = pt.receivingAddress,
                 Sol = pt.sol,
                 CexId = pt.cex_id,
+                GroupId = "",
                 Timestamp = DateTime.Now
             };
 
@@ -127,7 +128,7 @@ namespace nattbakka_server.Data
             await context.SaveChangesAsync();
         }
         
-        public async Task<List<Transaction>> AddGroupIdToTransactions(List<Transaction> transactions, int groupId)
+        public async Task<List<Transaction>> AddGroupIdToTransactions(List<Transaction> transactions, string groupId)
         {
             try
             {
@@ -150,7 +151,7 @@ namespace nattbakka_server.Data
             }
         }
 
-        public async Task<Transaction> AddGroupIdToTransactions(Transaction transaction, int groupId)
+        public async Task<Transaction> AddGroupIdToTransactions(Transaction transaction, string groupId)
         {
             try
             {
@@ -178,6 +179,7 @@ namespace nattbakka_server.Data
 
             var group = new Group()
             {
+                Id = Guid.NewGuid().ToString(),
                 TimeDifferentUnix = timeDifferentUnix,
                 Created = DateTime.Now
             };
@@ -204,7 +206,7 @@ namespace nattbakka_server.Data
             DateTime time_history = DateTime.Now.AddDays(-1);
 
             var query = context.transaction.Where(t =>
-                t.GroupId == 0 &&
+                t.GroupId == "" &&
                 t.Timestamp > time_history
             );
 
@@ -223,7 +225,7 @@ namespace nattbakka_server.Data
 
             var query = context.transaction.Where(t =>
                 t.Sol >= minSol &&
-                t.GroupId == 0 &&
+                t.GroupId == "" &&
                 t.Timestamp > time_history
             );
 
@@ -243,7 +245,7 @@ namespace nattbakka_server.Data
             var query = context.transaction.Where(t =>
                 t.Sol >= minSol &&
                 t.CexId == cex &&
-                t.GroupId == 0 &&
+                t.GroupId == "" &&
                 t.Timestamp > time_history
             );
 
@@ -260,11 +262,11 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
 
             var transactions = await context.transaction
-                .Where(t => t.GroupId != 0)
+                .Where(t => t.GroupId != "")
                 .ToListAsync();
 
             var groups = await context.cex_group
-                .Where(g => g.Id != 0)
+                .Where(g => g.Id != "")
                 .ToListAsync();
 
             var transactionGroups = groups.Select(g => new TransactionGroup
