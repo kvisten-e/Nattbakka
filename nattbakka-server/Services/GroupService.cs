@@ -40,7 +40,8 @@ namespace nattbakka_server.Services
 
                 double minSol = 0.1;
                 _transactions = await _databaseComponents.GetTransactions(minSol);
-
+                _transactions = _transactions.OrderBy(d => d.Timestamp).ThenBy(d => d.CexId).ToList();
+                
                 foreach (var transaction in _transactions)
                 {
                     if (await AddTxToActiveGroups(transaction)) continue;
@@ -59,7 +60,7 @@ namespace nattbakka_server.Services
                     if (createdGroup.Id == "") continue;
 
                     var transactionsWithId = await _databaseComponents.AddGroupIdToTransactions(group, createdGroup.Id);
-                    if (transactionsWithId is not null)
+                    if (transactionsWithId != null)
                     {
                         await _transactionRepository.AddTransactionGroupAsync(new TransactionGroup
                         {
@@ -113,7 +114,7 @@ namespace nattbakka_server.Services
             if (!string.IsNullOrEmpty(groupIdFound))
             {
                 var transactionWithId = await _databaseComponents.AddGroupIdToTransactions(transaction, groupIdFound);
-                if (transactionWithId is not null)
+                if (transactionWithId != null)
                 {
                     await _transactionRepository.AddTransactionAsync(transactionWithId);
                     return true;
@@ -124,18 +125,10 @@ namespace nattbakka_server.Services
         }
 
 
-        private bool CheckTxInCurrentGroupList(Transaction transaction) {
-
-
-            foreach(var createdGroup in _createdGroupsList)
-            {
-                bool exist = createdGroup.Any(tr => tr.Id == transaction.Id);
-                if (exist)
-                {
-                    return true;
-                }
-            }
-            return false;
+        private bool CheckTxInCurrentGroupList(Transaction transaction)
+        {
+            var transactionIds = new HashSet<string>(_createdGroupsList.SelectMany(g => g).Select(t => t.Id));
+            return transactionIds.Contains(transaction.Id);
         }
 
         private void CreateGroup(Transaction transaction)
@@ -196,6 +189,8 @@ namespace nattbakka_server.Services
                 {
                     break;
                 }
+                Console.WriteLine($"Old leader: {leaderData.Address} - {leaderData.Sol}");
+                Console.WriteLine($"New leader: {newLeader.Address} - {newLeader.Sol}");
 
                 createdGroup.Add(newLeader);
                 leaderData = newLeader;
@@ -205,6 +200,14 @@ namespace nattbakka_server.Services
 
             if (createdGroup.Count >= 3)
             {
+                int counter = 1;
+                foreach (var tx in createdGroup)
+                {
+                    
+                    Console.WriteLine("Group found:");
+                    Console.WriteLine($"{counter++}: {tx.Address} - {tx.Sol}");
+                }
+                
                 _createdGroupsList.Add(createdGroup);
             }
         }
@@ -214,11 +217,10 @@ namespace nattbakka_server.Services
             return (long)date.Subtract(DateTime.UnixEpoch).TotalSeconds;
         }
         
+
         private int CalculateUnixDifferent(DateTime first, DateTime last)
         {
-            int unixSeconds = (int)(ConvertDatetimeToUnix(last) - ConvertDatetimeToUnix(first));
-            return unixSeconds;
+            return (int)(ConvertDatetimeToUnix(last) - ConvertDatetimeToUnix(first));
         }
-    
     }
 }

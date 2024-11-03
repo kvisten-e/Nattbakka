@@ -1140,3 +1140,184 @@ VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
 2024-11-03 12:52:38.207 +01:00 [INF] Saved 1 entities to in-memory store.
 2024-11-03 12:52:39.476 +01:00 [INF] Saved 1 entities to in-memory store.
 2024-11-03 12:52:44.622 +01:00 [INF] Application is shutting down...
+2024-11-03 13:09:10.494 +01:00 [INF] Executed DbCommand (50ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `Cex` AS `c`
+WHERE `c`.`active`
+2024-11-03 13:09:15.497 +01:00 [INF] GroupService running.
+2024-11-03 13:09:15.524 +01:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `Cex` AS `c`
+WHERE `c`.`active`
+2024-11-03 13:09:16.394 +01:00 [INF] Now listening on: https://localhost:7066
+2024-11-03 13:09:16.394 +01:00 [INF] Now listening on: http://localhost:5168
+2024-11-03 13:09:16.394 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-03 13:09:16.395 +01:00 [INF] Hosting environment: Development
+2024-11-03 13:09:16.395 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-11-03 13:09:20.887 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:33.850 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.html - null null
+2024-11-03 13:09:33.942 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.html - 200 null text/html;charset=utf-8 95.3826ms
+2024-11-03 13:09:34.247 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:34.247 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:34.267 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:34.747 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/index.js - null null
+2024-11-03 13:09:34.751 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/index.js - 200 null application/javascript;charset=utf-8 3.5943ms
+2024-11-03 13:09:34.973 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:34.982 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:35.291 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - null null
+2024-11-03 13:09:35.380 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 88.4344ms
+2024-11-03 13:09:36.661 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:40.544 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:47.159 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7066/api/Transactions - null null
+2024-11-03 13:09:47.174 +01:00 [INF] Executing endpoint 'nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server)'
+2024-11-03 13:09:47.210 +01:00 [INF] Route matched with {action = "Gettransaction", controller = "Transactions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[nattbakka_server.Models.Transaction]]] Gettransaction() on controller nattbakka_server.Controllers.TransactionsController (nattbakka-server).
+2024-11-03 13:09:47.241 +01:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[nattbakka_server.Models.Transaction, nattbakka-server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-03 13:09:47.265 +01:00 [INF] Executed action nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server) in 50.975ms
+2024-11-03 13:09:47.266 +01:00 [INF] Executed endpoint 'nattbakka_server.Controllers.TransactionsController.Gettransaction (nattbakka-server)'
+2024-11-03 13:09:47.267 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7066/api/Transactions - 200 null application/json; charset=utf-8 108.6456ms
+2024-11-03 13:09:50.669 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:52.439 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:53.270 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:53.630 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:54.061 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:09:54.445 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:05.751 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:13.021 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:13.509 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:13.842 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:13.911 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:14.215 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:14.292 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:14.430 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:14.637 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:15.163 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:15.317 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:17.036 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:17.058 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:19.215 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:19.245 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:25.833 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:32.462 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:34.241 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:34.396 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:10:52.420 +01:00 [INF] Application is shutting down...
+2024-11-03 13:10:52.503 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:49.721 +01:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `Cex` AS `c`
+WHERE `c`.`active`
+2024-11-03 13:15:51.741 +01:00 [INF] GroupService running.
+2024-11-03 13:15:51.762 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `c`.`id`, `c`.`active`, `c`.`address`, `c`.`name`
+FROM `Cex` AS `c`
+WHERE `c`.`active`
+2024-11-03 13:15:51.852 +01:00 [INF] Now listening on: https://localhost:7066
+2024-11-03 13:15:51.852 +01:00 [INF] Now listening on: http://localhost:5168
+2024-11-03 13:15:51.853 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-03 13:15:51.853 +01:00 [INF] Hosting environment: Development
+2024-11-03 13:15:51.853 +01:00 [INF] Content root path: C:\Users\kvist\solana\nattbakka\nattbakka-server
+2024-11-03 13:15:55.481 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:55.653 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:55.662 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:55.676 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:55.720 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:56.898 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:58.088 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:58.160 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:58.608 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:15:59.432 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:03.548 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:12.724 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:12.855 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:13.308 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:14.089 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:16.011 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:16.043 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:16.094 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:16.107 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:16.120 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:17.469 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:17.509 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:17.540 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:17.984 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:18.099 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:18.342 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:18.865 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:19.324 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:20.506 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:21.063 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:22.188 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:22.254 +01:00 [INF] Saved 3 entities to in-memory store.
+2024-11-03 13:16:23.027 +01:00 [INF] Executed DbCommand (48ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 4000), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 4000), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `Transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2024-11-03 13:16:23.031 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:23.032 +01:00 [INF] Saved 3 entities to in-memory store.
+2024-11-03 13:16:23.045 +01:00 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000), @p8='?' (Size = 255), @p9='?' (Size = 4000), @p10='?' (DbType = Int32), @p11='?' (Size = 4000), @p12='?' (DbType = Double), @p13='?' (DbType = Boolean), @p14='?' (DbType = DateTime), @p15='?' (Size = 4000), @p16='?' (Size = 255), @p17='?' (Size = 4000), @p18='?' (DbType = Int32), @p19='?' (Size = 4000), @p20='?' (DbType = Double), @p21='?' (DbType = Boolean), @p22='?' (DbType = DateTime), @p23='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `Transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7),
+(@p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15),
+(@p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2024-11-03 13:16:33.132 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:33.178 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:33.196 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:33.257 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:33.568 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:33.635 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:34.816 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:35.356 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:47.119 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: 2jTToAFTfcpcELJD7P8DnGtobo6QphYjsQz8towkkG34 - Sol: 19,99 - Cex: 1 - Timestamp: 2024-11-03 13:15:55
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: 3GQW1pdoLzSB5ewyc1w245uzSQhbVFXAmzShNS5wHSLY - Sol: 19,99 - Cex: 1 - Timestamp: 2024-11-03 13:15:55
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: DbC8yQX7kSzRAa6BuMeEyLaDWBo6PfdAGqgwWrMkZywJ - Sol: 9,99 - Cex: 1 - Timestamp: 2024-11-03 13:16:16
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: ELuJcgZBjd5Rn7FkZKm1DqbqgB4babJvURmsDduUWTjL - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:15:59
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: FcKJbJyGh3oKGt15f922dFRNJ2voR6rmV9YCyyUzXoqg - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:16:17
+2024-11-03 13:16:53.050 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: 6ek5SEoF16pkWBRz1621zvdqjRK4zSYiqPMspVVGv2km - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:16:19
+2024-11-03 13:16:53.052 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:53.067 +01:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `Transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2024-11-03 13:16:53.698 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:54.082 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:55.110 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:55.495 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:56.057 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:16:56.203 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:11.045 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:11.343 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:16.593 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:16.594 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:16.604 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:17.169 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:17.316 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:17.368 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:17.384 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:17.803 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:18.469 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:18.510 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:19.426 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:20.790 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:21.635 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: 2jTToAFTfcpcELJD7P8DnGtobo6QphYjsQz8towkkG34 - Sol: 19,99 - Cex: 1 - Timestamp: 2024-11-03 13:15:55
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: 3GQW1pdoLzSB5ewyc1w245uzSQhbVFXAmzShNS5wHSLY - Sol: 19,99 - Cex: 1 - Timestamp: 2024-11-03 13:15:55
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: d1a9c225-d4a3-4114-8870-f8dbc4f869c5 - Addres: DbC8yQX7kSzRAa6BuMeEyLaDWBo6PfdAGqgwWrMkZywJ - Sol: 9,99 - Cex: 1 - Timestamp: 2024-11-03 13:16:16
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: ELuJcgZBjd5Rn7FkZKm1DqbqgB4babJvURmsDduUWTjL - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:15:59
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: FcKJbJyGh3oKGt15f922dFRNJ2voR6rmV9YCyyUzXoqg - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:16:17
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: 6ek5SEoF16pkWBRz1621zvdqjRK4zSYiqPMspVVGv2km - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:16:19
+2024-11-03 13:17:23.081 +01:00 [INF] GroupId: 34ff7fa6-52be-41ff-ac9f-b0c296a1bf51 - Addres: 3XAjZNCigH4Ud8dKgRKo1qyGrK6HqQZ1h1abzfdVnYBq - Sol: 1,18 - Cex: 1 - Timestamp: 2024-11-03 13:16:35
+2024-11-03 13:17:23.083 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:23.098 +01:00 [INF] Executed DbCommand (13ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `Transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2024-11-03 13:17:23.099 +01:00 [INF] Saved 1 entities to in-memory store.
+2024-11-03 13:17:23.108 +01:00 [INF] Executed DbCommand (8ms) [Parameters=[@p0='?' (Size = 255), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 4000), @p4='?' (DbType = Double), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime), @p7='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+INSERT INTO `Transaction` (`Id`, `Address`, `CexId`, `GroupId`, `Sol`, `SolChanged`, `Timestamp`, `Tx`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2024-11-03 13:17:28.629 +01:00 [INF] Application is shutting down...
