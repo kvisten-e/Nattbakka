@@ -4,9 +4,11 @@
     {
         public string GetTransactionSolDecimal(double sol)
         {
+            char[] symbols = { '.', ',' };
+            string solString = sol.ToString();
             Console.WriteLine($"Sol: {sol}");
             int decimalsMax = 3;
-            int firstDecimalIndex = sol.ToString().IndexOf(".");
+            int firstDecimalIndex = solString.IndexOfAny(symbols);
             Console.WriteLine($"firstDecimalIndex: {firstDecimalIndex}");
 
             if (firstDecimalIndex < 0)
