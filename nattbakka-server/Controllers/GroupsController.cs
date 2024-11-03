@@ -25,14 +25,14 @@ namespace nattbakka_server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> Getcex_group()
         {
-            return await _context.cex_group.ToListAsync();
+            return await _context.Group.ToListAsync();
         }
 
         // GET: api/Groups/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetGroup(int id)
         {
-            var @group = await _context.cex_group.FindAsync(id);
+            var @group = await _context.Group.FindAsync(id);
 
             if (@group == null)
             {

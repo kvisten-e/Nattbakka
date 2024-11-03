@@ -7,9 +7,9 @@ namespace nattbakka_server.Data
     {
         public InMemoryDataContext(DbContextOptions<InMemoryDataContext> options) : base(options) { }
 
-        public DbSet<Transaction> transaction { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
 
-        public DbSet<Group> cex_group { get; set; }
+        public DbSet<Group> Group { get; set; }
         public DbSet<TransactionGroup> TransactionGroup { get; set; }
 
     }

@@ -9,7 +9,7 @@ namespace nattbakka_server
     public class SolanaWebSocketClient
     {
         private List<string> _apiKeys;
-        private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new RandomizeRpcEndpoint();
+        private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new();
         public SolanaWebSocketClient(List<string> apiKeysHelius) {
             
             _apiKeys = new List<string>(apiKeysHelius);

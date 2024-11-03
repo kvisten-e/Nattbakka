@@ -31,6 +31,7 @@ namespace nattbakka_server.Data
 
         public async Task PostTransactionInMemory(ParsedTransaction pt)
         {
+
             using var context = await GetInMemoryDbContext();
             var transaction = new Transaction()
             {
@@ -42,9 +43,16 @@ namespace nattbakka_server.Data
                 GroupId = "",
                 Timestamp = DateTime.Now
             };
-
-            context.transaction.Add(transaction);
-            await context.SaveChangesAsync();
+            try
+            {
+                context.Transaction.Add(transaction);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"DbUpdateException for transaction {ex}");
+            }
+            
         }
         public async Task PostTransactionDatabase(TransactionGroup group)
         {
@@ -63,6 +71,7 @@ namespace nattbakka_server.Data
                 await HandleDuplicatedEntriesDb(group);
             }
         }
+        
         
         public async Task HandleDuplicatedEntriesDb(TransactionGroup group)
         {
@@ -184,7 +193,7 @@ namespace nattbakka_server.Data
                 Created = DateTime.Now
             };
 
-            inMemoryContext.cex_group.Add(group);
+            inMemoryContext.Group.Add(group);
             await inMemoryContext.SaveChangesAsync();
 
             return group;
@@ -205,7 +214,7 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transaction.Where(t =>
+            var query = context.Transaction.Where(t =>
                 t.GroupId == "" &&
                 t.Timestamp > time_history
             );
@@ -223,7 +232,7 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transaction.Where(t =>
+            var query = context.Transaction.Where(t =>
                 t.Sol >= minSol &&
                 t.GroupId == "" &&
                 t.Timestamp > time_history
@@ -242,7 +251,7 @@ namespace nattbakka_server.Data
             using var context = await GetInMemoryDbContext();
             DateTime time_history = DateTime.Now.AddDays(-1);
 
-            var query = context.transaction.Where(t =>
+            var query = context.Transaction.Where(t =>
                 t.Sol >= minSol &&
                 t.CexId == cex &&
                 t.GroupId == "" &&
@@ -261,11 +270,11 @@ namespace nattbakka_server.Data
         {
             using var context = await GetInMemoryDbContext();
 
-            var transactions = await context.transaction
+            var transactions = await context.Transaction
                 .Where(t => t.GroupId != "")
                 .ToListAsync();
 
-            var groups = await context.cex_group
+            var groups = await context.Group
                 .Where(g => g.Id != "")
                 .ToListAsync();
 

@@ -25,7 +25,7 @@ namespace nattbakka_server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> Gettransaction()
         {
-            return await _context.transaction.ToListAsync();
+            return await _context.Transaction.ToListAsync();
         }
         
 
