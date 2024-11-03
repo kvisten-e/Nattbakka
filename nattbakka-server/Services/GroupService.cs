@@ -176,7 +176,7 @@ namespace nattbakka_server.Services
             while (startIndex < _transactions.Count)
             {
                 var newLeader = _transactions
-                    .Skip(startIndex) // Start search from the index after the leader.
+                    .Skip(startIndex)
                     .FirstOrDefault(d =>
                         d.CexId == leaderData.CexId &&
                         d.Timestamp > leaderData.Timestamp &&
@@ -189,9 +189,12 @@ namespace nattbakka_server.Services
                 {
                     break;
                 }
+                
                 Console.WriteLine($"Old leader: {leaderData.Address} - {leaderData.Sol}");
                 Console.WriteLine($"New leader: {newLeader.Address} - {newLeader.Sol}");
-
+                Console.WriteLine($"Old leader sol Decimals: {_getDecimals.GetTransactionSolDecimal(leaderData.Sol)}");
+                Console.WriteLine($"New leader Decimals: {_getDecimals.GetTransactionSolDecimal(newLeader.Sol)}");
+                
                 createdGroup.Add(newLeader);
                 leaderData = newLeader;
 
