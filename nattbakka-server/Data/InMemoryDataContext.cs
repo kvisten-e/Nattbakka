@@ -13,4 +13,5 @@ namespace nattbakka_server.Data
         public DbSet<TransactionGroup> TransactionGroup { get; set; }
 
     }
+    
 }

@@ -14,11 +14,11 @@ namespace nattbakka_server.Services
     {
         private readonly ILogger<GroupService> _logger;
         private readonly DatabaseComponents _databaseComponents;
-        public List<List<Transaction>> _createdGroupsList = new List<List<Transaction>>();
-        public List<TransactionGroup> _cexGroups = new List<TransactionGroup>();
-        public List<Transaction> _transactions = new List<Transaction>();
-        public List<Cex> _cexes = new List<Cex>();
-        private readonly GetTransactionSolDecimals _getDecimals = new GetTransactionSolDecimals();
+        public List<List<Transaction>> _createdGroupsList = new();
+        public List<TransactionGroup> _cexGroups = new();
+        public List<Transaction> _transactions = new();
+        public List<Cex> _cexes = new();
+        private readonly GetTransactionSolDecimals _getDecimals = new();
         private readonly ITransactionRepository _transactionRepository;
 
 
@@ -39,15 +39,15 @@ namespace nattbakka_server.Services
                 await GetCurrentCexGroups();
 
                 double minSol = 0.1;
-                _transactions = await _databaseComponents.GetTransactions(minSol, asNoTracking: true);
+                _transactions = await _databaseComponents.GetTransactions(minSol);
 
                 foreach (var transaction in _transactions)
                 {
                     if (await AddTxToActiveGroups(transaction)) continue;
                     if (CheckTxInCurrentGroupList(transaction)) continue;
-                    CreateGroup(transaction);
+                    // CreateGroup(transaction);
+                    CreateGroupTest(transaction);
                 }
-
 
                 foreach (var group in _createdGroupsList)
                 {
@@ -116,6 +116,7 @@ namespace nattbakka_server.Services
                 if (transactionWithId is not null)
                 {
                     await _transactionRepository.AddTransactionAsync(transactionWithId);
+                    return true;
                 }
             }
 
@@ -139,12 +140,12 @@ namespace nattbakka_server.Services
 
         private void CreateGroup(Transaction transaction)
         {
+            
             var leaderData = transaction;
             List<Transaction> createdGroup = new List<Transaction> { leaderData };
 
             while (true)
             {
-
                 var newLeader = _transactions.FirstOrDefault(d =>
                     d.CexId == leaderData.CexId &&
                     d.Timestamp > leaderData.Timestamp &&
@@ -170,7 +171,44 @@ namespace nattbakka_server.Services
 
         }
 
+        private void CreateGroupTest(Transaction transaction)
+        {
+            _transactions = _transactions.OrderBy(d => d.Timestamp).ThenBy(d => d.CexId).ToList();
 
+            var leaderData = transaction;
+            List<Transaction> createdGroup = new List<Transaction> { leaderData };
+
+            int startIndex = _transactions.IndexOf(leaderData) + 1;
+
+            while (startIndex < _transactions.Count)
+            {
+                var newLeader = _transactions
+                    .Skip(startIndex) // Start search from the index after the leader.
+                    .FirstOrDefault(d =>
+                        d.CexId == leaderData.CexId &&
+                        d.Timestamp > leaderData.Timestamp &&
+                        _getDecimals.GetTransactionSolDecimal(d.Sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.Sol)) &&
+                        (ConvertDatetimeToUnix(d.Timestamp) - ConvertDatetimeToUnix(leaderData.Timestamp)) <= 180 &&
+                        _cexes.Any(a => a.address != transaction.Address)
+                    );
+
+                if (newLeader == null)
+                {
+                    break;
+                }
+
+                createdGroup.Add(newLeader);
+                leaderData = newLeader;
+
+                startIndex = _transactions.IndexOf(newLeader) + 1;
+            }
+
+            if (createdGroup.Count >= 3)
+            {
+                _createdGroupsList.Add(createdGroup);
+            }
+        }
+        
         private long ConvertDatetimeToUnix(DateTime date)
         {
             return (long)date.Subtract(DateTime.UnixEpoch).TotalSeconds;

@@ -40,7 +40,6 @@ namespace nattbakka_server.Data
                 Address = pt.receivingAddress,
                 Sol = pt.sol,
                 CexId = pt.cex_id,
-                GroupId = "",
                 Timestamp = DateTime.Now
             };
             try
@@ -227,44 +226,20 @@ namespace nattbakka_server.Data
             return await query.ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactions(double minSol, bool asNoTracking = false)
+        public async Task<List<Transaction>> GetTransactions(double minSol)
         {
             using var context = await GetInMemoryDbContext();
-            DateTime time_history = DateTime.Now.AddDays(-1);
+            DateTime timeHistory = DateTime.Now.AddDays(-1);
 
-            var query = context.Transaction.Where(t =>
+            var transactions = context.Transaction.Where(t =>
                 t.Sol >= minSol &&
-                t.GroupId == "" &&
-                t.Timestamp > time_history
+                String.IsNullOrEmpty(t.GroupId) &&
+                t.Timestamp > timeHistory
             );
 
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            return await query.ToListAsync();
+            return await transactions.ToListAsync();
         }
-
-        public async Task<List<Transaction>> GetTransactions(int minSol, int cex, bool asNoTracking = false)
-        {
-            using var context = await GetInMemoryDbContext();
-            DateTime time_history = DateTime.Now.AddDays(-1);
-
-            var query = context.Transaction.Where(t =>
-                t.Sol >= minSol &&
-                t.CexId == cex &&
-                t.GroupId == "" &&
-                t.Timestamp > time_history
-            );
-
-            if (asNoTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            return await query.ToListAsync();
-        }
+        
 
         public async Task<List<TransactionGroup>> GetTransactionsWithGroups()
         {

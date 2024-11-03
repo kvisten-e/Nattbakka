@@ -106,9 +106,6 @@ namespace nattbakka_server.Services
 
             await _databaseComponents.PostTransactionInMemory(parsedTransaction);
 
-
-
-
         }
 
         private async Task OnWebSocketClosed(Cex cex, SolanaWebSocketClient solanaWs, CloseEventArgs e)

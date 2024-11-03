@@ -8,7 +8,7 @@
         public double Sol { get; set;}
         public bool SolChanged { get; set; }
         public int CexId { get; set;}
-        public string GroupId { get; set;}
+        public string? GroupId { get; set;}
         public TransactionGroup Group { get; set; }
 
         public DateTime Timestamp { get; set; }
