@@ -58,14 +58,27 @@ namespace nattbakka_server.Services
 
         private async Task CreateAndMonitorWebSocket(SolanaWebSocketClient solanaWs, Cex cex)
         {
-            string address = cex.address;
-            string name = cex.name;
-            var ws = await solanaWs.CreateWebSocketConnection(address);
-            ws.OnClose += async (sender, e) => await OnWebSocketClosed(cex, solanaWs, e);
-            ws.OnMessage += async (sender, e) => await OnWebSocketMessage(cex, sender, e);
+            while (_shouldReconnect)
+            {
+                try
+                {
+                    string address = cex.address;
+                    string name = cex.name;
+                    var ws = await solanaWs.CreateWebSocketConnection(address);
+                    ws.OnClose += async (sender, e) => await OnWebSocketClosed(cex, solanaWs, e);
+                    ws.OnMessage += async (sender, e) => await OnWebSocketMessage(cex, sender, e);
 
-            ActiveCexWebSockets acw = new(name, ws);
-            _activeWs.Add(acw);
+                    ActiveCexWebSockets acw = new(name, ws);
+                    _activeWs.Add(acw);
+                    Console.WriteLine($"WebSocket connected: {cex.name}");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error trying to create websocket for: {cex.name} - Message: {ex.Message}");
+                    await Task.Delay(5000);
+                }                
+            }
         }
 
         private async Task OnWebSocketMessage(Cex cex, object? sender, MessageEventArgs e)
@@ -97,15 +110,11 @@ namespace nattbakka_server.Services
             if (parsedTransaction is null || parsedTransaction.sendingAddress != cex.address || parsedTransaction.sol < 0.01 && parsedTransaction.sol > 5000) {
                 return;
             };
-
-
-            // Save to database directly
+            
             parsedTransaction.signature = signature;
             parsedTransaction.cex_id = cex.id;
 
-
             await _databaseComponents.PostTransactionInMemory(parsedTransaction);
-
         }
 
         private async Task OnWebSocketClosed(Cex cex, SolanaWebSocketClient solanaWs, CloseEventArgs e)

@@ -42,7 +42,8 @@ builder.Services.AddSignalR();
 
 builder.Services.AddScoped<GroupService>();
 builder.Services.AddScoped<UpdateGroupService>();
-builder.Services.AddHostedService<GroupServiceRunner>();
+builder.Services.AddScoped<ClearTransactionsService>();
+builder.Services.AddHostedService<ServiceRunner>();
 
 // builder.Services.AddStackExchangeRedisCache(options =>
 // {

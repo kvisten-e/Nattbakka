@@ -39,7 +39,6 @@ namespace nattbakka_server.Services
 
                 return transactionDetails;
             }
-            Console.WriteLine($"Failed to get confirmed signature: {signature} - rip");
             return null;
         }
 
@@ -63,22 +62,7 @@ namespace nattbakka_server.Services
             return ClientFactory.GetClient(wss);
         }
 
-        public string RotateApiList()
-        {
-            List<string> backupApiKeys = _apiKeys;
-            string currentApi = _apiKeys[0];
-            try
-            {
-                _apiKeys.Remove(currentApi);
-                _apiKeys.Add(currentApi);
-            }
-            catch
-            {
-                _apiKeys = backupApiKeys;
-            }
-            return currentApi;
-        }
-
+        
         public static double ConvertLamportsToSol(ulong lamports)
         {
             return (double)(lamports / 1_000_000_000);
