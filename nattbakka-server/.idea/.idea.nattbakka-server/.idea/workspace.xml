@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="307dc2c8-783d-4328-94cf-3cf9d1a13c10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/bin/Debug/net8.0/nattbakka-server.Tests.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/bin/Debug/net8.0/nattbakka-server.Tests.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/bin/Debug/net8.0/nattbakka-server.Tests.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/bin/Debug/net8.0/nattbakka-server.Tests.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/Debug/net8.0/nattbakka-server.Tests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/Debug/net8.0/nattbakka-server.Tests.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/Debug/net8.0/nattbakka-server.Tests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/Debug/net8.0/nattbakka-server.Tests.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/nattbakka-server.Tests.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/nattbakka-server.Tests.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../nattbakka-server.Tests/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.nattbakka-server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.nattbakka-server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/GroupService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/GroupService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +48,7 @@
     ".NET Launch Settings Profile.nattbakka-server: https.executor": "Run",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feat/cache",
+    "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -127,7 +123,7 @@
       <workItem from="1730665116709" duration="1290000" />
       <workItem from="1730701432257" duration="1756000" />
       <workItem from="1730914185496" duration="1460000" />
-      <workItem from="1731102843957" duration="52000" />
+      <workItem from="1731102843957" duration="1110000" />
     </task>
     <servers />
   </component>

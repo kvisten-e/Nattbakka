@@ -46,8 +46,7 @@ namespace nattbakka_server.Services
                 {
                     if (await AddTxToActiveGroups(transaction)) continue;
                     if (CheckTxInCurrentGroupList(transaction)) continue;
-                    // CreateGroup(transaction);
-                    CreateGroupTest(transaction);
+                    CreateGroup(transaction);
                 }
 
                 foreach (var group in _createdGroupsList)
@@ -130,41 +129,9 @@ namespace nattbakka_server.Services
             var transactionIds = new HashSet<string>(_createdGroupsList.SelectMany(g => g).Select(t => t.Id));
             return transactionIds.Contains(transaction.Id);
         }
+        
 
         private void CreateGroup(Transaction transaction)
-        {
-            
-            var leaderData = transaction;
-            List<Transaction> createdGroup = new List<Transaction> { leaderData };
-
-            while (true)
-            {
-                var newLeader = _transactions.FirstOrDefault(d =>
-                    d.CexId == leaderData.CexId &&
-                    d.Timestamp > leaderData.Timestamp &&
-                    _getDecimals.GetTransactionSolDecimal(d.Sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.Sol)) &&
-                    (ConvertDatetimeToUnix(d.Timestamp) - ConvertDatetimeToUnix(leaderData.Timestamp)) <= 180 &&
-                    _cexes.Any(a => a.address != transaction.Address)
-                    );
-
-                if (newLeader == null)
-                {
-                    break;
-                };
-
-                createdGroup.Add(newLeader);
-                leaderData = newLeader;
-            }
-
-
-            if (createdGroup.Count >= 3)
-            {
-                _createdGroupsList.Add(createdGroup);
-            }
-
-        }
-
-        private void CreateGroupTest(Transaction transaction)
         {
             _transactions = _transactions.OrderBy(d => d.Timestamp).ThenBy(d => d.CexId).ToList();
 
