@@ -1,0 +1,55 @@
+.transaction-columns {
+  display: flex;
+  gap: 20px;
+  border-left: 1px solid #ccc;
+  /* Left border for the first column */
+  padding-left: 20px;
+}
+
+.transaction-column {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  /* Right border for each column */
+  padding: 0 20px;
+}
+
+.transaction-column:last-child {
+  border-right: none;
+  /* Remove right border for the last column */
+}
+
+.transaction-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.transaction-card p {
+  margin: 4px 0;
+}
+
+.transaction-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.transaction-detail p {
+  margin: 0;
+}
+
+.transaction-column h3 {
+  text-align: center;
+  /* Center the CEX ID */
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+hr {
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
