@@ -4,16 +4,15 @@
     {
         public string GetTransactionSolDecimal(double sol)
         {
-            int decimalsMax = 3;
-            int firstDecimalIndex = sol.ToString().IndexOf(",");
+            string solString = sol.ToString();
+            char separator = solString.Contains('.') ? '.' : ',';
+            
+            int firstDecimalIndex = solString.IndexOf(separator);
 
-            if (firstDecimalIndex < 0)
-            {
-                return "0";
-            }
-            string solToString = sol.ToString();
-            string decimals = solToString.Split(',')[1];
-            decimals = (decimals.Length > 3) ? decimals[..decimalsMax] : decimals;
+            if (firstDecimalIndex < 0) return "0";
+            
+            string decimals = solString.Split(separator)[1];
+            decimals = (decimals.Length > 3) ? decimals[..3] : decimals;
             return decimals;
         }
 

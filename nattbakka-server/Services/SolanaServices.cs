@@ -14,7 +14,6 @@ namespace nattbakka_server.Services
     {
         private List<string> _apiKeys;
         private readonly RandomizeRpcEndpoint _randomizeRpcEndpoint = new RandomizeRpcEndpoint();
-
         public SolanaServices(List<string> apiKeys)
         {
             if (apiKeys == null || apiKeys.Count == 0)
@@ -33,14 +32,13 @@ namespace nattbakka_server.Services
                 if (!transactionDetails.WasSuccessful)
                 {
                     attempts++;
-                    //Console.WriteLine($"Failed to get confirmed signature: {signature} - Attempt left: {10 - attempts}");
+                    // Console.WriteLine($"Failed with rpc: {api}");
                     Thread.Sleep(1000);
                     continue;
                 }
 
                 return transactionDetails;
             }
-            Console.WriteLine($"Failed to get confirmed signature: {signature} - rip");
             return null;
         }
 
@@ -64,22 +62,7 @@ namespace nattbakka_server.Services
             return ClientFactory.GetClient(wss);
         }
 
-        public string RotateApiList()
-        {
-            List<string> backupApiKeys = _apiKeys;
-            string currentApi = _apiKeys[0];
-            try
-            {
-                _apiKeys.Remove(currentApi);
-                _apiKeys.Add(currentApi);
-            }
-            catch
-            {
-                _apiKeys = backupApiKeys;
-            }
-            return currentApi;
-        }
-
+        
         public static double ConvertLamportsToSol(ulong lamports)
         {
             return (double)(lamports / 1_000_000_000);
