@@ -1,10 +1,16 @@
 import React from "react";
 import TransactionList from "./TransactionGroups";
+import logo from "./images/bat1.png"; 
+import logoText from "./images/nattbakka_text_transp.png"; 
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <h1>Real-time Transaction Groups</h1>
+      <div className="header-images">
+        <img src={logo} alt="Logo 1" className="header-logo" />
+        <img src={logoText} alt="Logo 2" className="header-logo" />
+      </div>
       <TransactionList />
     </div>
   );

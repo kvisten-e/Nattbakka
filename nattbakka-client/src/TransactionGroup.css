@@ -1,55 +1,124 @@
+
+.transaction-columns-container {
+  overflow-x: auto;
+  padding: 20px;
+  background-color: #14232b;
+  white-space: nowrap;
+}
+
 .transaction-columns {
   display: flex;
-  gap: 20px;
-  border-left: 1px solid #ccc;
-  /* Left border for the first column */
-  padding-left: 20px;
+  width: max-content;
+}
+
+.transaction-column h2{
+  color: #4894cc
 }
 
 .transaction-column {
-  flex: 1;
-  border-right: 1px solid #ccc;
-  /* Right border for each column */
+  width: 300px;
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.transaction-column:last-child {
-  border-right: none;
-  /* Remove right border for the last column */
+.transaction-column::after {
+  content: "";
+  position: absolute;
+  top: 80px;
+  right: 0;
+  height: calc(100% - 30px);
+  width: 1px;
+  background-color: #0b1217;
+}
+
+.transaction-column:last-child::after {
+  display: none;
 }
 
 .transaction-card {
-  background-color: #f8f9fa;
+  background-color: #394956;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 16px;
+  width: 250px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.transaction-card.active {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .transaction-card p {
   margin: 4px 0;
+  color: white;
+}
+
+.transaction-card h4 {
+  font-weight: bold;
+  color: white;
+}
+.transactions-headers{
+  display: flex;
+  justify-content: space-between;
+  
 }
 
 .transaction-detail {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 14px;
+  margin-top: 8px;
 }
 
 .transaction-detail p {
   margin: 0;
+  color: white;
+  text-align: left;
+  min-width: 80px;
 }
 
 .transaction-column h3 {
   text-align: center;
-  /* Center the CEX ID */
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: bold;
+  color: white;
+  margin-top: 5px;
 }
 
 hr {
   margin: 8px 0;
   border: none;
   border-top: 1px solid #e0e0e0;
+}
+
+.status-icon {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.status-icon.green {
+  color: #28a745;
+}
+
+.status-icon.red {
+  color: #dc3545;
+}
+
+.transaction-address-link {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.transaction-address-link:hover {
+  color: #228dcb;
 }
