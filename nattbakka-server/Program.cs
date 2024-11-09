@@ -74,11 +74,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(x => x.AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
+
 app.UseWebSockets();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<GroupHub>("group-hub");
+app.MapHub<GroupHub>("cexGroupHub");
 
 
 using (var scope = app.Services.CreateScope())
