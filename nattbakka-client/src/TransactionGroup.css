@@ -126,3 +126,82 @@ hr {
 .material-symbols-outlined:hover{
   color: #228dcb;
 }
+
+
+@media (max-width: 768px) {
+  
+  .dropdown-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    gap: 10px;
+  }
+  
+  .transaction-container {
+    padding: 10px;
+  }
+  .transaction-columns-container,
+  .transaction-columns {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .transaction-column,
+  .transaction-cards {
+    display: block;
+    width: 100%;
+  }
+
+.transaction-card h3 {
+  font-weight: bold;
+  color: white;
+}
+
+.transaction-cards{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#cex-dropdown {
+  width: 80%;
+  max-width: 200px;
+  padding: 10px;
+  border: 1px solid #394956;
+  /* Border color to match cards */
+  border-radius: 5px;
+  background-color: #14232b;
+  /* Matches background */
+  color: white;
+  font-size: 16px;
+  appearance: none;
+  /* Hides default arrow */
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Dropdown arrow styling */
+#cex-dropdown::after {
+  content: '▼';
+  position: absolute;
+  right: 20px;
+  color: #4894cc;
+  /* Color to match the header */
+}
+
+/* Hover effect */
+#cex-dropdown:hover {
+  background-color: #1e3a4c;
+  /* Slightly lighter background on hover */
+}
+
+/* Focused state styling */
+#cex-dropdown:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(72, 148, 204, 0.5);
+  /* Blue shadow on focus */
+}
+
+}
