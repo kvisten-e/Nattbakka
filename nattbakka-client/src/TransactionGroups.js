@@ -13,6 +13,7 @@ const TransactionList = () => {
   const [updatedGroup, setUpdatedGroup] = useState(null);
   const [highlightedGroupId, setHighlightedGroupId] = useState(null);
   const [showUpdatedText, setShowUpdatedText] = useState({});
+  const [newGroupIds, setNewGroupIds] = useState([]);
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
@@ -43,15 +44,19 @@ const TransactionList = () => {
     connection.on("ReceiveTransactionGroupUpdate", (updatedGroup) => {
       setTransactionGroups((prevGroups) => {
         const index = prevGroups.findIndex(g => g.id === updatedGroup.id);
+        const currentTime = new Date();
+        updatedGroup.updatedAt = currentTime;
+
         if (index > -1) {
           const updatedGroups = [...prevGroups];
-
-          const currentTime = new Date();
-          updatedGroup.updatedAt = currentTime;
-          
           updatedGroups[index] = updatedGroup;
           return updatedGroups;
         } else {
+          // New group logic
+          setNewGroupIds((prevIds) => [...prevIds, updatedGroup.id]);
+          setTimeout(() => {
+            setNewGroupIds((prevIds) => prevIds.filter(id => id !== updatedGroup.id));
+          }, 20000); // Remove the new group ID after 20 seconds
           return [...prevGroups, updatedGroup];
         }
       });
@@ -151,10 +156,12 @@ const TransactionList = () => {
                   className={`transaction-card ${activeCardIds.includes(group.id) ? "active" : ""}`}
                   onClick={() => handleCardClick(group.id)}
                   style={{
-                    backgroundColor: highlightedGroupId === group.id
-                      ? 'rgba(255, 255, 0, 0.2)'
+                    backgroundColor: newGroupIds.includes(group.id) // Check if group is new
+                      ? 'rgba(0, 200, 0, 0.1)' // Green background for new groups
+                      : highlightedGroupId === group.id
+                      ? 'rgba(200, 200, 0, 0.1)' // Yellow background for highlighted groups
                       : ''
-                  }}                 
+                  }}                
                 >
                   <h3>{new Date(group.created).toLocaleTimeString()}</h3>
                   {showUpdatedText[group.id] && (
@@ -177,6 +184,7 @@ const TransactionList = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="transaction-address-link"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           {transaction.address.slice(0, 4)}...{transaction.address.slice(-4)}
                         </a>
