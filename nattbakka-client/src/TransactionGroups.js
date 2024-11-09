@@ -45,6 +45,10 @@ const TransactionList = () => {
         const index = prevGroups.findIndex(g => g.id === updatedGroup.id);
         if (index > -1) {
           const updatedGroups = [...prevGroups];
+
+          const currentTime = new Date();
+          updatedGroup.updatedAt = currentTime;
+          
           updatedGroups[index] = updatedGroup;
           return updatedGroups;
         } else {
@@ -62,7 +66,8 @@ const TransactionList = () => {
           const updatedGroup = { ...updatedGroups[groupIndex] };
 
           updatedGroup.transactions = [...updatedGroup.transactions, transaction];
-
+          const currentTime = new Date();
+          updatedGroup.updatedAt = currentTime;
           updatedGroups[groupIndex] = updatedGroup;
 
           setUpdatedGroup(updatedGroup);
@@ -153,9 +158,9 @@ const TransactionList = () => {
                 >
                   <h3>{new Date(group.created).toLocaleTimeString()}</h3>
                   {showUpdatedText[group.id] && (
-                    <p style={{ color: 'yellow', margin: 0 }}>*Updated*</p>
-                  )}                  
-                  <p><strong>Created Time:</strong> {new Date(group.created).toLocaleTimeString()}</p>
+                    <p style={{ color: 'yellow', margin: 0 }}>*Updated at {new Date(group.updatedAt).toLocaleTimeString()}*</p>
+                  )}                   
+                  <p><strong>Created:</strong> {new Date(group.created).toLocaleDateString()}</p>
                   <p><strong>Time different:</strong> {group.timeDifferentUnix} seconds</p>
                   <hr />
                   <div class="transactions-headers">
