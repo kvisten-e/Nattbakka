@@ -122,3 +122,7 @@ hr {
 .transaction-address-link:hover {
   color: #228dcb;
 }
+
+.material-symbols-outlined:hover{
+  color: #228dcb;
+}

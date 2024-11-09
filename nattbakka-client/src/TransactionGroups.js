@@ -141,6 +141,20 @@ const TransactionList = () => {
     }, {});
   }, [transactionGroups]);
 
+  const copyToClipboard = (group) => {
+    // Format the group data
+    const transactionLinks = group.transactions.map(transaction =>
+      `https://solscan.io/account/${transaction.address}#transfers`
+    ).join('\n');
+
+    const uniqueSolValues = [...new Set(group.transactions.map(transaction => transaction.sol))].join(", ");
+    const textToCopy = `${group.transactions.length}st - ${cexIdToNameMap[group.transactions[0].cexId] || "Unknown"} - ${uniqueSolValues}\n${transactionLinks}`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(textToCopy).then(() => {
+    }).catch((err) => console.error("Could not copy text: ", err));
+  };
+
   return (
     <div className="transaction-columns-container">
       <div className="transaction-columns">
@@ -163,10 +177,22 @@ const TransactionList = () => {
                       : ''
                   }}                
                 >
+                  <div
+                    className="copy-icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard(group);
+                    }}
+                    style={{position: "absolute", right: '40px', cursor: 'pointer', color: "white" }}
+                  >
+                    <span class="material-symbols-outlined">
+                      content_copy
+                    </span>
+                  </div>
                   <h3>{new Date(group.created).toLocaleTimeString()}</h3>
                   {showUpdatedText[group.id] && (
                     <p style={{ color: 'yellow', margin: 0 }}>*Updated at {new Date(group.updatedAt).toLocaleTimeString()}*</p>
-                  )}                   
+                  )}    
                   <p><strong>Created:</strong> {new Date(group.created).toLocaleDateString()}</p>
                   <p><strong>Time different:</strong> {group.timeDifferentUnix} seconds</p>
                   <hr />
