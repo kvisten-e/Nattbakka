@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import * as signalR from "@microsoft/signalr";
 import "./TransactionGroup.css"; // Import CSS for styling
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import TransactionCard from "./TransactionCard";
 
 const TransactionList = () => {
   const [transactionGroups, setTransactionGroups] = useState([]);
@@ -16,6 +17,30 @@ const TransactionList = () => {
   const [newGroupIds, setNewGroupIds] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [selectedCexId, setSelectedCexId] = useState(null);
+
+  const cexIdToNameMap = useMemo(() => {
+    const map = cex.reduce((acc, item) => {
+      acc[item.id] = item.name;
+      return acc;
+    }, {});
+    console.log("CEX ID to Name Map:", map); // Debug statement
+    return map;
+  }, [cex]);
+
+  useEffect(() => {
+    if (cex.length > 0) {
+      const updatedGroups = transactionGroups.map((group) => {
+        const cexId = group.transactions[0]?.cexId;
+        const cexName = cexIdToNameMap[cexId] || "Unknown CEX";
+        console.log(`Group ID: ${group.id}, CEX ID: ${cexId}, CEX Name: ${cexName}`); // Debug statement
+        return {
+          ...group,
+          cexName,
+        };
+      });
+      setTransactionGroups(updatedGroups);
+    }
+  }, [cex, transactionGroups]);
 
   useEffect(() => {
     if (cex.length > 0 && selectedCexId === null) {
@@ -42,7 +67,7 @@ const TransactionList = () => {
       try {
         const response = await fetch("https://localhost:7066/api/TransactionGroup");
         const data = await response.json();
-        setTransactionGroups(data);
+        setTransactionGroups(data); // Initially set transaction groups without cexName
       } catch (error) {
         console.error("Error fetching initial transaction groups:", error);
       }
@@ -138,12 +163,7 @@ const TransactionList = () => {
     });
   };
 
-  const cexIdToNameMap = useMemo(() => {
-    return cex.reduce((acc, item) => {
-      acc[item.id] = item.name;
-      return acc;
-    }, {});
-  }, [cex]);
+
 
   const groupedByCexId = useMemo(() => {
     return transactionGroups.reduce((acc, group) => {
@@ -222,7 +242,6 @@ const TransactionList = () => {
         {isMobile
           ? selectedCexId &&
           groupedByCexId[selectedCexId]
-            .slice()
             .reverse()
             ?.map((group) => (
             <TransactionCard
@@ -240,7 +259,6 @@ const TransactionList = () => {
             <div key={cexId} className="transaction-column">
               <h2>{cexIdToNameMap[cexId] || `CEX ID: ${cexId}`}</h2>
               {groupedByCexId[cexId]
-                .slice()
                 .reverse()
                 .map((group) => (
                 <TransactionCard
@@ -252,6 +270,8 @@ const TransactionList = () => {
                   showUpdatedText={showUpdatedText}
                   handleCardClick={handleCardClick}
                   copyToClipboard={copyToClipboard}
+                  savedCard={false}
+                  cexName={""}
                 />
               ))}
             </div>
@@ -261,63 +281,5 @@ const TransactionList = () => {
   );
 };
 
-// TransactionCard component for individual card rendering
-const TransactionCard = ({ group, activeCardIds, newGroupIds, highlightedGroupId, showUpdatedText, handleCardClick, copyToClipboard }) => (
-  <div
-    className={`transaction-card ${activeCardIds.includes(group.id) ? "active" : ""}`}
-    onClick={() => handleCardClick(group.id)}
-    style={{
-      backgroundColor: newGroupIds.includes(group.id)
-        ? 'rgba(0, 200, 0, 0.1)'
-        : highlightedGroupId === group.id
-          ? 'rgba(200, 200, 0, 0.1)'
-          : ''
-    }}
-  >
-    <div
-      className="copy-icon"
-      onClick={(e) => {
-        e.stopPropagation();
-        copyToClipboard(group);
-      }}
-      style={{ position: "absolute", cursor: 'pointer', color: "white", transform: "translateX(980%)" }}
-    >
-      <span className="material-symbols-outlined">content_copy</span>
-    </div>
-    <h3>{new Date(group.created).toLocaleTimeString()}</h3>
-    {showUpdatedText[group.id] && (
-      <p style={{ color: 'yellow', margin: 0 }}>*Updated at {new Date(group.updatedAt).toLocaleTimeString()}*</p>
-    )}
-    <p><strong>Created:</strong> {new Date(group.created).toLocaleDateString()}</p>
-    <p><strong>Time different:</strong> {group.timeDifferentUnix} seconds</p>
-    <hr />
-    <div className="transactions-headers">
-      <h4>Address</h4>
-      <h4>SOL</h4>
-      <h4>Active</h4>
-    </div>
-    {group.transactions.map((transaction) => (
-      <div key={transaction.id} className="transaction-detail">
-        <a
-          href={`https://solscan.io/account/${transaction.address}#transfers`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transaction-address-link"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {transaction.address.slice(0, 4)}...{transaction.address.slice(-4)}
-        </a>
-        <p>{transaction.sol}</p>
-        <span className={`status-icon ${transaction.solChanged ? "red" : "green"}`}>
-          {transaction.solChanged ? (
-            <i className="fas fa-times"></i>
-          ) : (
-            <i className="fas fa-check"></i>
-          )}
-        </span>
-      </div>
-    ))}
-  </div>
-);
 
 export default TransactionList;
