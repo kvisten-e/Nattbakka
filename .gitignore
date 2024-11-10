@@ -1,3 +1,4 @@
 .vs
 nattbakka-server.Tests/obj
 nattbakka-server/Logs
+nattbakka-server/.idea
