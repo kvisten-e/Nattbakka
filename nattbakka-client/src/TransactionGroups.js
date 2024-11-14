@@ -142,7 +142,6 @@ const TransactionList = () => {
   }, [transactionGroups]);
 
   const copyToClipboard = (group) => {
-    // Format the group data
     const transactionLinks = group.transactions.map(transaction =>
       `https://solscan.io/account/${transaction.address}#transfers`
     ).join('\n');
@@ -150,10 +149,26 @@ const TransactionList = () => {
     const uniqueSolValues = [...new Set(group.transactions.map(transaction => transaction.sol))].join(", ");
     const textToCopy = `${group.transactions.length}st - ${cexIdToNameMap[group.transactions[0].cexId] || "Unknown"} - ${uniqueSolValues}\n${transactionLinks}`;
 
-    // Copy to clipboard
-    navigator.clipboard.writeText(textToCopy).then(() => {
-    }).catch((err) => console.error("Could not copy text: ", err));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        console.log("Text copied to clipboard!");
+      }).catch((err) => console.error("Could not copy text: ", err));
+    } else {
+      // Fallback: Use a textarea element for older browsers
+      const textarea = document.createElement("textarea");
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        console.log("Fallback: Text copied to clipboard!");
+      } catch (err) {
+        console.error("Fallback: Could not copy text: ", err);
+      }
+      document.body.removeChild(textarea);
+    }
   };
+
 
   return (
     <div className="transaction-columns-container">
