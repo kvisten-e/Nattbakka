@@ -16,3 +16,32 @@ code {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
+/* For WebKit Browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 20px;
+  height: 22px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+  border: 3px solid #14232b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1418;
+  border-radius: 6px;
+}
+
+
+
+/* For Firefox (using scrollbar-color and scrollbar-width) */
+body {
+  scrollbar-color: #888 #f0f0f0;
+  scrollbar-width: thin;
+}
+

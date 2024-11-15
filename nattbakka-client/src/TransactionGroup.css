@@ -1,7 +1,7 @@
 
 .transaction-columns-container {
   overflow-x: auto;
-  padding: 20px;
+  padding: 10px;
   background-color: #14232b;
   white-space: nowrap;
 }
@@ -124,5 +124,27 @@ hr {
 }
 
 .material-symbols-outlined:hover{
+  color: #228dcb;
+}
+
+.load-more-container{
+  margin-top: 20px;
+}
+
+.load-more-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+}
+
+.arrow-icon {
+  font-size: 60px;
+  color: white;
+}
+
+.load-more-button:hover .arrow-icon {
+  cursor: pointer;
   color: #228dcb;
 }

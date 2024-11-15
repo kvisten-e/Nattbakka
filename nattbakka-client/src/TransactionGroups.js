@@ -14,6 +14,7 @@ const TransactionList = () => {
   const [highlightedGroupId, setHighlightedGroupId] = useState(null);
   const [showUpdatedText, setShowUpdatedText] = useState({});
   const [newGroupIds, setNewGroupIds] = useState([]);
+  const [visibleRows, setVisibleRows] = useState(20);
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
@@ -168,7 +169,10 @@ const TransactionList = () => {
       document.body.removeChild(textarea);
     }
   };
-
+  
+  const loadMoreRows = () => {
+    setVisibleRows((prevRows) => prevRows + 20); 
+  };
 
   return (
     <div className="transaction-columns-container">
@@ -179,6 +183,7 @@ const TransactionList = () => {
             {groupedByCexId[cexId]
               .slice()
               .reverse()
+              .slice(0, visibleRows)
               .map((group) => (
                 <div
                   key={group.id}
@@ -186,9 +191,9 @@ const TransactionList = () => {
                   onClick={() => handleCardClick(group.id)}
                   style={{
                     backgroundColor: newGroupIds.includes(group.id) // Check if group is new
-                      ? 'rgba(0, 200, 0, 0.1)' // Green background for new groups
+                      ? 'rgba(0, 300, 0, 0.1)' // Green background for new groups
                       : highlightedGroupId === group.id
-                      ? 'rgba(200, 200, 0, 0.1)' // Yellow background for highlighted groups
+                      ? 'rgba(300, 300, 0, 0.1)' // Yellow background for highlighted groups
                       : ''
                   }}                
                 >
@@ -244,6 +249,17 @@ const TransactionList = () => {
           </div>
         ))}
       </div>
+      {Object.keys(groupedByCexId).some(
+        (cexId) => groupedByCexId[cexId].length > visibleRows
+      ) && (
+          <div className="load-more-container">
+            <button className="load-more-button" onClick={loadMoreRows}>
+            <span class="material-symbols-outlined arrow-icon">
+                keyboard_double_arrow_down
+              </span>
+            </button>
+          </div>
+        )}      
     </div>
   );
 };
