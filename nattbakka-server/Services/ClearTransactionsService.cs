@@ -15,7 +15,7 @@ public class ClearTransactionsService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            DateTime breakpoint = DateTime.Now.AddDays(-1);
+            DateTime breakpoint = DateTime.Now.AddHours(-1);
 
             var entitiesToRemove = _inMemoryDataContext.Transaction.Where(e => e.Timestamp < breakpoint);
 
