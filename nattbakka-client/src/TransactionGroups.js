@@ -18,13 +18,13 @@ const TransactionList = () => {
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7066/cexGroupHub")
+      .withUrl("http://localhost:5168/cexGroupHub")
       .withAutomaticReconnect()
       .build();
 
     const fetchInitialTransactionGroups = async () => {
       try {
-        const response = await fetch("https://localhost:7066/api/TransactionGroup");
+        const response = await fetch("http://localhost:5168/api/TransactionGroup");
         const data = await response.json();
         setTransactionGroups(data);
       } catch (error) {
@@ -34,7 +34,7 @@ const TransactionList = () => {
 
     const fetchInitialCexObjects = async () => {
       try {
-        const response = await fetch("https://localhost:7066/api/Cex");
+        const response = await fetch("http://localhost:5168/api/Cex");
         const data = await response.json();
         setCex(data);
       } catch (error) {

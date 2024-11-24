@@ -2,7 +2,7 @@
 
 cd nattbakka-server
 echo Starting .NET server...
-start "" dotnet run --launch-profile https
+start "" dotnet run --launch-profile http
 
 timeout /t 3 /nobreak
 cd ..
