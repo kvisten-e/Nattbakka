@@ -40,7 +40,7 @@ namespace nattbakka_server.Services
 
                 double minSol = 0.1;
                 _transactions = await _databaseComponents.GetTransactions(minSol);
-                _transactions = _transactions.OrderBy(d => d.Timestamp).ThenBy(d => d.CexId).ToList();
+                _transactions = _transactions.OrderBy(d => d.Created).ThenBy(d => d.CexId).ToList();
                 
                 foreach (var transaction in _transactions)
                 {
@@ -53,7 +53,7 @@ namespace nattbakka_server.Services
                 {
                     if (group.Count < 3) continue;
 
-                    int timeDifferent = CalculateUnixDifferent(group[0].Timestamp, group[group.Count - 1].Timestamp);
+                    int timeDifferent = CalculateUnixDifferent(group[0].Created, group[group.Count - 1].Created);
                     var createdGroup = await _databaseComponents.CreateDexGroup(timeDifferent);
 
                     if (createdGroup.Id == "") continue;
@@ -92,7 +92,7 @@ namespace nattbakka_server.Services
             {
                 foreach(var transaction in group.Transactions)
                 {
-                    _logger.LogInformation($"GroupId: {group.Id} - Addres: {transaction.Address} - Sol: {transaction.Sol} - Cex: {transaction.CexId} - Timestamp: {transaction.Timestamp}");
+                    _logger.LogInformation($"GroupId: {group.Id} - Addres: {transaction.Address} - Sol: {transaction.Sol} - Cex: {transaction.CexId} - Timestamp: {transaction.Created}");
                 }
 
             }
@@ -105,8 +105,8 @@ namespace nattbakka_server.Services
             string? groupIdFound = _cexGroups
                 .FirstOrDefault(group => group.Transactions.Any(t =>
                     t.CexId == transaction.CexId &&
-                    ConvertDatetimeToUnix(transaction.Timestamp) - ConvertDatetimeToUnix(t.Timestamp) <= timeLimitUnix &&
-                    ConvertDatetimeToUnix(transaction.Timestamp) - ConvertDatetimeToUnix(t.Timestamp) >= 0 &&
+                    ConvertDatetimeToUnix(transaction.Created) - ConvertDatetimeToUnix(t.Created) <= timeLimitUnix &&
+                    ConvertDatetimeToUnix(transaction.Created) - ConvertDatetimeToUnix(t.Created) >= 0 &&
                     _getDecimals.GetTransactionSolDecimal(t.Sol) == _getDecimals.GetTransactionSolDecimal(transaction.Sol)
                 ))?.Id;
 
@@ -133,7 +133,7 @@ namespace nattbakka_server.Services
 
         private void CreateGroup(Transaction transaction)
         {
-            _transactions = _transactions.OrderBy(d => d.Timestamp).ThenBy(d => d.CexId).ToList();
+            _transactions = _transactions.OrderBy(d => d.Created).ThenBy(d => d.CexId).ToList();
 
             var leaderData = transaction;
             List<Transaction> createdGroup = new List<Transaction> { leaderData };
@@ -146,9 +146,9 @@ namespace nattbakka_server.Services
                     .Skip(startIndex)
                     .FirstOrDefault(d =>
                         d.CexId == leaderData.CexId &&
-                        d.Timestamp > leaderData.Timestamp &&
+                        d.Created > leaderData.Created &&
                         _getDecimals.GetTransactionSolDecimal(d.Sol).Equals(_getDecimals.GetTransactionSolDecimal(leaderData.Sol)) &&
-                        (ConvertDatetimeToUnix(d.Timestamp) - ConvertDatetimeToUnix(leaderData.Timestamp)) <= 180 &&
+                        (ConvertDatetimeToUnix(d.Created) - ConvertDatetimeToUnix(leaderData.Created)) <= 180 &&
                         _cexes.Any(a => a.address != transaction.Address)
                     );
 

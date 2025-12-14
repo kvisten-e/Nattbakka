@@ -40,7 +40,7 @@ namespace nattbakka_server.Data
                 Address = pt.receivingAddress,
                 Sol = pt.sol,
                 CexId = pt.cex_id,
-                Timestamp = DateTime.Now
+                Created = DateTime.Now
             };
             try
             {
@@ -215,7 +215,7 @@ namespace nattbakka_server.Data
 
             var query = context.Transaction.Where(t =>
                 t.GroupId == "" &&
-                t.Timestamp > time_history
+                t.Created > time_history
             );
 
             if (asNoTracking)
@@ -234,7 +234,7 @@ namespace nattbakka_server.Data
             var transactions = context.Transaction.Where(t =>
                 t.Sol >= minSol &&
                 String.IsNullOrEmpty(t.GroupId) &&
-                t.Timestamp > timeHistory
+                t.Created > timeHistory
             );
 
             return await transactions.ToListAsync();

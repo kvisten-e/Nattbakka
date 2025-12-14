@@ -11,7 +11,7 @@
         public string? GroupId { get; set;}
         public TransactionGroup Group { get; set; }
 
-        public DateTime Timestamp { get; set; }
+        public DateTime Created { get; set; }
 
     }
 }

@@ -35,7 +35,7 @@ namespace nattbakka_server.Data
                 entity.Property(t => t.Address).IsRequired();
                 entity.Property(t => t.Sol).IsRequired();
                 entity.Property(t => t.SolChanged).IsRequired();
-                entity.Property(t => t.Timestamp).IsRequired();
+                entity.Property(t => t.Created).IsRequired();
             });
 
             // Configure Cex relationship
@@ -46,7 +46,6 @@ namespace nattbakka_server.Data
                     .HasForeignKey(t => t.CexId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
             base.OnModelCreating(modelBuilder);
         }
     }

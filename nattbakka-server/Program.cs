@@ -12,26 +12,23 @@
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Services.AddDbContextFactory<DataContext>(options => 
-    {
-        string? connectionString = builder.Configuration.GetValue<string>("GetConnectionString:DefaultConnection");
-        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    
+    DotNetEnv.Env.Load(); 
+    var connectionString = Environment.GetEnvironmentVariable("MyDb_ConnectionString")
+                           ?? throw new InvalidOperationException("MyDb_ConnectionString not configured");
 
-    });
+    builder.Services.AddDbContextFactory<DataContext>(options => options.UseSqlServer(connectionString));
 
     builder.Services.AddDbContextFactory<InMemoryDataContext>(options =>
     {
         options.UseInMemoryDatabase("TransactionsDb");
     });
 
-
     var cexGroupLog = new LoggerConfiguration()
         .WriteTo.File("./Logs/CexGroups.log", rollingInterval: RollingInterval.Day)
         .ReadFrom.Configuration(builder.Configuration)
         .Enrich.FromLogContext()
         .CreateLogger();
-
-
 
 
     builder.Logging.ClearProviders();
@@ -43,15 +40,11 @@
     builder.Services.AddScoped<GroupService>();
     builder.Services.AddScoped<UpdateGroupService>();
     builder.Services.AddScoped<ClearTransactionsService>();
+    builder.Services.AddScoped<DatabaseComponents>();
+    builder.Services.AddScoped<CexTransactionsService>();
+    builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+    
     builder.Services.AddHostedService<ServiceRunner>();
-
-    // builder.Services.AddStackExchangeRedisCache(options =>
-    // {
-    //     options.Configuration = "localhost:6379,connectTimeout=5000,syncTimeout=10000"; 
-    //     options.InstanceName = "TransactionCache";
-    // });
-
-
 
     builder.Services.Configure<RpcApiKeysOptions>(options =>
     {
@@ -60,9 +53,7 @@
     });
 
 
-    builder.Services.AddScoped<DatabaseComponents>();
-    builder.Services.AddScoped<CexTransactionsService>();
-    builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 
 
     var app = builder.Build();

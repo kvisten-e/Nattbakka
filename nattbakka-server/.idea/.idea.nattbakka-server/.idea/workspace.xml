@@ -11,6 +11,20 @@
   <component name="ChangeListManager">
     <list default="true" id="307dc2c8-783d-4328-94cf-3cf9d1a13c10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.nattbakka-server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.nattbakka-server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/DataContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/DataContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/DatabaseComponents.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/DatabaseComponents.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20241101084349_Initial.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20241101084349_Initial.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20241101085734_ConfigureTransactionModel.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20241101085734_ConfigureTransactionModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/DataContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Cex.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Cex.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Transaction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Transaction.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/ClearTransactionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/ClearTransactionsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/GroupService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/GroupService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nattbakka-server.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/nattbakka-server.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nattbakka-server.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/nattbakka-server.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,15 +32,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DpaMonitoringSettings">
-    <option name="autoShow" value="false" />
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d8012b1151014db88eeb9ad15050c9e32e400/e6/572dfa23/IRpcClient.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d81b2d4f22bee75e5438c707251ae43cb0974c207db91ffc159118c84b4eb9/ServiceProvider.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/38d3cef14c5a4fc9a92de0991034bc1a3d200/78/68130047/WebSocket.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -47,6 +61,7 @@
     &quot;.NET Launch Settings Profile.nattbakka-server: https.executor&quot;: &quot;Run&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -127,12 +142,20 @@
       <workItem from="1731748712263" duration="651000" />
       <workItem from="1731953786315" duration="100000" />
       <workItem from="1732459649510" duration="421000" />
+      <workItem from="1735818494968" duration="5468000" />
+      <workItem from="1735824005128" duration="2943000" />
+      <workItem from="1736237781534" duration="6183000" />
+      <workItem from="1739016945080" duration="12000" />
+      <workItem from="1739309148200" duration="1044000" />
+      <workItem from="1739386070096" duration="4357000" />
+      <workItem from="1739628080966" duration="669000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
